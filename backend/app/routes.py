@@ -3,7 +3,7 @@ from httpx import request
 
 from app.database import get_connection, get_schema, execute_query
 from app.prompt import build_sql_prompt
-from app.llm import generate_sql, generate_answer
+from app.llm import generate_sql, generate_answer, correct_sql
 from app.sql_validator import validate_sql
 
 
@@ -91,15 +91,54 @@ def query_database(request: QueryRequest):
         results = execute_query(sql)
         answer = generate_answer(question=request.question, sql=sql, results=results)
     except Exception as error:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "message": "SQL execution failed.",
-                "error": str(error),
-                "generated_sql": sql,
-            },
+
+        # print("Original SQL:", sql)
+        # print("Database error:", str(error))
+
+        # Ask Llama to correct the failed SQL
+        corrected_sql = correct_sql(
+            question=request.question, sql=sql, error=str(error), schema=schema
         )
+
+        # print("Corrected SQL:", corrected_sql)
+        
+        # Validate corrected SQL
+        is_valid, message = validate_sql(corrected_sql)
+
+        if not is_valid:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "AI-generated correction failed validation.",
+                    "validation_error": message,
+                    "generated_sql": corrected_sql,
+                },
+            )
+
+        # Execute corrected SQL
+        try:
+            results = execute_query(corrected_sql)
+            sql = corrected_sql
+
+        except Exception as correction_error:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "SQL correction failed.",
+                    "error": str(correction_error),
+                    "generated_sql": corrected_sql,
+                },
+            )
+
+    # Generate human-readable answer
+    answer = generate_answer(question=request.question, sql=sql, results=results)
 
     # 6. Return everything
 
-    return {"status": "success","question": request.question, "sql": sql, "results": results,"answer": answer}
+    return {
+        "status": "success",
+        "question": request.question,
+        "sql": sql,
+        "results": results,
+        "answer": answer,
+    }

@@ -77,3 +77,52 @@ Rules:
     )
 
     return response.choices[0].message.content.strip()
+
+
+def correct_sql(question: str, sql: str, error: str, schema: dict) -> str:
+
+    prompt = f"""
+You are an expert SQLite SQL debugging assistant.
+
+The SQL query generated for the user's question failed during
+database execution.
+
+Your task is to identify the problem and generate a corrected SQL query.
+
+USER QUESTION:
+{question}
+
+GENERATED SQL:
+{sql}
+
+DATABASE ERROR:
+{error}
+
+DATABASE SCHEMA:
+{schema}
+
+RULES:
+1. Fix the SQL based on the database error.
+2. Use ONLY tables and columns from the schema.
+3. Preserve the original user's intent.
+4. Generate SQLite-compatible SQL.
+5. Return ONLY a SELECT query.
+6. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
+7. Do not explain the correction.
+8. Do not use Markdown.
+9. Return only the corrected SQL query.
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert SQLite SQL debugging assistant.",
+            },
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0,
+    )
+
+    return response.choices[0].message.content.strip()
