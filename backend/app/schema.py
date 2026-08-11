@@ -10,5 +10,6 @@ class QueryResponse(BaseModel):
     question: str | None = None
     sql: str | None = None
     results: dict | None = None
+    answer: str | None = None
     clarification_question: str | None = None
     options: list[str] | None = None

@@ -3,10 +3,11 @@ from httpx import request
 
 from app.database import get_connection, get_schema, execute_query
 from app.prompt import build_sql_prompt
-from app.llm import generate_sql
+from app.llm import generate_sql, generate_answer
 from app.sql_validator import validate_sql
 
-from app.schema import QueryRequest
+
+from app.schema import QueryRequest, QueryResponse
 
 router = APIRouter()
 
@@ -44,7 +45,7 @@ def database_schema():
     return get_schema()
 
 
-@router.post("/query")
+@router.post("/query", response_model=QueryResponse)
 def query_database(request: QueryRequest):
 
     # 1. Get database schema
@@ -88,7 +89,7 @@ def query_database(request: QueryRequest):
     # 5. Execute SQL
     try:
         results = execute_query(sql)
-
+        answer = generate_answer(question=request.question, sql=sql, results=results)
     except Exception as error:
         raise HTTPException(
             status_code=400,
@@ -100,4 +101,5 @@ def query_database(request: QueryRequest):
         )
 
     # 6. Return everything
-    return {"question": request.question, "sql": sql, "results": results}
+
+    return {"status": "success","question": request.question, "sql": sql, "results": results,"answer": answer}
