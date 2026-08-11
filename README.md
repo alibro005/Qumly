@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/qumly-logo-transparent.svg" alt="Qumly logo" width="500">
+  <img src="assets/qumly-logo-transparent.svg" alt="Qumly logo" width="680">
 </p>
 
 ## Qumly
