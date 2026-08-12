@@ -8,6 +8,7 @@ from app.sql_validator import validate_sql
 
 
 from app.schema import QueryRequest, QueryResponse
+from app.conversation import get_history, add_message
 
 router = APIRouter()
 
@@ -63,8 +64,17 @@ def query_database(request: QueryRequest):
     User clarification:
     {request.clarification}
     """
+    conversation_id = request.conversation_id
 
-    prompt = build_sql_prompt(schema=schema, question=question)
+    history = []
+
+    if conversation_id:
+        history = get_history(conversation_id)
+
+    print("CONVERSATION ID:", conversation_id)
+    print("HISTORY:", history)
+
+    prompt = build_sql_prompt(schema=schema, question=question, history=history)
 
     # 3. Generate SQL using Llama
     result = generate_sql(prompt)
@@ -132,6 +142,14 @@ def query_database(request: QueryRequest):
 
     # Generate human-readable answer
     answer = generate_answer(question=request.question, sql=sql, results=results)
+
+    if conversation_id:
+        add_message(
+            conversation_id=conversation_id,
+            question=request.question,
+            sql=sql,
+            answer=answer,
+        )
 
     # 6. Return everything
 

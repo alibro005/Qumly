@@ -1,4 +1,4 @@
-def build_sql_prompt(schema: dict, question: str) -> str:
+def build_sql_prompt(schema: dict, question: str, history: list | None = None) -> str:
     schema_text = ""
 
     for table_name, table_info in schema.items():
@@ -26,6 +26,25 @@ def build_sql_prompt(schema: dict, question: str) -> str:
                     f"{foreign_key['references_column']}\n"
                 )
 
+    # Dynamic conversation history
+    history_text = ""
+
+    if history:
+        history_text = "\nCONVERSATION HISTORY:\n"
+
+        for message in history:
+            history_text += f"""
+User question:
+{message["question"]}
+
+Generated SQL:
+{message["sql"]}
+
+Assistant answer:
+{message["answer"]}
+---
+"""
+
     prompt = f"""
 You are QueryAI, an intelligent database assistant that converts
 natural language questions into SQLite SQL queries.
@@ -33,7 +52,9 @@ natural language questions into SQLite SQL queries.
 DATABASE SCHEMA:
 {schema_text}
 
-USER QUESTION:
+{history_text}
+
+CURRENT USER QUESTION:
 {question}
 
 IMPORTANT RELATIONSHIP RULES:
@@ -46,6 +67,24 @@ IMPORTANT RELATIONSHIP RULES:
 5. Never assume two columns are related just because their names
    look similar.
 6. Use the exact table and column names provided in the schema.
+
+CONVERSATION RULES:
+
+1. Use the conversation history when interpreting the current user question.
+2. If the current question is a follow-up, use relevant previous questions,
+   SQL queries, and answers to understand its meaning.
+3. Resolve references and omitted context using the conversation history.
+4. Generate SQL for the current request, not simply copy the previous SQL.
+5. If the current question is independent of the conversation, treat it as
+   a new request.
+6. If the conversation history does not provide enough information to
+   understand a follow-up question, ask for clarification.
+7. When the current question is a follow-up, preserve all relevant
+   constraints from the previous request unless the user explicitly
+   changes them.
+8. Do not remove filters, limits, ordering, grouping, or other
+   requirements from the previous request unless the current request
+   changes them.
 
 YOUR TASK:
 

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class QueryRequest(BaseModel):
     question: str
     clarification: str | None = None
+    conversation_id: str | None = None
 
 class QueryResponse(BaseModel):
     status: str
