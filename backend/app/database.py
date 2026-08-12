@@ -24,13 +24,31 @@ def get_schema():
     schema = {}
 
     for (table_name,) in tables:
+
+        # Get columns and primary keys
         cursor.execute(f"PRAGMA table_info({table_name})")
 
         columns = cursor.fetchall()
 
-        schema[table_name] = [
-            {"name": column[1], "type": column[2]} for column in columns
-        ]
+        primary_keys = [column[1] for column in columns if column[5] == 1]
+
+        # Get foreign keys
+        cursor.execute(f"PRAGMA foreign_key_list({table_name})")
+
+        foreign_keys = cursor.fetchall()
+
+        schema[table_name] = {
+            "columns": [{"name": column[1], "type": column[2]} for column in columns],
+            "primary_keys": primary_keys,
+            "foreign_keys": [
+                {
+                    "column": foreign_key[3],
+                    "references_table": foreign_key[2],
+                    "references_column": foreign_key[4],
+                }
+                for foreign_key in foreign_keys
+            ],
+        }
 
     connection.close()
 
@@ -47,10 +65,7 @@ def execute_query(sql: str):
         columns = [description[0] for description in cursor.description]
         rows = cursor.fetchall()
 
-        return {
-            "columns": columns,
-            "rows": [list(row) for row in rows]
-        }
+        return {"columns": columns, "rows": [list(row) for row in rows]}
 
     finally:
         connection.close()

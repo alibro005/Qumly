@@ -101,7 +101,7 @@ def query_database(request: QueryRequest):
         )
 
         # print("Corrected SQL:", corrected_sql)
-        
+
         # Validate corrected SQL
         is_valid, message = validate_sql(corrected_sql)
 
