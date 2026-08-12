@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from httpx import request
 
-from app.database import get_connection, get_schema, execute_query
-from app.prompt import build_sql_prompt
-from app.llm import generate_sql, generate_answer, correct_sql
-from app.sql_validator import validate_sql
+from app.services.database import get_connection, get_schema, execute_query
+from app.services.prompt import build_sql_prompt
+from app.services.llm import generate_sql, generate_answer, correct_sql
+from app.services.sql_validator import validate_sql
 
 
-from app.schema import QueryRequest, QueryResponse
-from app.conversation import get_history, add_message
+from app.schema.schema import QueryRequest, QueryResponse
+from app.services.conversation import get_history, add_message
 
 router = APIRouter()
 

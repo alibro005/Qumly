@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-DATABASE_PATH = Path(__file__).resolve().parents[2] / "database" / "queryai.db"
+DATABASE_PATH = Path(__file__).resolve().parents[3] / "database" / "queryai.db"
 
 
 def get_connection():
