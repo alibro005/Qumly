@@ -47,6 +47,28 @@
   --header-h: 56px;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 /* ==========================================================
    Reset
    ========================================================== */
@@ -419,7 +441,6 @@ a {
   overflow-x: hidden;
 }
 
-
 .eyebrow {
   font-size: 11.5px;
   font-weight: 600;
@@ -574,9 +595,7 @@ a {
   flex-direction: column;
   gap: var(--sp-5);
   margin-top: var(--sp-6);
-  
 }
-
 
 .msg {
   display: flex;
@@ -765,35 +784,11 @@ a {
   gap: var(--sp-3);
   height: 140px;
 }
-.bar-chart__col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  height: 100%;
-  justify-content: flex-end;
-}
-.bar-chart__bar {
-  width: 100%;
-  max-width: 42px;
-  background: var(--accent);
-  border-radius: 4px 4px 0 0;
-  opacity: 0.85;
-  transition: opacity var(--transition);
-}
-.bar-chart__col:hover .bar-chart__bar {
-  opacity: 1;
-}
-.bar-chart__label {
-  font-size: 11px;
-  color: var(--text-faint);
-  text-align: center;
-}
-.bar-chart__value {
-  font-size: 11.5px;
+.chart-panel__text {
+  font-size: 13.5px;
   color: var(--text-secondary);
-  font-family: var(--font-mono);
+  line-height: 1.6;
+  padding-top: var(--sp-3);
 }
 
 /* Clarification card */
@@ -902,7 +897,6 @@ a {
    ========================================================== */
 
 @media (max-width: 900px) {
-
   /* Main layout always occupies full width */
   .app-shell,
   .app-shell.sidebar-collapsed {
@@ -960,9 +954,7 @@ a {
   }
 }
 
-
 @media (max-width: 560px) {
-
   :root {
     --header-h: 52px;
   }
