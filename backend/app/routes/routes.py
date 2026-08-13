@@ -2,12 +2,17 @@ from fastapi import APIRouter, HTTPException
 from httpx import request
 
 from app.services.database import get_connection, get_schema, execute_query
-from app.services.prompt import build_sql_prompt
-from app.services.llm import generate_sql, generate_answer, correct_sql
+from app.services.prompt import build_sql_prompt, build_explain_sql_prompt
+from app.services.llm import (
+    generate_sql,
+    generate_answer,
+    correct_sql,
+    generate_sql_explanation,
+)
 from app.services.sql_validator import validate_sql
 
 
-from app.schema.schema import QueryRequest, QueryResponse
+from app.schema.schema import QueryRequest, QueryResponse, ExplainSQLRequest
 from app.services.conversation import get_history, add_message
 
 router = APIRouter()
@@ -160,3 +165,14 @@ def query_database(request: QueryRequest):
         "results": results,
         "answer": answer,
     }
+
+
+@router.post("/explain-sql")
+async def explain_sql(data: ExplainSQLRequest):
+
+    prompt = build_explain_sql_prompt(data.sql)
+
+    # Call your existing LLM function here
+    explanation = generate_sql_explanation(prompt)
+
+    return {"status": "success", "sql": data.sql, "explanation": explanation}

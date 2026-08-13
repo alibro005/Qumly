@@ -36,6 +36,15 @@ def generate_sql(prompt: str) -> dict:
     return result
 
 
+def generate_sql_explanation(prompt):
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    return response.choices[0].message.content
+
+
 def generate_answer(question: str, sql: str, results: dict) -> str:
     prompt = f"""
 You are QueryAI, a database assistant.

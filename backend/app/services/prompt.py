@@ -109,6 +109,7 @@ IMPORTANT RULES:
 10. Return ONLY valid JSON.
 11. Do not use Markdown.
 12. Do not include ```json or ```.
+13. Generate valid SQL and always end the SQL statement with a semicolon ;.
 
 RESPONSE FORMAT:
 
@@ -132,6 +133,30 @@ For an ambiguous question:
 }}
 
 Return ONLY the JSON object.
+"""
+
+    return prompt.strip()
+
+
+def build_explain_sql_prompt(sql: str) -> str:
+    prompt = f"""
+You are QueryAI, an intelligent database assistant.
+
+Explain the following SQL query briefly and clearly.
+
+SQL QUERY:
+{sql}
+
+Rules:
+- Keep the explanation to 2-3 sentences maximum.
+- Explain what the query does and what data it returns.
+- Mention important clauses such as WHERE, JOIN, GROUP BY, ORDER BY, or LIMIT only if they exist.
+- Do not explain SQL syntax word-by-word.
+- Do not use numbered lists.
+- Do not repeat the SQL query.
+- Use simple language suitable for a beginner.
+
+Return only the explanation.
 """
 
     return prompt.strip()

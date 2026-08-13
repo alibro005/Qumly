@@ -6,6 +6,7 @@ class QueryRequest(BaseModel):
     clarification: str | None = None
     conversation_id: str | None = None
 
+
 class QueryResponse(BaseModel):
     status: str
     question: str | None = None
@@ -14,3 +15,7 @@ class QueryResponse(BaseModel):
     answer: str | None = None
     clarification_question: str | None = None
     options: list[str] | None = None
+
+
+class ExplainSQLRequest(BaseModel):
+    sql: str
