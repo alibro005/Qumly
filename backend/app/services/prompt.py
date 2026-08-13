@@ -99,17 +99,19 @@ IMPORTANT RULES:
 1. Use only tables and columns from the provided schema.
 2. Generate SQLite-compatible SQL.
 3. Only generate SELECT queries.
-4. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
-5. Never invent tables, columns, relationships, or data.
-6. Do not ask unnecessary clarification questions.
-7. If the meaning is obvious, generate SQL directly.
-8. If multiple interpretations are reasonable, ask a concise
+4. For text comparisons, make comparisons case-insensitive.
+5.Use LOWER(column) = LOWER('value') when comparing text values.
+6. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
+7. Never invent tables, columns, relationships, or data.
+8. Do not ask unnecessary clarification questions.
+9. If the meaning is obvious, generate SQL directly.
+10. If multiple interpretations are reasonable, ask a concise
    clarification question.
-9. When asking for clarification, provide 2 to 4 concrete options.
-10. Return ONLY valid JSON.
-11. Do not use Markdown.
-12. Do not include ```json or ```.
-13. Generate valid SQL and always end the SQL statement with a semicolon ;.
+11. When asking for clarification, provide 2 to 4 concrete options.
+12. Return ONLY valid JSON.
+13. Do not use Markdown.
+14. Do not include ```json or ```.
+15. Generate valid SQL and always end the SQL statement with a semicolon ;.
 
 RESPONSE FORMAT:
 
