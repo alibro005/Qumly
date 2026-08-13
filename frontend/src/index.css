@@ -427,6 +427,7 @@ a {
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: var(--sp-2);
+  margin-top: var(--sp-7);
 }
 
 .hero__heading {

@@ -56,7 +56,7 @@ function App() {
 
       const newMessage = {
         id: Date.now(),
-        question: message.question,
+        question: `${message.question} based on ${clarification}`,
         status: response.status,
         answer: response.answer,
         sql: response.sql,
@@ -83,13 +83,12 @@ function App() {
         <Sidebar />
 
         <main className="workspace">
-          <QueryInput onSubmit={handleQuery} loading={loading} />
-
           <ConversationFeed
             messages={messages}
             onClarification={handleClarification}
             onExplainSql={handleExplainSql}
           />
+          <QueryInput onSubmit={handleQuery} loading={loading} />
         </main>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ResultTable from "../results/ResultTable";
+import ResultChart from "../results/ResultChart";
 import { format } from "sql-formatter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -9,6 +10,7 @@ function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
   const [explanation, setExplanation] = useState("");
   const [showExplain, setShowExplain] = useState(false);
   const [loadingExplanation, setLoadingExplanation] = useState(false);
+  const [showChart, setShowChart] = useState(false);
 
   const formattedSql = format(sql, {
     language: "sql",
@@ -78,8 +80,12 @@ function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
                   : "Explain SQL"}
             </button>
 
-            <button className="btn btn--ghost btn--sm" type="button">
-              Chart
+            <button
+              className="btn btn--ghost btn--sm"
+              type="button"
+              onClick={() => setShowChart((prev) => !prev)}
+            >
+              {showChart ? "Hide Chart" : "Chart"}
             </button>
           </div>
 
@@ -114,6 +120,8 @@ function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
               <p className="explain-panel__text">{explanation}</p>
             </div>
           )}
+
+          {showChart && <ResultChart results={results} />}
         </div>
       </div>
     </div>
