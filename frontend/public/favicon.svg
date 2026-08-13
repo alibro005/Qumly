@@ -1,0 +1,53 @@
+<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Qumly</title>
+
+  <!-- Top database row -->
+  <rect
+    x="12"
+    y="10"
+    width="40"
+    height="11"
+    rx="3"
+    fill="#7F77DD"
+    fill-opacity="0.18"
+    stroke="#7F77DD"
+    stroke-width="2"
+  />
+
+  <!-- Middle database row -->
+  <rect
+    x="12"
+    y="26"
+    width="40"
+    height="11"
+    rx="3"
+    fill="#7F77DD"
+    fill-opacity="0.18"
+    stroke="#7F77DD"
+    stroke-width="2"
+  />
+
+  <!-- Bottom row + chat tail -->
+  <path
+    d="M12 42
+       H38
+       A3 3 0 0 1 41 45
+       V50
+       A3 3 0 0 1 38 53
+       H26
+       L12 58
+       V45
+       A3 3 0 0 1 12 42
+       Z"
+    fill="#7F77DD"
+    fill-opacity="0.18"
+    stroke="#7F77DD"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+</svg>

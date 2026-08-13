@@ -1,0 +1,61 @@
+<svg
+  width="280"
+  height="260"
+  viewBox="0 0 280 260"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Qumly logo</title>
+  <desc>
+    A wordmark for Qumly with an icon combining database table rows
+    and a chat bubble tail, representing natural language to SQL.
+  </desc>
+
+  <!-- Icon mark: stacked table rows morphing into a chat tail -->
+  <g>
+    <!-- Top row -->
+    <rect
+      x="80"
+      y="55"
+      width="120"
+      height="34"
+      rx="6"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+    />
+
+    <!-- Middle row -->
+    <rect
+      x="80"
+      y="98"
+      width="120"
+      height="34"
+      rx="6"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+    />
+
+    <!-- Bottom row + chat tail -->
+    <path
+      d="M80 141
+         H156
+         A6 6 0 0 1 162 147
+         V169
+         A6 6 0 0 1 156 175
+         H106
+         L80 195
+         V147
+         A6 6 0 0 1 80 141
+         Z"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>
