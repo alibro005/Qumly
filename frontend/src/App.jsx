@@ -11,6 +11,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [recentQueries, setRecentQueries] = useState([]);
 
   const handleExplainSql = async (sql) => {
     return await explainSql(sql);
@@ -34,6 +35,17 @@ function App() {
       };
 
       setMessages((previousMessages) => [...previousMessages, newMessage]);
+      setRecentQueries((previous) => {
+        const updated = [
+          {
+            id: newMessage.id,
+            question: newMessage.question,
+          },
+          ...previous.filter((item) => item.question !== newMessage.question),
+        ];
+
+        return updated.slice(0, 5);
+      });
     } catch (error) {
       console.error("Query error:", error);
     } finally {
@@ -72,6 +84,11 @@ function App() {
     }
   };
 
+  const handleNewQuery = () => {
+    setMessages([]);
+    setLoading(false);
+  };
+
   return (
     <div className="app">
       <Topbar
@@ -80,7 +97,7 @@ function App() {
       />
 
       <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
-        <Sidebar />
+        <Sidebar onNewQuery={handleNewQuery} recentQueries={recentQueries} />
 
         <main className="workspace">
           <ConversationFeed

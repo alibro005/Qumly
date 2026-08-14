@@ -255,6 +255,8 @@ a {
 }
 
 .sidebar {
+  position: relative;
+  z-index: 10;
   border-right: 1px solid var(--border);
   background: var(--surface);
   padding: var(--sp-4) var(--sp-3);
@@ -344,6 +346,17 @@ a {
 .recent-item:hover {
   background: var(--surface-2);
   color: var(--text);
+}
+
+.recent-list__item {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  word-break: break-word;
+  cursor: pointer;
 }
 
 /* Schema explorer */
@@ -526,6 +539,12 @@ a {
 /* ==========================================================
    Buttons
    ========================================================== */
+.sidebar .btn {
+  position: relative;
+  z-index: 11;
+  pointer-events: auto;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

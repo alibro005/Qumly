@@ -1,11 +1,19 @@
 import SchemaExplorer from "./SchemaExplorer";
 
-function Sidebar() {
+function Sidebar({ onNewQuery, recentQueries }) {
   return (
     <aside className="sidebar">
       {/* New Query */}
       <div className="sidebar__section">
-        <button className="btn btn--primary btn--block">+ New query</button>
+        <button
+          className="btn btn--primary btn--block"
+          onClick={() => {
+            console.log("SIDEBAR BUTTON CLICKED");
+            onNewQuery();
+          }}
+        >
+          + New query
+        </button>
       </div>
 
       {/* Navigation */}
@@ -13,18 +21,22 @@ function Sidebar() {
         <a href="#" className="nav-link is-active">
           New query
         </a>
-
-        <a href="#" className="nav-link">
-          Query history
-        </a>
       </nav>
 
       {/* Recent Queries */}
       <div className="sidebar__section sidebar__section--recent">
         <h2 className="sidebar__label">Recent queries</h2>
 
-        <ul className="recent-list">
-          {/* I'll connect this to query history later */}
+        <ul className="recent-list recent-item recent-item:hover">
+          {recentQueries.map((query) => (
+            <li
+              key={query.id}
+              className="recent-list__item"
+              title={query.question}
+            >
+              {query.question}
+            </li>
+          ))}
         </ul>
       </div>
 
