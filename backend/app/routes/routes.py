@@ -1,8 +1,11 @@
 from fastapi import APIRouter, HTTPException
-from httpx import request
 
-
-from app.services.prompt import build_sql_prompt, build_explain_sql_prompt
+from app.services.prompt import (
+    build_sql_prompt,
+    build_explain_sql_prompt,
+    build_explain_answer_prompt,
+    build_correct_sql_prompt,
+)
 from app.services.llm import (
     generate_sql,
     generate_answer,
@@ -109,21 +112,19 @@ def database_schema():
 @router.post("/query", response_model=QueryResponse)
 def query_database(request: QueryRequest):
 
-    # 1. Get database schema
     schema = get_schema()
-
-    # 2. Build AI prompt
 
     question = request.question
 
     if request.clarification:
         question = f"""
-    Original question:
-    {request.question}
+Original question:
+{request.question}
 
-    User clarification:
-    {request.clarification}
-    """
+User clarification:
+{request.clarification}
+"""
+
     conversation_id = request.conversation_id
 
     history = []
@@ -131,48 +132,82 @@ def query_database(request: QueryRequest):
     if conversation_id:
         history = get_history(conversation_id)
 
-    print("CONVERSATION ID:", conversation_id)
-    print("HISTORY:", history)
+    prompt = build_sql_prompt(
+        schema=schema,
+        question=question,
+        history=history,
+    )
 
-    prompt = build_sql_prompt(schema=schema, question=question, history=history)
-
-    # 3. Generate SQL using Llama
     result = generate_sql(prompt)
 
-    if result["status"] == "clarification_needed":
+    print("LLM RESULT:", result)
+
+    # Clarification
+
+    if result.get("status") == "clarification_needed":
         return {
             "status": "clarification_needed",
-            "question": result["question"],
-            "options": result["options"],
+            "question": result.get("question"),
+            "options": result.get("options", []),
         }
 
-    sql = result["sql"]
+    # Rejected request
 
-    # 4. Validate generated SQL
+    if result.get("status") == "rejected":
+        return {
+            "status": "rejected",
+            "question": request.question,
+            "answer": result.get("message", "This operation is not allowed."),
+        }
+
+    # Clear request
+
+    if result.get("status") != "clear":
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "Invalid response from AI.",
+                "result": result,
+            },
+        )
+
+    sql = result.get("sql")
+
+    if not sql:
+        raise HTTPException(
+            status_code=400,
+            detail="AI did not return a SQL query.",
+        )
+
+    # Validate SQL
+
     is_valid, message = validate_sql(sql)
 
     if not is_valid:
         raise HTTPException(
-            status_code=400, detail={"message": message, "generated_sql": sql}
+            status_code=400,
+            detail={
+                "message": message,
+                "generated_sql": sql,
+            },
         )
 
-    # 5. Execute SQL
+    # Execute SQL
+
     try:
         results = execute_query(sql)
-        answer = generate_answer(question=request.question, sql=sql, results=results)
+
     except Exception as error:
 
-        # print("Original SQL:", sql)
-        # print("Database error:", str(error))
-
-        # Ask Llama to correct the failed SQL
-        corrected_sql = correct_sql(
-            question=request.question, sql=sql, error=str(error), schema=schema
+        corrected_prompt = build_correct_sql_prompt(
+            question=request.question,
+            sql=sql,
+            error=str(error),
+            schema=schema,
         )
 
-        # print("Corrected SQL:", corrected_sql)
+        corrected_sql = correct_sql(corrected_prompt)
 
-        # Validate corrected SQL
         is_valid, message = validate_sql(corrected_sql)
 
         if not is_valid:
@@ -185,7 +220,6 @@ def query_database(request: QueryRequest):
                 },
             )
 
-        # Execute corrected SQL
         try:
             results = execute_query(corrected_sql)
             sql = corrected_sql
@@ -200,8 +234,15 @@ def query_database(request: QueryRequest):
                 },
             )
 
-    # Generate human-readable answer
-    answer = generate_answer(question=request.question, sql=sql, results=results)
+   
+    # Generate answer
+    answer_prompt = build_explain_answer_prompt(
+        question=request.question,
+        sql=sql,
+        results=results,
+    )
+
+    answer = generate_answer(answer_prompt)
 
     if conversation_id:
         add_message(
@@ -210,8 +251,6 @@ def query_database(request: QueryRequest):
             sql=sql,
             answer=answer,
         )
-
-    # 6. Return everything
 
     return {
         "status": "success",
@@ -227,7 +266,7 @@ async def explain_sql(data: ExplainSQLRequest):
 
     prompt = build_explain_sql_prompt(data.sql)
 
-    # Call your existing LLM function here
+    # Call Llm function
     explanation = generate_sql_explanation(prompt)
 
     return {"status": "success", "sql": data.sql, "explanation": explanation}

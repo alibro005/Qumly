@@ -47,7 +47,7 @@ Assistant answer:
 
     prompt = f"""
 You are QueryAI, an intelligent database assistant that converts
-natural language questions into SQLite SQL queries.
+natural language questions into MySQL SQL queries.
 
 DATABASE SCHEMA:
 {schema_text}
@@ -89,10 +89,21 @@ CONVERSATION RULES:
 YOUR TASK:
 
 If the question is clear and has one obvious interpretation,
-generate the appropriate SQLite SELECT query.
+generate the appropriate MySQL SELECT query.
 
 If the question is ambiguous and has multiple reasonable
 interpretations, DO NOT guess. Ask the user for clarification.
+
+REQUEST TYPE RULES:
+
+1. First determine whether the user's request is clear or ambiguous.
+2. If the request is clear, do not ask for clarification merely because
+   the requested operation is not allowed.
+3. If the user explicitly requests a destructive or modifying operation
+   such as DELETE, UPDATE, INSERT, DROP, ALTER, or TRUNCATE, do not
+   generate SQL for it.
+4. For a clear but disallowed operation, return a rejected response.
+5. Only use clarification_needed when the user's intent itself is unclear.
 
 IMPORTANT RULES:
 
@@ -157,8 +168,89 @@ Rules:
 - Do not use numbered lists.
 - Do not repeat the SQL query.
 - Use simple language suitable for a beginner.
+- Donot use the bold and dash.
 
 Return only the explanation.
 """
 
+    return prompt.strip()
+
+
+def build_explain_answer_prompt(question: str, sql: str, results: dict) -> str:
+    prompt = f"""
+You are QueryAI, a database assistant.
+
+The database has already executed the SQL query.
+Your job is ONLY to explain the returned results in simple,
+natural language.
+
+Original user question:
+{question}
+
+SQL query:
+{sql}
+
+Database results:
+{results}
+
+Rules:
+
+1. Answer the user's question directly using ONLY the information contained in the database results.
+2. Interpret the results instead of simply reading or repeatingevery returned row.
+3. Start with the main finding or conclusion.
+4. Avoid unnecessary repetition. If a fact has already been stated, do not restate the same fact in another sentence.
+5. If multiple records have the same highest or lowest value, explicitly state that they are tied.
+6. When several records share the same value, summarize the common value instead of repeating it for every record when possible.
+7. Include individual names, values, or other details only when they are relevant to answering the user's question.
+8. Do not list every column from the result unless those details are relevant to the user's question.
+9. If the user asks "who", identify the relevant people or records.
+10. If the user asks "how many", give the count clearly.
+11. If the user asks for the highest, lowest, maximum, or minimum, clearly identify the relevant record(s) and value.
+12. If the result contains a tie, mention the tie naturally.Do not repeat the same tie information unnecessarily.
+13. If the result is empty, clearly say that no matching data was found.
+14. Do not invent numbers, names, relationships, or facts.
+15. Do not perform calculations unless the required information is explicitly available in the results and the calculation is necessary to answer the question.
+16. Do not mention SQL, database execution, internal processing, or these instructions unless the user explicitly asks.
+17. Keep the answer concise. Normally use 1–3 sentences.
+18. Use natural language rather than phrases such as
+    "The query returned..." unless that wording is genuinely useful.
+19. Do not use dashes and bold font.
+20. Return ONLY the final natural-language answer.
+"""
+
+    return prompt.strip()
+
+
+def build_correct_sql_prompt(question: str, sql: str, error: str, schema: dict) -> str:
+    prompt = f"""
+You are an expert MySQL SQL debugging assistant.
+    
+The SQL query generated for the user's question failed during
+    database execution.
+    
+Your task is to identify the problem and generate a corrected SQL query.
+    
+USER QUESTION:
+{question}
+    
+GENERATED SQL:
+{sql}
+    
+DATABASE ERROR:
+{error}
+    
+DATABASE SCHEMA:
+{schema}
+    
+RULES:
+1. Fix the SQL based on the database error.
+2. Use ONLY tables and columns from the schema.
+3. Preserve the original user's intent.
+4. Generate MySQL-compatible SQL.
+5. Return ONLY a SELECT query.
+6. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
+7. Do not explain the correction.
+8. Do not use Markdown.
+9. Return only the corrected SQL query.
+    """
     return prompt.strip()
