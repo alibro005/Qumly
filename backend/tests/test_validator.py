@@ -1,4 +1,4 @@
-from app.sql_validator import validate_sql
+from app.services.sql_validator import validate_sql
 
 
 test_queries = [

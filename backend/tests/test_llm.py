@@ -1,6 +1,6 @@
-from app.database import get_schema
-from app.prompt import build_sql_prompt
-from app.llm import generate_sql
+from app.services.database.manager import get_schema
+from app.services.prompt import build_sql_prompt
+from app.services.llm import generate_sql
 
 schema = get_schema()
 
