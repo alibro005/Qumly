@@ -1,17 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Topbar from "./components/layout/Topbar";
 import Sidebar from "./components/layout/Sidebar";
 import QueryInput from "./components/query/QueryInput";
 import ConversationFeed from "./components/conversation/ConversationFeed";
+import DatabaseModal from "./components/database/Database";
 
-import { sendQuery, explainSql } from "./services/api";
+import { sendQuery, explainSql, getDatabaseStatus ,getSchema} from "./services/api";
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [recentQueries, setRecentQueries] = useState([]);
+  const [databaseModalOpen, setDatabaseModalOpen] = useState(false);
+
+  const [schema, setSchema] = useState({});
+  const [databaseType, setDatabaseType] = useState(null);
+
+  useEffect(() => {
+    const loadDatabase = async () => {
+      try {
+        const status = await getDatabaseStatus();
+
+        if (!status.connected) {
+          setDatabaseType(null);
+          setSchema({});
+          return;
+        }
+
+        setDatabaseType(status.database);
+
+        const schema = await getSchema();
+        setSchema(schema);
+      } catch (error) {
+        console.error("Failed to restore database:", error);
+        setDatabaseType(null);
+        setSchema({});
+      }
+    };
+
+    loadDatabase();
+  }, []);
+
+  const handleAddDatabase = () => {
+    console.log("ADD DATABASE CLICKED");
+    setDatabaseModalOpen(true);
+  };
+
+  const handleCloseDatabaseModal = () => {
+    setDatabaseModalOpen(false);
+  };
 
   const handleExplainSql = async (sql) => {
     return await explainSql(sql);
@@ -97,7 +136,13 @@ function App() {
       />
 
       <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
-        <Sidebar onNewQuery={handleNewQuery} recentQueries={recentQueries} />
+        <Sidebar
+          onNewQuery={handleNewQuery}
+          recentQueries={recentQueries}
+          onAddDatabase={handleAddDatabase}
+          schema={schema}
+          databaseType={databaseType}
+        />
 
         <main className="workspace">
           <ConversationFeed
@@ -108,6 +153,17 @@ function App() {
           <QueryInput onSubmit={handleQuery} loading={loading} />
         </main>
       </div>
+      {databaseModalOpen && (
+        <DatabaseModal
+          onClose={() => setDatabaseModalOpen(false)}
+          onDatabaseConnected={(data) => {
+            console.log("DATABASE RESPONSE:", data);
+
+            setSchema(data || {});
+            setDatabaseType("mysql");
+          }}
+        />
+      )}
     </div>
   );
 }

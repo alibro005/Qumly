@@ -1,18 +1,25 @@
 import SchemaExplorer from "./SchemaExplorer";
 
-function Sidebar({ onNewQuery, recentQueries }) {
+function Sidebar({
+  onNewQuery,
+  recentQueries,
+  onAddDatabase,
+  schema,
+  databaseType,
+}) {
   return (
     <aside className="sidebar">
       {/* New Query */}
       <div className="sidebar__section">
-        <button
-          className="btn btn--primary btn--block"
-          onClick={() => {
-            console.log("SIDEBAR BUTTON CLICKED");
-            onNewQuery();
-          }}
-        >
+        <button className="btn btn--primary btn--block" onClick={onNewQuery}>
           + New query
+        </button>
+        <button
+          type="button"
+          className="btn btn--primary btn--block dbt"
+          onClick={onAddDatabase}
+        >
+          + Add database
         </button>
       </div>
 
@@ -41,16 +48,23 @@ function Sidebar({ onNewQuery, recentQueries }) {
       </div>
 
       {/* Dynamic Schema */}
-      <SchemaExplorer />
+      <SchemaExplorer schema={schema} databaseType={databaseType} />
 
       {/* Database Status */}
       <div className="sidebar__footer">
         <div className="db-status">
-          <span className="db-status__dot"></span>
+          <span
+            className={`db-status__dot ${
+              databaseType ? "is-connected" : "is-disconnected"
+            }`}
+          ></span>
 
           <div>
-            <div className="db-status__name">SQLite</div>
-            <div className="db-status__state">Connected</div>
+            <div className="db-status__name">{databaseType || "Database"}</div>
+
+            <div className="db-status__state">
+              {databaseType ? "Connected" : "Not connected"}
+            </div>
           </div>
         </div>
       </div>

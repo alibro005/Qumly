@@ -574,6 +574,10 @@ a {
   background: var(--accent);
   color: #0b0f14;
 }
+
+.dbt {
+  margin-top: var(--sp-4);
+}
 .btn--primary:hover:not(:disabled) {
   background: var(--accent-hover);
 }
@@ -604,6 +608,279 @@ a {
 .btn--xs {
   padding: 4px 8px;
   font-size: 11.5px;
+}
+
+/* ================================
+   Database Modal
+================================ */
+
+.database-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(4px);
+}
+
+.database-modal {
+  width: min(460px, 100%);
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Header */
+
+.database-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.database-modal__header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.database-modal__close {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.database-modal__close:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
+/* Body */
+
+.database-modal__body {
+  padding: 20px;
+}
+
+/* Database type selector */
+
+.database-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+
+  margin-bottom: 22px;
+
+  padding: 4px;
+
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.database-type__button {
+  padding: 9px 12px;
+
+  border: 0;
+  border-radius: 6px;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.database-type__button:hover {
+  color: var(--text-primary);
+}
+
+.database-type__button.is-active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Form */
+
+.database-modal__body label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.database-modal__body input {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-bottom: 15px;
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--surface-2);
+  color: var(--text-primary);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.database-modal__body input::placeholder {
+  color: var(--text-muted);
+}
+
+.database-modal__body input:focus {
+  border-color: var(--accent);
+
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* SQLite file input */
+
+.database-modal__body input[type="file"] {
+  padding: 8px;
+
+  cursor: pointer;
+}
+
+.database-modal__body input[type="file"]::file-selector-button {
+  margin-right: 10px;
+
+  padding: 7px 10px;
+
+  border: 0;
+  border-radius: 6px;
+
+  background: var(--surface);
+  color: var(--text-primary);
+
+  font-family: inherit;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+/* Connect button */
+
+.database-modal__body > div > button:last-child {
+  width: 100%;
+
+  margin-top: 4px;
+  padding: 10px 14px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: var(--accent);
+  color: white;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.database-modal__body > div > button:last-child:hover {
+  background: var(--accent-hover);
+}
+
+.database-modal__body > div > button:last-child:active {
+  transform: translateY(1px);
+}
+
+/* Modal scrollbar */
+
+.database-modal::-webkit-scrollbar {
+  width: 5px;
+}
+
+.database-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.database-modal::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.database-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .database-modal__overlay {
+    padding: 14px;
+  }
+
+  .database-modal {
+    border-radius: 12px;
+  }
+
+  .database-modal__body {
+    padding: 16px;
+  }
 }
 
 /* ==========================================================

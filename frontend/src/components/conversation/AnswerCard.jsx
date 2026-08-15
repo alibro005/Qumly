@@ -12,13 +12,12 @@ function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
   const [loadingExplanation, setLoadingExplanation] = useState(false);
   const [showChart, setShowChart] = useState(false);
 
-  const formattedSql = format(sql, {
-    language: "sql",
-  });
-
+  const formattedSql = sql
+    ? format(sql, {
+        language: "mysql",
+      })
+    : null;
   const handleExplain = async () => {
-    // If explanation already exists, just hide/show it.
-    // DON'T call the LLM again.
     if (explanation) {
       setShowExplain((prev) => !prev);
       return;
