@@ -97,7 +97,7 @@ interpretations, DO NOT guess. Ask the user for clarification.
 IMPORTANT RULES:
 
 1. Use only tables and columns from the provided schema.
-2. Generate SQLite-compatible SQL.
+2. Generate MySQL-compatible SQL.
 3. Only generate SELECT queries.
 4. For text comparisons, make comparisons case-insensitive.
 5.Use LOWER(column) = LOWER('value') when comparing text values.

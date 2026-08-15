@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from httpx import request
 
-from app.services.database import get_connection, get_schema, execute_query
+
 from app.services.prompt import build_sql_prompt, build_explain_sql_prompt
 from app.services.llm import (
     generate_sql,
@@ -11,8 +11,19 @@ from app.services.llm import (
 )
 from app.services.sql_validator import validate_sql
 
+from app.services.database.manager import (
+    configure_mysql,
+    is_connected,
+    get_schema,
+    execute_query,
+)
 
-from app.schema.schema import QueryRequest, QueryResponse, ExplainSQLRequest
+from app.schema.schema import (
+    QueryRequest,
+    QueryResponse,
+    ExplainSQLRequest,
+    MySQLConnectionRequest,
+)
 from app.services.conversation import get_history, add_message
 
 router = APIRouter()
@@ -28,27 +39,71 @@ def health_check():
     return {"status": "healthy"}
 
 
+@router.post("/database/connect")
+def connect_mysql(data: MySQLConnectionRequest):
+
+    try:
+        configure_mysql(
+            host=data.host,
+            port=data.port,
+            database=data.database,
+            username=data.username,
+            password=data.password,
+        )
+
+        # Test the connection and retrieve schema
+        schema = get_schema()
+
+        return schema
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "failed",
+                "message": str(error),
+            },
+        )
+
+
+@router.get("/database/status")
+def database_status():
+
+    return {
+        "connected": is_connected(),
+        "database": "mysql" if is_connected() else None,
+    }
+
+
 @router.get("/database-test")
 def database_test():
-    connection = get_connection()
-    cursor = connection.cursor()
+    try:
+        schema = get_schema()
 
-    cursor.execute("""
-        SELECT name
-        FROM sqlite_master
-        WHERE type='table'
-        AND name NOT LIKE 'sqlite_%';
-    """)
+        return {
+            "database": "mysql",
+            "tables": list(schema.keys()),
+        }
 
-    tables = cursor.fetchall()
-    connection.close()
-
-    return {"database": "connected", "tables": [table[0] for table in tables]}
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        )
 
 
 @router.get("/schema")
 def database_schema():
-    return get_schema()
+    try:
+        return get_schema()
+    except Exception as error:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "failed",
+                "message": str(error),
+            },
+        )
 
 
 @router.post("/query", response_model=QueryResponse)

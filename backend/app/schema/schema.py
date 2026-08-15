@@ -19,3 +19,10 @@ class QueryResponse(BaseModel):
 
 class ExplainSQLRequest(BaseModel):
     sql: str
+
+class MySQLConnectionRequest(BaseModel):
+    host: str
+    port: int = 3306
+    database: str
+    username: str
+    password: str
