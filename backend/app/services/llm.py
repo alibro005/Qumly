@@ -11,7 +11,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_sql(prompt: str) -> dict:
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[
             {
                 "role": "system",
@@ -38,7 +38,7 @@ def generate_sql(prompt: str) -> dict:
 
 def generate_sql_explanation(prompt):
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[{"role": "user", "content": prompt}],
     )
 
@@ -74,7 +74,7 @@ Rules:
 """
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[
             {
                 "role": "system",
