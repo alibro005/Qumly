@@ -34,11 +34,11 @@ function Sidebar({
       <div className="sidebar__section sidebar__section--recent">
         <h2 className="sidebar__label">Recent queries</h2>
 
-        <ul className="recent-list recent-item recent-item:hover">
+        <ul className="recent-list ">
           {recentQueries.map((query) => (
             <li
               key={query.id}
-              className="recent-list__item"
+              className="recent-list__item recent-item recent-item:hover"
               title={query.question}
             >
               {query.question}
