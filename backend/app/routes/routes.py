@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.services.prompt.prompt import (
+from app.services.prompts.prompt import (
     build_sql_prompt,
     build_explain_sql_prompt,
     build_explain_answer_prompt,
@@ -12,7 +12,7 @@ from app.services.llm import (
     correct_sql,
     generate_sql_explanation,
 )
-from app.services.validator.sql_validator import validate_sql
+from app.services.validators.sql_validator import validate_sql
 
 from app.services.database.manager import (
     configure_mysql,
@@ -27,7 +27,7 @@ from app.schema.schema import (
     ExplainSQLRequest,
     MySQLConnectionRequest,
 )
-from app.services.conversation import get_history, add_message
+from app.services.history.conversation import get_history, add_message
 
 router = APIRouter()
 

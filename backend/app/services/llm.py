@@ -78,7 +78,7 @@ def correct_sql(prompt) -> str:
         messages=[
             {
                 "role": "system",
-                "content": "You are an expert SQLite SQL debugging assistant.",
+                "content": "You are an expert Mysql SQL debugging assistant.",
             },
             {"role": "user", "content": prompt},
         ],
