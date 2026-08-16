@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.services.prompt import (
+from app.services.prompt.prompt import (
     build_sql_prompt,
     build_explain_sql_prompt,
     build_explain_answer_prompt,
@@ -12,7 +12,7 @@ from app.services.llm import (
     correct_sql,
     generate_sql_explanation,
 )
-from app.services.sql_validator import validate_sql
+from app.services.validator.sql_validator import validate_sql
 
 from app.services.database.manager import (
     configure_mysql,
@@ -234,7 +234,6 @@ User clarification:
                 },
             )
 
-   
     # Generate answer
     answer_prompt = build_explain_answer_prompt(
         question=request.question,
