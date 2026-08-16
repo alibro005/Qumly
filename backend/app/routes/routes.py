@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Header
+
 
 from app.services.prompts.prompt import (
     build_sql_prompt,
@@ -14,12 +15,13 @@ from app.services.llm import (
 )
 from app.services.validators.sql_validator import validate_sql
 
-from app.services.database.manager import (
-    configure_mysql,
-    is_connected,
-    get_schema,
-    execute_query,
-)
+# from app.services.database.manager import (
+#     configure_mysql,
+#     is_connected,
+#     get_schema,
+#     execute_query,
+# )
+from app.services.database.manager import database_manager
 
 from app.schema.schema import (
     QueryRequest,
@@ -42,23 +44,51 @@ def health_check():
     return {"status": "healthy"}
 
 
-@router.post("/database/connect")
-def connect_mysql(data: MySQLConnectionRequest):
+# @router.post("/database/connect")
+# def connect_mysql(data: MySQLConnectionRequest, x_session_id: str = Header(...),):
 
+#     try:
+#         database_manager.configure_mysql(
+#             host=data.host,
+#             port=data.port,
+#             database=data.database,
+#             username=data.username,
+#             password=data.password,
+#         )
+
+#         # Test the connection and retrieve schema
+#         schema = database_manager.get_schema()
+
+#         return schema
+
+#     except Exception as error:
+#         raise HTTPException(
+#             status_code=400,
+#             detail={
+#                 "status": "failed",
+#                 "message": str(error),
+#             },
+#         )
+
+
+@router.post("/database/connect")
+def connect_database(
+    request: MySQLConnectionRequest,
+    x_session_id: str = Header(...),
+):
     try:
-        configure_mysql(
-            host=data.host,
-            port=data.port,
-            database=data.database,
-            username=data.username,
-            password=data.password,
+        database_manager.configure_mysql(
+            session_id=x_session_id,
+            host=request.host,
+            port=request.port,
+            database=request.database,
+            username=request.username,
+            password=request.password,
         )
 
-        # Test the connection and retrieve schema
-        schema = get_schema()
+        schema = database_manager.get_schema(x_session_id)
 
         return schema
-
     except Exception as error:
         raise HTTPException(
             status_code=400,
@@ -70,18 +100,22 @@ def connect_mysql(data: MySQLConnectionRequest):
 
 
 @router.get("/database/status")
-def database_status():
+def database_status(
+    x_session_id: str = Header(...),
+):
 
     return {
-        "connected": is_connected(),
-        "database": "mysql" if is_connected() else None,
+        "connected": database_manager.is_connected(x_session_id),
+        "database": "mysql" if database_manager.is_connected(x_session_id) else None,
     }
 
 
 @router.get("/database-test")
-def database_test():
+def database_test(
+    x_session_id: str = Header(...),
+):
     try:
-        schema = get_schema()
+        schema = database_manager.get_schema(x_session_id)
 
         return {
             "database": "mysql",
@@ -96,9 +130,11 @@ def database_test():
 
 
 @router.get("/schema")
-def database_schema():
+def database_schema(
+    x_session_id: str = Header(...),
+):
     try:
-        return get_schema()
+        return database_manager.get_schema(x_session_id)
     except Exception as error:
         raise HTTPException(
             status_code=400,
@@ -110,9 +146,12 @@ def database_schema():
 
 
 @router.post("/query", response_model=QueryResponse)
-def query_database(request: QueryRequest):
+def query_database(
+    request: QueryRequest,
+    x_session_id: str = Header(...),
+):
 
-    schema = get_schema()
+    schema = database_manager.get_schema(x_session_id)
 
     question = request.question
 
@@ -195,7 +234,7 @@ User clarification:
     # Execute SQL
 
     try:
-        results = execute_query(sql)
+        results = database_manager.execute_query(x_session_id, sql)
 
     except Exception as error:
 
@@ -221,7 +260,7 @@ User clarification:
             )
 
         try:
-            results = execute_query(corrected_sql)
+            results = database_manager.execute_query(x_session_id, corrected_sql)
             sql = corrected_sql
 
         except Exception as correction_error:

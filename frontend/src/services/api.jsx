@@ -1,14 +1,26 @@
+import { getSessionId } from "./session";
+
 const API_URL = "http://127.0.0.1:8000";
 
-// get Schema
+function getSessionHeaders() {
+  return {
+    "X-Session-ID": getSessionId(),
+  };
+}
+
+// Get Schema
 export async function getSchema() {
-  const response = await fetch(`${API_URL}/schema`);
+  const response = await fetch(`${API_URL}/schema`, {
+    headers: getSessionHeaders(),
+  });
+
+  const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(`Schema request failed: ${response.status}`);
+    throw new Error(data.detail || `Schema request failed: ${response.status}`);
   }
 
-  return response.json();
+  return data;
 }
 
 // Send Query
@@ -17,6 +29,7 @@ export async function sendQuery(question, clarification = null) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getSessionHeaders(),
     },
     body: JSON.stringify({
       question,
@@ -24,11 +37,16 @@ export async function sendQuery(question, clarification = null) {
     }),
   });
 
+  const data = await response.json();
+
+  console.log("QUERY RESPONSE STATUS:", response.status);
+  console.log("QUERY RESPONSE:", data);
+
   if (!response.ok) {
-    throw new Error(`Query request failed: ${response.status}`);
+    throw new Error(data.detail || "Query failed");
   }
 
-  return response.json();
+  return data;
 }
 
 // Explain SQL
@@ -37,47 +55,58 @@ export async function explainSql(sql) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getSessionHeaders(),
     },
     body: JSON.stringify({
-      sql: sql,
+      sql,
     }),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("Failed to explain SQL");
+    throw new Error(data.detail || "Failed to explain SQL");
   }
 
-  return await response.json();
+  return data;
 }
 
-// Connect My SQL
+// Connect MySQL
 export async function connectMySQL(credentials) {
-  const response = await fetch("http://127.0.0.1:8000/database/connect", {
+  const response = await fetch(`${API_URL}/database/connect`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getSessionHeaders(),
     },
     body: JSON.stringify(credentials),
   });
 
   const data = await response.json();
 
+  console.log("CONNECT RESPONSE STATUS:", response.status);
+  console.log("CONNECT RESPONSE:", data);
+
   if (!response.ok) {
-    throw new Error(
-      data.detail?.message || data.detail || "Failed to connect to MySQL",
-    );
+    throw new Error(data.detail || "Failed to connect to MySQL");
   }
 
   return data;
 }
 
-// Get Status
+// Get Database Status
 export async function getDatabaseStatus() {
-  const response = await fetch("http://127.0.0.1:8000/database/status");
+  const response = await fetch(`${API_URL}/database/status`, {
+    headers: getSessionHeaders(),
+  });
+
+  const data = await response.json();
+
+  console.log("DATABASE STATUS:", data);
 
   if (!response.ok) {
-    throw new Error("Failed to get database status");
+    throw new Error(data.detail || "Failed to get database status");
   }
 
-  return response.json();
+  return data;
 }
