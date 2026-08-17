@@ -88,12 +88,21 @@ export async function connectMySQL(credentials) {
   console.log("CONNECT RESPONSE:", data);
 
   if (!response.ok) {
-    throw new Error(data.detail || "Failed to connect to MySQL");
+    const detail = data.detail;
+
+    let message = "Unable to connect to MySQL.";
+
+    if (typeof detail === "string") {
+      message = detail;
+    } else if (detail && typeof detail === "object") {
+      message = detail.message || detail.error || "Unable to connect to MySQL.";
+    }
+
+    throw new Error(message);
   }
 
   return data;
 }
-
 // Get Database Status
 export async function getDatabaseStatus() {
   const response = await fetch(`${API_URL}/database/status`, {

@@ -11,6 +11,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
   });
 
   const [connecting, setConnecting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleMysqlChange = (event) => {
     const { name, value } = event.target;
@@ -26,13 +27,25 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       return;
     }
 
-    if (
-      !mysqlForm.host ||
-      !mysqlForm.port ||
-      !mysqlForm.database ||
-      !mysqlForm.username
-    ) {
-      console.error("Please fill in all required fields.");
+    setError("");
+
+    if (!mysqlForm.host) {
+      setError("Please enter the MySQL host.");
+      return;
+    }
+
+    if (!mysqlForm.port) {
+      setError("Please enter the MySQL port.");
+      return;
+    }
+
+    if (!mysqlForm.database) {
+      setError("Please enter the database name.");
+      return;
+    }
+
+    if (!mysqlForm.username) {
+      setError("Please enter the MySQL username.");
       return;
     }
 
@@ -46,8 +59,6 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
         username: mysqlForm.username,
       });
 
-      console.log("Connecting to MySQL...");
-
       const response = await connectMySQL({
         host: mysqlForm.host,
         port: Number(mysqlForm.port),
@@ -59,10 +70,11 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       console.log("MySQL connected:", response);
 
       onDatabaseConnected(response);
-
       onClose();
     } catch (error) {
       console.error("MySQL connection failed:", error);
+
+      setError(error.message || "Unable to connect to MySQL.");
     } finally {
       setConnecting(false);
     }
@@ -147,7 +159,11 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               onChange={handleMysqlChange}
               placeholder="Password"
             />
-
+            {error && (
+              <div className="database-error" role="alert">
+                {error}
+              </div>
+            )}
             {/* Connect */}
             <button type="button" onClick={handleConnect} disabled={connecting}>
               {connecting ? "Connecting..." : "Connect"}

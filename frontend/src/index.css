@@ -1046,6 +1046,18 @@ a {
   }
 }
 
+.database-error {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 /* ==========================================================
    Conversation feed
    ========================================================== */
