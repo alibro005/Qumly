@@ -3,8 +3,8 @@ import { connectMySQL } from "../../services/api";
 
 function DatabaseModal({ onClose, onDatabaseConnected }) {
   const [mysqlForm, setMysqlForm] = useState({
-    host: "localhost",
-    port: "3306",
+    host: "",
+    port: "",
     database: "",
     username: "",
     password: "",
@@ -109,7 +109,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               type="text"
               value={mysqlForm.host}
               onChange={handleMysqlChange}
-              placeholder="localhost"
+              placeholder="Host name"
             />
 
             {/* Port */}
@@ -121,7 +121,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               type="number"
               value={mysqlForm.port}
               onChange={handleMysqlChange}
-              placeholder="3306"
+              placeholder="Port"
             />
 
             {/* Database */}
@@ -145,7 +145,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               type="text"
               value={mysqlForm.username}
               onChange={handleMysqlChange}
-              placeholder="root"
+              placeholder="Username"
             />
 
             {/* Password */}
