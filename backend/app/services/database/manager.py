@@ -43,13 +43,22 @@ class DatabaseManager:
         self._pools[session_id] = pool
 
     def configure_demo(self, session_id: str):
+        host = os.getenv("DEMO_DB_HOST")
+        port = os.getenv("DEMO_DB_PORT")
+        database = os.getenv("DEMO_DB_NAME")
+        username = os.getenv("DEMO_DB_USERNAME")
+        password = os.getenv("DEMO_DB_PASSWORD")
+
+        if not all([host, port, database, username, password]):
+            raise RuntimeError("Demo database environment variables are incomplete.")
+
         self.configure_mysql(
             session_id=session_id,
-            host=os.getenv("DEMO_DB_HOST"),
-            port=int(os.getenv("DEMO_DB_PORT")),
-            database=os.getenv("DEMO_DB_NAME"),
-            username=os.getenv("DEMO_DB_USERNAME"),
-            password=os.getenv("DEMO_DB_PASSWORD"),
+            host=host,
+            port=int(port),
+            database=database,
+            username=username,
+            password=password,
         )
 
     def get_connection(self, session_id: str):
