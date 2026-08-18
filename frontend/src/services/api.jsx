@@ -8,6 +8,39 @@ function getSessionHeaders() {
   };
 }
 
+// Connect Demo Database
+export async function connectDemo() {
+  const response = await fetch(`${API_URL}/demo`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...getSessionHeaders(),
+    },
+  });
+
+  const data = await response.json();
+
+  console.log("DEMO RESPONSE STATUS:", response.status);
+  console.log("DEMO RESPONSE:", data);
+
+  if (!response.ok) {
+    const detail = data.detail;
+
+    let message = "Unable to connect to demo database.";
+
+    if (typeof detail === "string") {
+      message = detail;
+    } else if (detail && typeof detail === "object") {
+      message =
+        detail.message || detail.error || "Unable to connect to demo database.";
+    }
+
+    throw new Error(message);
+  }
+
+  return data;
+}
+
 // Get Schema
 export async function getSchema() {
   const response = await fetch(`${API_URL}/schema`, {

@@ -862,49 +862,43 @@ a {
   padding: 20px;
 }
 
-/* Database type selector */
-
-.database-type {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  gap: 8px;
-
-  margin-bottom: 22px;
-
-  padding: 4px;
-
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 9px;
+.database-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
 
-.database-type__button {
-  padding: 9px 12px;
+.database-demo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
 
-  border: 0;
-  border-radius: 6px;
-
-  background: transparent;
+.database-demo p {
+  margin: 0;
   color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
 
-  font-size: 13px;
-  font-weight: 500;
-
+.database-demo button {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--text-on-primary);
+  font-weight: 600;
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.database-type__button:hover {
-  color: var(--text-primary);
+.database-demo button:hover {
+  opacity: 0.9;
 }
 
-.database-type__button.is-active {
-  background: var(--accent);
-  color: white;
+.database-demo button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Form */
@@ -951,31 +945,6 @@ a {
   border-color: var(--accent);
 
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
-}
-
-/* SQLite file input */
-
-.database-modal__body input[type="file"] {
-  padding: 8px;
-
-  cursor: pointer;
-}
-
-.database-modal__body input[type="file"]::file-selector-button {
-  margin-right: 10px;
-
-  padding: 7px 10px;
-
-  border: 0;
-  border-radius: 6px;
-
-  background: var(--surface);
-  color: var(--text-primary);
-
-  font-family: inherit;
-  font-size: 12px;
-
-  cursor: pointer;
 }
 
 /* Connect button */
@@ -1028,6 +997,43 @@ a {
 
 .database-modal::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Database connection mode */
+.database-mode {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.database-mode button {
+  flex: 1;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.database-mode button:hover {
+  color: var(--text-primary);
+}
+
+.database-mode button.active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Mobile */

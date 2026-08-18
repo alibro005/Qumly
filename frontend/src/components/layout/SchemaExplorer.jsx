@@ -1,6 +1,4 @@
 function SchemaExplorer({ schema = {}, databaseType = null }) {
-  console.log("SCHEMA EXPLORER RECEIVED:", schema);
-  console.log("DATABASE TYPE:", databaseType);
   return (
     <div className="sidebar__section sidebar__section--schema">
       <h2 className="sidebar__label">Schema</h2>
