@@ -44,31 +44,11 @@ def health_check():
     return {"status": "healthy"}
 
 
-# @router.post("/database/connect")
-# def connect_mysql(data: MySQLConnectionRequest, x_session_id: str = Header(...),):
+@router.post("/demo")
+def connect_demo(session_id: str):
+    database_manager.configure_demo(session_id)
 
-#     try:
-#         database_manager.configure_mysql(
-#             host=data.host,
-#             port=data.port,
-#             database=data.database,
-#             username=data.username,
-#             password=data.password,
-#         )
-
-#         # Test the connection and retrieve schema
-#         schema = database_manager.get_schema()
-
-#         return schema
-
-#     except Exception as error:
-#         raise HTTPException(
-#             status_code=400,
-#             detail={
-#                 "status": "failed",
-#                 "message": str(error),
-#             },
-#         )
+    return {"message": "Demo database connected successfully."}
 
 
 @router.post("/database/connect")

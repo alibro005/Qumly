@@ -1,7 +1,9 @@
+import os
 import mysql.connector as mysql_connector
 from mysql.connector import pooling
 
 from app.services.database import mysql as mysql_database
+
 
 class DatabaseManager:
     def __init__(self):
@@ -40,13 +42,21 @@ class DatabaseManager:
 
         self._pools[session_id] = pool
 
+    def configure_demo(self, session_id: str):
+        self.configure_mysql(
+            session_id=session_id,
+            host=os.getenv("DEMO_DB_HOST"),
+            port=int(os.getenv("DEMO_DB_PORT")),
+            database=os.getenv("DEMO_DB_NAME"),
+            username=os.getenv("DEMO_DB_USERNAME"),
+            password=os.getenv("DEMO_DB_PASSWORD"),
+        )
+
     def get_connection(self, session_id: str):
         pool = self._pools.get(session_id)
 
         if pool is None:
-            raise RuntimeError(
-                "Database is not connected for this session."
-            )
+            raise RuntimeError("Database is not connected for this session.")
 
         connection = pool.get_connection()
         connection.ping(
@@ -100,77 +110,3 @@ class DatabaseManager:
 
 
 database_manager = DatabaseManager()
-
-# _connection_config = None
-
-
-# def configure_mysql(
-#     host: str,
-#     port: int,
-#     database: str,
-#     username: str,
-#     password: str,
-# ):
-#     global _connection_config
-
-#     # Test the connection first
-#     connection = mysql_connector.connect(
-#         host=host,
-#         port=port,
-#         database=database,
-#         user=username,
-#         password=password,
-#     )
-
-#     connection.close()
-
-#     _connection_config = {
-#         "host": host,
-#         "port": port,
-#         "database": database,
-#         "username": username,
-#         "password": password,
-#     }
-
-
-# def get_connection():
-#     if _connection_config is None:
-#         raise RuntimeError("Database is not connected.")
-
-#     return mysql_connector.connect(
-#         host=_connection_config["host"],
-#         port=_connection_config["port"],
-#         database=_connection_config["database"],
-#         user=_connection_config["username"],
-#         password=_connection_config["password"],
-#     )
-
-
-# def is_connected():
-#     if _connection_config is None:
-#         return False
-
-#     try:
-#         connection = get_connection()
-#         connection.close()
-#         return True
-#     except Exception:
-#         return False
-
-
-# def get_schema():
-#     connection = get_connection()
-
-#     try:
-#         return mysql_database.get_schema(connection)
-#     finally:
-#         connection.close()
-
-
-# def execute_query(sql: str):
-#     connection = get_connection()
-
-#     try:
-#         return mysql_database.execute_query(connection, sql)
-#     finally:
-#         connection.close()
