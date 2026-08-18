@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Topbar from "./components/layout/Topbar";
-import Sidebar from "./components/layout/Sidebar";
+import Sidebar from "./components/layout/SideBar";
 import QueryInput from "./components/query/QueryInput";
 import ConversationFeed from "./components/conversation/ConversationFeed";
 import DatabaseModal from "./components/database/Database";
