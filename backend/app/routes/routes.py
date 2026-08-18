@@ -14,13 +14,6 @@ from app.services.llm import (
     generate_sql_explanation,
 )
 from app.services.validators.sql_validator import validate_sql
-
-# from app.services.database.manager import (
-#     configure_mysql,
-#     is_connected,
-#     get_schema,
-#     execute_query,
-# )
 from app.services.database.manager import database_manager
 
 from app.schema.schema import (
@@ -45,10 +38,21 @@ def health_check():
 
 
 @router.post("/demo")
-def connect_demo(session_id: str):
-    database_manager.configure_demo(session_id)
+def connect_demo(x_session_id: str = Header(...)):
+    try:
+        database_manager.configure_demo(x_session_id)
 
-    return {"message": "Demo database connected successfully."}
+        schema = database_manager.get_schema(x_session_id)
+
+        return schema
+    except Exception as error:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "failed",
+                "message": str(error),
+            },
+        )
 
 
 @router.post("/database/connect")
