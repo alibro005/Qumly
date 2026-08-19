@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header
+import logging
 
 
 from app.services.prompts.prompt import (
@@ -25,6 +26,7 @@ from app.schema.schema import (
 from app.services.history.conversation import get_history, add_message
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/")
@@ -46,11 +48,12 @@ def connect_demo(x_session_id: str = Header(...)):
 
         return schema
     except Exception as error:
+        logger.exception("Failed to connect to demo database")
         raise HTTPException(
-            status_code=400,
+            status_code=503,
             detail={
                 "status": "failed",
-                "message": str(error),
+                "message": "Unable to connect to the database. Please try again in a few seconds.",
             },
         )
 
