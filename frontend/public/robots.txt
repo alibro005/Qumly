@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://qumly.vercel.app/sitemap.xml
+Sitemap: https://qumly.me/sitemap.xml
