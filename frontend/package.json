@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2",
     "react-syntax-highlighter": "^16.1.1",
     "recharts": "^3.10.1",
     "sql-formatter": "^15.8.2"
