@@ -44,7 +44,6 @@ function App() {
   }, []);
 
   const handleAddDatabase = () => {
-    console.log("ADD DATABASE CLICKED");
     setDatabaseModalOpen(true);
   };
 
@@ -155,7 +154,7 @@ function App() {
         <DatabaseModal
           onClose={() => setDatabaseModalOpen(false)}
           onDatabaseConnected={(data) => {
-            console.log("DATABASE RESPONSE:", data);
+            // console.log("DATABASE RESPONSE:", data);
 
             setSchema(data || {});
             setDatabaseType("mysql");

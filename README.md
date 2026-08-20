@@ -24,7 +24,7 @@
   </a>
 </p>
 
-[Live Demo](https://qumly.vercel.app) |  [Installation](INSTALLATION.md) |  [Issues](https://github.com/alibro005/Qumly/issues)
+[Live Demo](https://qumly.me) |  [Installation](INSTALLATION.md) |  [Issues](https://github.com/alibro005/Qumly/issues)
 
 An AI-powered SQL Assistant that turns natural language or voice into safe, schema-aware SQL, executes the queries, shows you the results, and explains them in plain English.
 
@@ -131,7 +131,7 @@ For detailed instructions on installing and running Qumly locally, see:
 
 Try the deployed version of Qumly:
 
-**[Qumly](https://qumly.vercel.app)**
+**[Qumly](https://qumly.me)**
 
 > The deployed version requires a backend and database that are reachable from the internet. For the complete local setup, see the [Installation Guide](INSTALLATION.md).
 
