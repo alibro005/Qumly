@@ -20,8 +20,8 @@ export async function connectDemo() {
 
   const data = await response.json();
 
-  console.log("DEMO RESPONSE STATUS:", response.status);
-  console.log("DEMO RESPONSE:", data);
+  // console.log("DEMO RESPONSE STATUS:", response.status);
+  // console.log("DEMO RESPONSE:", data);
 
   if (!response.ok) {
     const detail = data.detail;
@@ -72,8 +72,8 @@ export async function sendQuery(question, clarification = null) {
 
   const data = await response.json();
 
-  console.log("QUERY RESPONSE STATUS:", response.status);
-  console.log("QUERY RESPONSE:", data);
+  // console.log("QUERY RESPONSE STATUS:", response.status);
+  // console.log("QUERY RESPONSE:", data);
 
   if (!response.ok) {
     throw new Error(data.detail || "Query failed");
@@ -117,8 +117,8 @@ export async function connectMySQL(credentials) {
 
   const data = await response.json();
 
-  console.log("CONNECT RESPONSE STATUS:", response.status);
-  console.log("CONNECT RESPONSE:", data);
+  // console.log("CONNECT RESPONSE STATUS:", response.status);
+  // console.log("CONNECT RESPONSE:", data);
 
   if (!response.ok) {
     const detail = data.detail;
@@ -144,7 +144,7 @@ export async function getDatabaseStatus() {
 
   const data = await response.json();
 
-  console.log("DATABASE STATUS:", data);
+  // console.log("DATABASE STATUS:", data);
 
   if (!response.ok) {
     throw new Error(data.detail || "Failed to get database status");

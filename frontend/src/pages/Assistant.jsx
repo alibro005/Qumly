@@ -95,15 +95,13 @@ function App() {
   // Handle Clarification
 
   const handleClarification = async (message, clarification) => {
-    console.log("Original question:", message.question);
-    console.log("Selected clarification:", clarification);
 
     try {
       setLoading(true);
 
       const response = await sendQuery(message.question, clarification);
 
-      console.log("Clarification response:", response);
+      // console.log("Clarification response:", response);
 
       const newMessage = {
         id: Date.now(),

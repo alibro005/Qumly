@@ -35,8 +35,6 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
 
       const response = await connectDemo();
 
-      console.log("Demo database connected:", response);
-
       onDatabaseConnected(response);
       onClose();
     } catch (error) {
@@ -78,13 +76,6 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
     try {
       setConnecting(true);
 
-      console.log("MYSQL FORM BEFORE REQUEST:", {
-        host: mysqlForm.host,
-        port: mysqlForm.port,
-        database: mysqlForm.database,
-        username: mysqlForm.username,
-      });
-
       const response = await connectMySQL({
         host: mysqlForm.host,
         port: Number(mysqlForm.port),
@@ -92,8 +83,6 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
         username: mysqlForm.username,
         password: mysqlForm.password,
       });
-
-      console.log("MySQL connected:", response);
 
       onDatabaseConnected(response);
       onClose();
