@@ -1,61 +1,62 @@
 
+<h1>Qumly</h1>
+
 <p align="center">
-  <img src="assets/qumly-logo-transparent.svg" alt="Qumly logo" width="680">
+  <img src="assets/logo_readme.svg" alt="Qumly logo" width="100%">
 </p>
 
-# Qumly
 
-
-<p>
-  <a href="https://github.com/alibro005/Qumly/releases">
-    <img src="https://img.shields.io/github/v/release/alibro005/Qumly?include_prereleases&label=release" alt="Release">
-  </a>
-  <a href="https://github.com/alibro005/Qumly">
-    <img src="https://img.shields.io/github/stars/alibro005/Qumly" alt="GitHub Stars">
-  </a>
-  <a href="https://github.com/alibro005/Qumly/issues">
-    <img src="https://img.shields.io/github/issues/alibro005/Qumly" alt="GitHub Issues">
-  </a>
-  <a href="https://github.com/alibro005/Qumly">
-    <img src="https://img.shields.io/github/last-commit/alibro005/Qumly" alt="Last Commit">
-  </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
-  </a>
+<p align="center">
+An AI-powered SQL assistant that turns natural language or voice into safe SQL, executes queries, and explains results in plain English.
 </p>
 
-[Live Demo](https://qumly.me) |  [Installation](INSTALLATION.md) |  [Issues](https://github.com/alibro005/Qumly/issues)
 
-An AI-powered SQL Assistant that turns natural language or voice into safe, schema-aware SQL, executes the queries, shows you the results, and explains them in plain English.
+<p align="center">
+  <a href="https://github.com/alibro005/Qumly/releases"><img src="https://img.shields.io/github/v/release/alibro005/Qumly?include_prereleases&label=release&style=flat-square" alt="Release"></a>
+  <a href="https://github.com/alibro005/Qumly"><img src="https://img.shields.io/github/stars/alibro005/Qumly?style=flat-square" alt="GitHub Stars"></a>
+  <a href="https://github.com/alibro005/Qumly/issues"><img src="https://img.shields.io/github/issues/alibro005/Qumly?style=flat-square" alt="GitHub Issues"></a>
+  <a href="https://github.com/alibro005/Qumly"><img src="https://img.shields.io/github/last-commit/alibro005/Qumly?style=flat-square" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
+</p>
 
----
+<p align="center">
+  <a href="https://qumly.me">Live Demo</a> .
+  <a href="INSTALLATION.md">Installation</a> .
+  <a href="https://github.com/alibro005/Qumly/issues">Issues</a>
+</p>
 
-## Overview
-
-Working with databases often requires knowing SQL, even for simple questions. Qumly provides a natural-language interface for querying MySQL databases without requiring users to write every query manually.
+Working with databases often requires knowing SQL, even for simple questions. Qumly provides a natural-language interface for querying MySQL databases without requiring users to write SQL manually.
 
 Qumly uses the connected database schema to generate SQL, validates the query before execution, and keeps the generated SQL visible so users can understand and verify what is being executed.
 
 For example, instead of writing a SQL query manually, you can simply ask:
 
-> What were the top 5 best-selling products last month?
+What were the top 5 best-selling products last month?
 
-Qumly handles the query generation and execution, then presents the results in a clear, human-readable format.
+Qumly generates and executes the query, then presents the results in a clear, human-readable format.
+
+
+<p align="center">
+  <img src="assets/landing_page.png" alt="Qumly" width="100%">
+</p>
 
 ---
 
 ## Features
 
-- **Natural Language to SQL :** Generate schema-aware SQL from plain-English questions.
-- **Voice Queries :** Ask questions using your voice.
-- **SQL Validation & Correction :** Validate and correct generated queries before execution.
-- **Safe Query Execution :** Restrict execution to read-only SQL operations.
-- **Human-Readable Answers :** Get clear explanations of query results.
-- **SQL Explanation :** Understand what the generated SQL does.
-- **Clarification Handling :** Resolve ambiguous questions before execution.
-- **Charts & Results :** View results in tables and suitable visualizations.
-- **Conversation History :** Continue conversations with previous context.
-- **MySQL Connections :** Connect Qumly to your own MySQL database.
+| Feature                         | Description                                              |
+| ------------------------------- | -------------------------------------------------------- |
+| **Natural Language to SQL**     | Generate schema-aware SQL from plain-English questions.  |
+| **Voice Queries**               | Ask questions using your voice.                          |
+| **SQL Validation & Correction** | Validate and correct generated queries before execution. |
+| **Safe Query Execution**        | Restrict execution to read-only SQL operations.          |
+| **Human-Readable Answers**      | Get clear explanations of query results.                 |
+| **SQL Explanation**             | Understand what the generated SQL does.                  |
+| **Clarification Handling**      | Resolve ambiguous questions before execution.            |
+| **Charts & Results**            | View results in tables and suitable visualizations.      |
+| **Conversation History**        | Continue conversations with previous context.            |
+| **MySQL Connections**           | Connect Qumly to your own MySQL database.                |
+
 
 ---
 
