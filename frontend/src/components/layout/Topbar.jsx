@@ -26,7 +26,7 @@ function Topbar({ onToggleSidebar, sidebarOpen = true }) {
           </svg>
         </button>
 
-        <a href="/" className="brand-mark" aria-label="Qumly home">
+        <a href="https://qumly.me" className="brand-mark" aria-label="Qumly home">
           <img src={logo} alt="Qumly logo" />
           <span className="brand-mark__text">Qumly</span>
         </a>
