@@ -1,0 +1,66 @@
+<svg width="680" height="260" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Qumly logo</title>
+  <desc>A wordmark for Qumly with an icon combining database table rows and a chat bubble tail, representing natural language to SQL.</desc>
+
+  <!-- Black background -->
+  <rect width="680" height="260" fill="#000000"/>
+
+  <!-- Icon mark -->
+  <g transform="translate(55, 30)">
+    <rect
+      x="70" y="30"
+      width="120" height="34"
+      rx="6"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+    />
+
+    <rect
+      x="70" y="73"
+      width="120" height="34"
+      rx="6"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+    />
+
+    <path
+      d="M70 116 h76 a6 6 0 0 1 6 6 v22 a6 6 0 0 1 -6 6 h-50 L70 168 V122 a6 6 0 0 1 0 -6 Z"
+      fill="#7F77DD"
+      fill-opacity="0.18"
+      stroke="#7F77DD"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(295, 0)">
+    <text
+      x="0"
+      y="112"
+      font-family="Helvetica, Arial, sans-serif"
+      font-size="56"
+      font-weight="500"
+      fill="#7F77DD"
+      dominant-baseline="central"
+    >
+      Qumly
+    </text>
+
+    <text
+      x="2"
+      y="158"
+      font-family="Helvetica, Arial, sans-serif"
+      font-size="16"
+      fill="#7F77DD"
+      fill-opacity="0.75"
+      dominant-baseline="central"
+    >
+      Ask your database anything
+    </text>
+  </g>
+</svg>
