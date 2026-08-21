@@ -6,6 +6,7 @@ function QueryInput({ onSubmit, loading = false }) {
 
   const recognitionRef = useRef(null);
 
+  // Start listening to the user's voice input
   const startListening = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -47,12 +48,14 @@ function QueryInput({ onSubmit, loading = false }) {
     recognition.start();
   };
 
+ // Stop listening to the user's voice input
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -66,6 +69,7 @@ function QueryInput({ onSubmit, loading = false }) {
     setQuestion("");
   };
 
+  // Handle Ctrl + Enter key combination to submit the form
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && event.ctrlKey) {
       event.preventDefault();

@@ -6,17 +6,21 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
+
   const [showSql, setShowSql] = useState(false);
   const [explanation, setExplanation] = useState("");
   const [showExplain, setShowExplain] = useState(false);
   const [loadingExplanation, setLoadingExplanation] = useState(false);
   const [showChart, setShowChart] = useState(false);
 
+  // Format the SQL query for better readability
   const formattedSql = sql
     ? format(sql, {
         language: "mysql",
       })
     : null;
+
+  // Handle the "Explain SQL" button click
   const handleExplain = async () => {
     if (explanation) {
       setShowExplain((prev) => !prev);
@@ -28,8 +32,10 @@ function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
 
       const data = await onExplainSql(sql);
 
+      // Set the explanation and show it
       setExplanation(data.explanation);
       setShowExplain(true);
+
     } catch (error) {
       console.error("Explain SQL error:", error);
     } finally {

@@ -14,6 +14,7 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
   const [connectionMode, setConnectionMode] = useState("demo");
   const [error, setError] = useState("");
 
+  // Handle form input changes for MySQL connection
   const handleMysqlChange = (event) => {
     const { name, value } = event.target;
 
@@ -23,6 +24,7 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
     }));
   };
 
+  // Handle demo database connection
   const handleDemoConnect = async () => {
     if (connecting) {
       return;
@@ -46,6 +48,7 @@ function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
     }
   };
 
+  // Handle MySQL connection
   const handleConnect = async () => {
     if (connecting) {
       return;

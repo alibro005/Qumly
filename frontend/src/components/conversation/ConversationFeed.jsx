@@ -24,6 +24,7 @@ function ConversationFeed({
             />
           )}
 
+          {/* Rejected */}
           {message.status === "rejected" && (
             <AnswerCard
               answer={message.answer}
@@ -34,6 +35,7 @@ function ConversationFeed({
             />
           )}
 
+          {/* Clarification needed */}
           {message.status === "clarification_needed" && (
             <ClarificationCard
               question={message.question}

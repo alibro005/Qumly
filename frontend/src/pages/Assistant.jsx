@@ -100,8 +100,6 @@ function App() {
 
       const response = await sendQuery(message.question, clarification);
 
-      // console.log("Clarification response:", response);
-
       const newMessage = {
         id: Date.now(),
         question: `${message.question} based on ${clarification}`,
@@ -154,8 +152,7 @@ function App() {
         <DatabaseModal
           onClose={() => setDatabaseModalOpen(false)}
           onDatabaseConnected={(data) => {
-            // console.log("DATABASE RESPONSE:", data);
-
+          
             setSchema(data || {});
             setDatabaseType("mysql");
           }}

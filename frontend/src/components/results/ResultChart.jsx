@@ -84,10 +84,6 @@ function ResultChart({ results }) {
     })
     .filter(Boolean);
 
-  console.log("CHART LABEL:", labelKey);
-  console.log("CHART VALUE:", valueKey);
-  console.log("CHART DATA:", chartData);
-
   // Nothing valid to display
   if (chartData.length === 0) {
     return (
