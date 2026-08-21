@@ -1,10 +1,11 @@
+import { ChevronRight } from "lucide-react";
+
 function ClarificationCard({ question, options, onSelect }) {
   return (
     <div className="msg msg--ai">
       <div className="clarify-card">
         <div className="clarify-card__head">
           <span className="answer-card__mark">Q</span>
-
           <span className="clarify-card__title">
             Qumly needs a little clarification
           </span>
@@ -17,10 +18,11 @@ function ClarificationCard({ question, options, onSelect }) {
             <button
               key={index}
               type="button"
-              className="btn btn--ghost btn--sm"
+              className="clarify-option"
               onClick={() => onSelect(option)}
             >
-              {option}
+              <span>{option}</span>
+              <ChevronRight size={16} />
             </button>
           ))}
         </div>
