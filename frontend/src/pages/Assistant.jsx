@@ -47,10 +47,6 @@ function App() {
     setDatabaseModalOpen(true);
   };
 
-  const handleCloseDatabaseModal = () => {
-    setDatabaseModalOpen(false);
-  };
-
   const handleExplainSql = async (sql) => {
     return await explainSql(sql);
   };

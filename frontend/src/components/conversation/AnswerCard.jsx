@@ -5,7 +5,7 @@ import { format } from "sql-formatter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-function AnswerCard({ answer, results, sql, onShowSql, onExplainSql }) {
+function AnswerCard({ answer, results, sql,  onExplainSql }) {
 
   const [showSql, setShowSql] = useState(false);
   const [explanation, setExplanation] = useState("");

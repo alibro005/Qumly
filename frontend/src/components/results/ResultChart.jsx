@@ -10,8 +10,6 @@ import {
 } from "recharts";
 
 function ResultChart({ results }) {
-  console.log("CHART RESULTS:", results);
-
   // Basic validation
   if (
     !results ||
@@ -64,7 +62,6 @@ function ResultChart({ results }) {
     );
   }
 
-  const labelKey = columns[labelIndex];
   const valueKey = columns[numericIndex];
 
   // Build chart data and remove invalid values

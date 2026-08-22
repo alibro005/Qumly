@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { connectMySQL, connectDemo } from "../../services/api";
 
-function DatabaseModal({ onClose, onDatabaseConnected, sessionId }) {
+function DatabaseModal({ onClose, onDatabaseConnected}) {
   const [mysqlForm, setMysqlForm] = useState({
     host: "",
     port: "",
