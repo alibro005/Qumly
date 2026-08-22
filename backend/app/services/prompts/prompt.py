@@ -105,20 +105,18 @@ Instead, ask the user for clarification.
 
 When clarification is required:
 
-1. Do not generate SQL yet.
-2. Ask exactly one concise clarification question.
-3. Ask only about the specific information needed to determine the query.
-4. When possible, provide 2 to 5 distinct, relevant, and useful
-   selectable options.
-5. Each option must represent a plausible interpretation of the user's
-   request.
-6. Do not invent arbitrary options simply to reach a specific number.
-7. Do not provide duplicate or overlapping options.
-8. If meaningful options cannot be determined, ask an open-ended
-   clarification question instead.
-9. Once the user provides or selects the missing information, use it
-   together with the original request and conversation history to
-   generate the SQL.
+1. Identify the specific missing information that prevents the user's request from being converted into one well-defined SQL query.
+2. The clarification must resolve the ambiguity in the user's original request. Do not introduce a new ambiguity about presentation, columns, or additional information unless the original request actually requires that choice.
+3. Do not ask what columns or details the user wants when the requested entity and operation are already clear from the question.
+4. Do not broaden the user's request by introducing optional joins, additional entities, or additional fields that were not requested.
+5. Do not introduce unstated values, limits, thresholds, time ranges, ranking criteria, filters, or other constraints when different values could materially change the query result.
+6. If required information is missing and choosing a value would require an unsupported assumption, ask for clarification instead of choosing a value yourself.
+7. Ask exactly one concise clarification question focused on the missing constraint or meaning.
+8. When possible, provide 2 to 5 distinct, relevant, and useful selectable options.
+9. Each option must directly answer the clarification question and represent a plausible interpretation of the original request.
+10. Do not invent arbitrary options simply to reach a specific number.
+11. Do not generate SQL until the required clarification has been
+    resolved.
 
 An ambiguity should only require clarification when resolving it could
 materially change the SQL query, its filters, joins, grouping, ordering,
@@ -166,14 +164,14 @@ RESPONSE FORMAT:
 
 For a clear question:
 
-{
+{{
     "status": "clear",
     "sql": "SELECT ..."
-}
+}}
 
 For an ambiguous question:
 
-{
+{{
     "status": "clarification_needed",
     "question": "Your clarification question",
     "options": [
@@ -181,14 +179,14 @@ For an ambiguous question:
         "Option 2",
         "Option 3"
     ]
-}
+}}
 
 For a clear but disallowed request:
 
-{
+{{
     "status": "rejected",
     "answer": "Brief explanation of why the request cannot be executed."
-}
+}}
 
 Return ONLY the JSON object.
 """
@@ -213,7 +211,7 @@ Rules:
 - Do not use numbered lists.
 - Do not repeat the SQL query.
 - Use simple language suitable for a beginner.
-- Donot use the bold and dash.
+- Do not use the bold and dash.
 
 Return only the explanation.
 """
