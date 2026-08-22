@@ -82,6 +82,22 @@ The general flow is:
 7. Qumly generates a human-readable explanation of the result.
 
 ---
+## Evaluation
+
+<p align="center">
+  <img src="assets/evaluation_results.png" alt="Qumly evaluation results" width="70%">
+</p>
+
+Qumly was evaluated on **49 test cases** using an e-commerce database schema. The evaluation covers SQL generation, database results, filtering, aggregation, joins, complex queries, ambiguity handling, and SQL safety.
+
+### Interaction Efficiency
+
+Qumly produced correct database results for all tested queries. One clear query required an unnecessary clarification before generating the correct SQL.
+
+**Interaction Efficiency: 48/49 (97.96%)**
+
+
+---
 
 ## Example
 
