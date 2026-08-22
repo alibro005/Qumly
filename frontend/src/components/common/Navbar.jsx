@@ -9,11 +9,21 @@ function Navbar() {
     e.preventDefault();
     setIsOpen(false);
 
+    // Respect user's preference for reduced motion
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
     document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
     });
 
-    window.history.replaceState(null, "", window.location.pathname);
+    // Update the URL without adding a new entry to the browser's history
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
   };
 
   return (
