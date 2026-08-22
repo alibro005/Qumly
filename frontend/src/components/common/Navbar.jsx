@@ -4,6 +4,28 @@ import logo from "../../assets/logo.svg";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  // handle navigation clicks
+  const handleNavClick = (e, id) => {
+    e.preventDefault();
+    setIsOpen(false);
+
+    // Respect user's preference for reduced motion
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    document.getElementById(id)?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+
+    // Update the URL without adding a new entry to the browser's history
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
+  };
+
   return (
     <header className={`site-nav ${isOpen ? "is-open" : ""}`}>
       <a href="/" className="brand-mark" aria-label="Qumly home">
@@ -12,25 +34,28 @@ function Navbar() {
       </a>
 
       <nav className="site-nav__links" id="navLinks" aria-label="Primary">
-        <a href="#how" onClick={() => setIsOpen(false)}>
+        <a href="#how" onClick={(e) => handleNavClick(e, "how")}>
           How it works
         </a>
 
-        <a href="#features" onClick={() => setIsOpen(false)}>
+        <a href="#features" onClick={(e) => handleNavClick(e, "features")}>
           Features
         </a>
 
-        <a href="#preview" onClick={() => setIsOpen(false)}>
+        <a href="#preview" onClick={(e) => handleNavClick(e, "preview")}>
           Preview
         </a>
 
-        <a href="#compat" onClick={() => setIsOpen(false)}>
+        <a href="#compat" onClick={(e) => handleNavClick(e, "compat")}>
           Compatibility
         </a>
       </nav>
 
       <div className="site-nav__actions">
-        <a href="https://app.qumly.me" className="btn btn--primary btn--sm hide">
+        <a
+          href="https://app.qumly.me"
+          className="btn btn--primary btn--sm hide"
+        >
           Try Qumly
         </a>
 
