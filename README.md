@@ -5,7 +5,6 @@
   <img src="assets/logo_readme.svg" alt="Qumly logo" width="100%">
 </p>
 
-
 <p align="center">
 An AI-powered SQL assistant that turns natural language or voice into safe SQL, executes queries, and explains results in plain English.
 </p>
@@ -13,7 +12,7 @@ An AI-powered SQL assistant that turns natural language or voice into safe SQL, 
 
 <p align="center">
   <a href="https://github.com/alibro005/Qumly/releases"><img src="https://img.shields.io/github/v/release/alibro005/Qumly?include_prereleases&label=release&style=flat-square" alt="Release"></a>
-  <a href="https://github.com/alibro005/Qumly"><img src="https://img.shields.io/github/stars/alibro005/Qumly?style=flat-square" alt="GitHub Stars"></a>
+  <a href="https://github.com/alibro005/Qumly"><img src="https://img.shields.io/github/stars/alibro005/Qumly?style=flat&cacheSeconds=60" alt="GitHub Stars"></a>
   <a href="https://github.com/alibro005/Qumly/issues"><img src="https://img.shields.io/github/issues/alibro005/Qumly?style=flat-square" alt="GitHub Issues"></a>
   <a href="https://github.com/alibro005/Qumly"><img src="https://img.shields.io/github/last-commit/alibro005/Qumly?style=flat-square" alt="Last Commit"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
