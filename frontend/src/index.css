@@ -1032,11 +1032,9 @@ a {
 .database-mode button:hover {
   color: var(--text-primary);
 }
-
-.database-mode button.active {
+*/ .database-mode button.active {
   background: var(--surface);
   color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Mobile */
@@ -1283,8 +1281,14 @@ a {
 }
 
 @keyframes clarify-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .clarify-card__head {
@@ -1356,7 +1360,9 @@ a {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  transition: transform var(--transition), color var(--transition);
+  transition:
+    transform var(--transition),
+    color var(--transition);
 }
 
 .clarify-option:hover svg {
