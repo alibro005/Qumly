@@ -24,7 +24,7 @@ An AI-powered SQL assistant that turns natural language or voice into safe SQL, 
   <a href="https://github.com/alibro005/Qumly/issues">Issues</a>
 </p>
 
-Working with databases often requires knowing SQL, even for simple questions. Qumly provides a natural-language interface for querying MySQL databases without requiring users to write SQL manually.
+Working with databases often requires knowing SQL, even for simple questions. Qumly provides a natural-language interface for querying databases without requiring users to write SQL manually.
 
 Qumly uses the connected database schema to generate SQL, validates the query before execution, and keeps the generated SQL visible so users can understand and verify what is being executed.
 
@@ -77,7 +77,7 @@ The general flow is:
 2. Qumly provides the database schema and question to the AI model.
 3. The model generates an SQL query.
 4. The query is validated for safety and correctness.
-5. The validated query is executed against MySQL.
+5. The validated query is executed against Database.
 6. The results are returned to the frontend.
 7. Qumly generates a human-readable explanation of the result.
 
@@ -118,20 +118,6 @@ LIMIT 1;
 ```
 
 The result is then presented along with an explanation so the user can understand both **what was queried** and **what the result means**.
-
----
-
-## Tech Stack
-
-| Part            | Technology      |
-| --------------- | --------------- |
-| Frontend        | React, Vite     |
-| Backend         | FastAPI, Python |
-| Database        | MySQL           |
-| AI              | Groq            |
-| Package Manager | uv              |
-| Styling         | CSS             |
-| Version Control | Git, GitHub     |
 
 ---
 
