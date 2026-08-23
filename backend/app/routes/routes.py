@@ -46,7 +46,11 @@ def connect_demo(x_session_id: str = Header(...)):
 
         schema = database_manager.get_schema(x_session_id)
 
-        return schema
+        return {
+            "status": "success",
+            "database": "mysql",
+            "schema": schema,
+        }
     except Exception as error:
         logger.exception("Failed to connect to demo database")
         raise HTTPException(
@@ -87,11 +91,11 @@ def connect_database(
 
         # return schema
         return {
-                "status": "success",
-                "database": request.database_type,
-                "schema": schema,
-            }
-    
+            "status": "success",
+            "database": request.database_type,
+            "schema": schema,
+        }
+
     except Exception as error:
         logger.exception(
             "Failed to connect to %s database",
@@ -116,11 +120,7 @@ def database_status(
 
     return {
         "connected": connected,
-        "database": (
-            database_type
-            if connected
-            else None
-        ),
+        "database": (database_type if connected else None),
     }
 
 
@@ -188,10 +188,7 @@ User clarification:
         history = get_history(conversation_id)
 
     prompt = build_sql_prompt(
-        schema=schema,
-        question=question,
-        history=history,
-        database_type=database_type
+        schema=schema, question=question, history=history, database_type=database_type
     )
 
     result = generate_sql(prompt)

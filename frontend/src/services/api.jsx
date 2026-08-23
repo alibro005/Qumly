@@ -104,8 +104,40 @@ export async function explainSql(sql) {
   return data;
 }
 
-// Connect MySQL
-export async function connectMySQL(credentials) {
+// Connect Database (MySQL, PostgreSQL, etc.)
+// export async function connectDatabase(credentials) {
+//   const response = await fetch(`${API_URL}/database/connect`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       ...getSessionHeaders(),
+//     },
+//     body: JSON.stringify(credentials),
+//   });
+
+//   const data = await response.json();
+
+//   // console.log("CONNECT RESPONSE STATUS:", response.status);
+//   // console.log("CONNECT RESPONSE:", data);
+
+//   if (!response.ok) {
+//     const detail = data.detail;
+
+//     let message = "Unable to connect to MySQL.";
+
+//     if (typeof detail === "string") {
+//       message = detail;
+//     } else if (detail && typeof detail === "object") {
+//       message = detail.message || detail.error || "Unable to connect with Database.";
+//     }
+
+//     throw new Error(message);
+//   }
+
+//   return data;
+// }
+
+export async function connectDatabase(credentials) {
   const response = await fetch(`${API_URL}/database/connect`, {
     method: "POST",
     headers: {
@@ -117,18 +149,15 @@ export async function connectMySQL(credentials) {
 
   const data = await response.json();
 
-  // console.log("CONNECT RESPONSE STATUS:", response.status);
-  // console.log("CONNECT RESPONSE:", data);
-
   if (!response.ok) {
     const detail = data.detail;
-
-    let message = "Unable to connect to MySQL.";
+    let message = "Unable to connect to database.";
 
     if (typeof detail === "string") {
       message = detail;
     } else if (detail && typeof detail === "object") {
-      message = detail.message || detail.error || "Unable to connect to MySQL.";
+      message =
+        detail.message || detail.error || "Unable to connect to database.";
     }
 
     throw new Error(message);
@@ -136,6 +165,7 @@ export async function connectMySQL(credentials) {
 
   return data;
 }
+
 // Get Database Status
 export async function getDatabaseStatus() {
   const response = await fetch(`${API_URL}/database/status`, {

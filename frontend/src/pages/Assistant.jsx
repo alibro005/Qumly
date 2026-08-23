@@ -6,7 +6,12 @@ import QueryInput from "../components/query/QueryInput";
 import ConversationFeed from "../components/conversation/ConversationFeed";
 import DatabaseModal from "../components/database/Database";
 
-import { sendQuery, explainSql, getDatabaseStatus ,getSchema} from "../services/api";
+import {
+  sendQuery,
+  explainSql,
+  getDatabaseStatus,
+  getSchema,
+} from "../services/api";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -90,7 +95,6 @@ function App() {
   // Handle Clarification
 
   const handleClarification = async (message, clarification) => {
-
     try {
       setLoading(true);
 
@@ -146,11 +150,11 @@ function App() {
       </div>
       {databaseModalOpen && (
         <DatabaseModal
+        
           onClose={() => setDatabaseModalOpen(false)}
           onDatabaseConnected={(data) => {
-          
-            setSchema(data || {});
-            setDatabaseType("mysql");
+            setSchema(data?.schema || {});
+            setDatabaseType(data?.database || null);
           }}
         />
       )}
