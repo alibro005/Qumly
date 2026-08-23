@@ -21,7 +21,7 @@ from app.schema.schema import (
     QueryRequest,
     QueryResponse,
     ExplainSQLRequest,
-    MySQLConnectionRequest,
+    DatabaseConnectionRequest,
 )
 from app.services.history.conversation import get_history, add_message
 
@@ -60,23 +60,44 @@ def connect_demo(x_session_id: str = Header(...)):
 
 @router.post("/database/connect")
 def connect_database(
-    request: MySQLConnectionRequest,
+    request: DatabaseConnectionRequest,
     x_session_id: str = Header(...),
 ):
     try:
-        database_manager.configure_mysql(
-            session_id=x_session_id,
-            host=request.host,
-            port=request.port,
-            database=request.database,
-            username=request.username,
-            password=request.password,
-        )
+        if request.database_type == "postgresql":
+            database_manager.configure_postgresql(
+                session_id=x_session_id,
+                host=request.host,
+                port=request.port,
+                database=request.database,
+                username=request.username,
+                password=request.password,
+            )
+        else:
+            database_manager.configure_mysql(
+                session_id=x_session_id,
+                host=request.host,
+                port=request.port,
+                database=request.database,
+                username=request.username,
+                password=request.password,
+            )
 
         schema = database_manager.get_schema(x_session_id)
 
-        return schema
+        # return schema
+        return {
+                "status": "success",
+                "database": request.database_type,
+                "schema": schema,
+            }
+    
     except Exception as error:
+        logger.exception(
+            "Failed to connect to %s database",
+            request.database_type,
+        )
+
         raise HTTPException(
             status_code=400,
             detail={
@@ -90,10 +111,16 @@ def connect_database(
 def database_status(
     x_session_id: str = Header(...),
 ):
+    connected = database_manager.is_connected(x_session_id)
+    database_type = database_manager.get_database_type(x_session_id)
 
     return {
-        "connected": database_manager.is_connected(x_session_id),
-        "database": "mysql" if database_manager.is_connected(x_session_id) else None,
+        "connected": connected,
+        "database": (
+            database_type
+            if connected
+            else None
+        ),
     }
 
 
@@ -103,9 +130,10 @@ def database_test(
 ):
     try:
         schema = database_manager.get_schema(x_session_id)
+        database_type = database_manager.get_database_type(x_session_id)
 
         return {
-            "database": "mysql",
+            "database": database_type,
             "tables": list(schema.keys()),
         }
 
@@ -139,6 +167,7 @@ def query_database(
 ):
 
     schema = database_manager.get_schema(x_session_id)
+    database_type = database_manager.get_database_type(x_session_id)
 
     question = request.question
 
@@ -162,6 +191,7 @@ User clarification:
         schema=schema,
         question=question,
         history=history,
+        database_type=database_type
     )
 
     result = generate_sql(prompt)
@@ -230,6 +260,7 @@ User clarification:
             sql=sql,
             error=str(error),
             schema=schema,
+            database_type=database_type,
         )
 
         corrected_sql = correct_sql(corrected_prompt)
@@ -257,6 +288,7 @@ User clarification:
                     "message": "SQL correction failed.",
                     "error": str(correction_error),
                     "generated_sql": corrected_sql,
+                    "database_type": database_type,
                 },
             )
 
@@ -275,6 +307,7 @@ User clarification:
             question=request.question,
             sql=sql,
             answer=answer,
+            database_type=database_type,
         )
 
     return {

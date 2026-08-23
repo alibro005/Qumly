@@ -1,3 +1,4 @@
+from typing import Literal
 from pydantic import BaseModel
 
 
@@ -20,7 +21,8 @@ class QueryResponse(BaseModel):
 class ExplainSQLRequest(BaseModel):
     sql: str
 
-class MySQLConnectionRequest(BaseModel):
+class DatabaseConnectionRequest(BaseModel):
+    database_type: Literal["postgresql", "mysql"]
     host: str
     port: int = 3306
     database: str
