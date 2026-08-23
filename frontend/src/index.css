@@ -198,41 +198,6 @@ a {
   color: var(--accent);
 }
 
-.topbar__status {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-}
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-size: 12.5px;
-  font-weight: 500;
-  background: var(--surface);
-}
-.status-chip svg {
-  color: var(--text-faint);
-}
-
-.status-chip--ready {
-  color: var(--success);
-  border-color: rgba(52, 211, 153, 0.25);
-  background: var(--success-soft);
-}
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--success);
-  box-shadow: 0 0 0 3px var(--success-soft);
-}
-
 /* ==========================================================
    App shell / sidebar
    ========================================================== */
@@ -413,29 +378,59 @@ a {
 
 .sidebar__footer {
   margin-top: auto;
-  padding-top: var(--sp-4);
-  border-top: 1px solid var(--border-soft);
+  padding: var(--sp-4);
+  border-radius: 200px;
+  border: 1px solid var(--border);
 }
 
 .db-status {
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
+  gap: var(--sp-4);
   padding: 0 var(--sp-1);
 }
+
 .db-status__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
   background: var(--success);
-  box-shadow: 0 0 0 3px var(--success-soft);
+}
+
+.db-status__dot.is-disconnected {
+  background: var(--text-secondary);
+  box-shadow: 0 0 0 3px var(--border);
+}
+
+.db-status__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.db-status__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  overflow: hidden;
+}
+
+.db-status__name img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
   flex-shrink: 0;
 }
-.db-status__name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
+
+.db-status__name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .db-status__state {
   font-size: 11.5px;
   color: var(--text-secondary);
@@ -814,9 +809,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 18px 20px;
-
   border-bottom: 1px solid var(--border);
 }
 
@@ -854,6 +847,11 @@ a {
     color 0.2s ease;
 }
 
+.database-logo {
+  width: 45px;
+  height: 35px;
+  margin-right: 8px;
+}
 .database-modal__close:hover {
   background: var(--surface-2);
   color: var(--text-primary);
@@ -881,27 +879,6 @@ a {
   color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.5;
-}
-
-.database-demo button {
-  width: 100%;
-  padding: var(--sp-3) var(--sp-4);
-  border: none;
-  border-radius: var(--radius-md);
-  background: var(--primary);
-  color: var(--text-on-primary);
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.database-demo button:hover {
-  opacity: 0.9;
-}
-
-.database-demo button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 /* Form */
@@ -950,11 +927,14 @@ a {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
-/* Connect button */
-
-.database-modal__body > div > button:last-child {
+/* Modal body (container) */
+.database-modal__body {
   width: 100%;
+}
 
+/* Submit button — separated from body container */
+.database-modal__submit {
+  width: 100%;
   margin-top: 4px;
   padding: 10px 14px;
 
@@ -962,7 +942,8 @@ a {
   border-radius: 8px;
 
   background: var(--accent);
-  color: white;
+
+  color: #0b0f14;
 
   font-family: inherit;
   font-size: 13px;
@@ -975,16 +956,21 @@ a {
     transform 0.1s ease;
 }
 
-.database-modal__body > div > button:last-child:hover {
+.database-modal__submit:hover {
   background: var(--accent-hover);
 }
 
-.database-modal__body > div > button:last-child:active {
+.database-modal__submit:active {
   transform: translateY(1px);
 }
 
-/* Modal scrollbar */
+.database-modal__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
 
+/* Modal scrollbar */
 .database-modal::-webkit-scrollbar {
   width: 5px;
 }
@@ -1010,14 +996,14 @@ a {
   padding: 4px;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 100px;
 }
 
 .database-mode button {
   flex: 1;
-  padding: 9px 12px;
+  padding: 0 9px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 100px;
   background: transparent;
   color: var(--text-secondary);
   font-family: inherit;
@@ -1032,9 +1018,38 @@ a {
 .database-mode button:hover {
   color: var(--text-primary);
 }
+
 .database-mode button.active {
   background: var(--surface);
   color: var(--text-primary);
+}
+
+/* Error state */
+.database-error {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--danger-border, rgba(239, 68, 68, 0.35));
+  border-radius: 8px;
+  background: var(--danger-soft, rgba(239, 68, 68, 0.08));
+  color: var(--danger, #ef4444);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .database-modal__overlay {
+    padding: 14px;
+  }
+
+  .database-modal {
+    border-radius: 12px;
+  }
+
+  .database-modal__body {
+    padding: 16px;
+  }
 }
 
 /* Mobile */

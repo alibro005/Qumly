@@ -1,6 +1,15 @@
 import logo from "../../assets/logo.svg";
+import mysqlLogo from "../../assets/mysql.svg";
+import postgresqlLogo from "../../assets/postgresql.svg";
 
-function Topbar({ onToggleSidebar, sidebarOpen = true }) {
+function Topbar({ onToggleSidebar, sidebarOpen = true, databaseType }) {
+  const normalizedDatabaseType = databaseType?.toLowerCase();
+
+  const databaseLogos = {
+    mysql: mysqlLogo,
+    postgresql: postgresqlLogo,
+  };
+  const databaseLogo = databaseLogos[normalizedDatabaseType];
   return (
     <header className="topbar">
       <div className="topbar__brand">
@@ -26,17 +35,27 @@ function Topbar({ onToggleSidebar, sidebarOpen = true }) {
           </svg>
         </button>
 
-        <a href="https://qumly.me" className="brand-mark" aria-label="Qumly home">
+        <a
+          href="https://qumly.me"
+          className="brand-mark"
+          aria-label="Qumly home"
+        >
           <img src={logo} alt="Qumly logo" />
           <span className="brand-mark__text">Qumly</span>
         </a>
       </div>
 
-      <div className="topbar__status">
-        <span className="status-chip status-chip--ready">
-          <span className="status-dot" aria-hidden="true"></span>
-          Ready
-        </span>
+      <div className="db-status">
+        <span
+          className={`db-status__dot ${
+            databaseType ? "is-connected" : "is-disconnected"
+          }`}
+        />
+        <div className="db-status__info">
+          <div className="db-status__name">
+            {databaseLogo && <img src={databaseLogo} alt={databaseType} />}
+          </div>
+        </div>
       </div>
     </header>
   );

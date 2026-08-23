@@ -1,257 +1,7 @@
-// import { useState } from "react";
-// import { connectMySQL, connectDemo } from "../../services/api";
-
-// function DatabaseModal({ onClose, onDatabaseConnected}) {
-//   const [mysqlForm, setMysqlForm] = useState({
-//     host: "",
-//     port: "",
-//     database: "",
-//     username: "",
-//     password: "",
-//   });
-
-//   const [connecting, setConnecting] = useState(false);
-//   const [connectionMode, setConnectionMode] = useState("demo");
-//   const [error, setError] = useState("");
-
-//   // Handle form input changes for MySQL connection
-//   const handleMysqlChange = (event) => {
-//     const { name, value } = event.target;
-
-//     setMysqlForm((previous) => ({
-//       ...previous,
-//       [name]: value,
-//     }));
-//   };
-
-//   // Handle demo database connection
-//   const handleDemoConnect = async () => {
-//     if (connecting) {
-//       return;
-//     }
-
-//     setError("");
-
-//     try {
-//       setConnecting(true);
-
-//       const response = await connectDemo();
-
-//       onDatabaseConnected(response);
-//       onClose();
-//     } catch (error) {
-//       console.error("Demo database connection failed:", error);
-
-//       setError(error.message || "Unable to connect to demo database.");
-//     } finally {
-//       setConnecting(false);
-//     }
-//   };
-
-//   // Handle MySQL connection
-//   const handleConnect = async () => {
-//     if (connecting) {
-//       return;
-//     }
-
-//     setError("");
-
-//     if (!mysqlForm.host) {
-//       setError("Please enter the MySQL host.");
-//       return;
-//     }
-
-//     if (!mysqlForm.port) {
-//       setError("Please enter the MySQL port.");
-//       return;
-//     }
-
-//     if (!mysqlForm.database) {
-//       setError("Please enter the database name.");
-//       return;
-//     }
-
-//     if (!mysqlForm.username) {
-//       setError("Please enter the MySQL username.");
-//       return;
-//     }
-
-//     try {
-//       setConnecting(true);
-
-//       const response = await connectMySQL({
-//         host: mysqlForm.host,
-//         port: Number(mysqlForm.port),
-//         database: mysqlForm.database,
-//         username: mysqlForm.username,
-//         password: mysqlForm.password,
-//       });
-
-//       onDatabaseConnected(response);
-//       onClose();
-//     } catch (error) {
-//       console.error("MySQL connection failed:", error);
-
-//       setError(error.message || "Unable to connect to MySQL.");
-//     } finally {
-//       setConnecting(false);
-//     }
-//   };
-
-//   return (
-//     <div className="database-modal__overlay">
-//       <div className="database-modal">
-//         {/* Header */}
-//         <div className="database-modal__header">
-//           <h2>Add Database</h2>
-
-//           <button
-//             type="button"
-//             className="database-modal__close"
-//             onClick={onClose}
-//             aria-label="Close"
-//           >
-//             ×
-//           </button>
-//         </div>
-
-//         {/* Body */}
-//         <div className="database-modal__body">
-//           <div className="database-mode">
-//             <button
-//               type="button"
-//               className={connectionMode === "demo" ? "active" : ""}
-//               onClick={() => {
-//                 setConnectionMode("demo");
-//                 setError("");
-//               }}
-//             >
-//               Demo Database
-//             </button>
-
-//             <button
-//               type="button"
-//               className={connectionMode === "mysql" ? "active" : ""}
-//               onClick={() => {
-//                 setConnectionMode("mysql");
-//                 setError("");
-//               }}
-//             >
-//               Connect MySQL
-//             </button>
-//           </div>
-
-//           {/* Demo Database */}
-//           {connectionMode === "demo" && (
-//             <div className="database-demo">
-//               <h3>Qumly Demo Database</h3>
-
-//               <p>Try Qumly with the built-in demo database.</p>
-
-//               {error && (
-//                 <div className="database-error" role="alert">
-//                   {error}
-//                 </div>
-//               )}
-
-//               <button
-//                 type="button"
-//                 onClick={handleDemoConnect}
-//                 disabled={connecting}
-//               >
-//                 {connecting ? "Connecting..." : "Connect Demo Database"}
-//               </button>
-//             </div>
-//           )}
-
-//           {/* User MySQL Database */}
-//           {connectionMode === "mysql" && (
-//             <div className="database-form">
-//               {/* Host */}
-//               <label htmlFor="mysql-host">Host</label>
-
-//               <input
-//                 id="mysql-host"
-//                 name="host"
-//                 type="text"
-//                 value={mysqlForm.host}
-//                 onChange={handleMysqlChange}
-//                 placeholder="Host name"
-//               />
-
-//               {/* Port */}
-//               <label htmlFor="mysql-port">Port</label>
-
-//               <input
-//                 id="mysql-port"
-//                 name="port"
-//                 type="number"
-//                 value={mysqlForm.port}
-//                 onChange={handleMysqlChange}
-//                 placeholder="Port"
-//               />
-
-//               {/* Database */}
-//               <label htmlFor="mysql-database">Database</label>
-
-//               <input
-//                 id="mysql-database"
-//                 name="database"
-//                 type="text"
-//                 value={mysqlForm.database}
-//                 onChange={handleMysqlChange}
-//                 placeholder="Database name"
-//               />
-
-//               {/* Username */}
-//               <label htmlFor="mysql-username">Username</label>
-
-//               <input
-//                 id="mysql-username"
-//                 name="username"
-//                 type="text"
-//                 value={mysqlForm.username}
-//                 onChange={handleMysqlChange}
-//                 placeholder="Username"
-//               />
-
-//               {/* Password */}
-//               <label htmlFor="mysql-password">Password</label>
-
-//               <input
-//                 id="mysql-password"
-//                 name="password"
-//                 type="password"
-//                 value={mysqlForm.password}
-//                 onChange={handleMysqlChange}
-//                 placeholder="Password"
-//               />
-
-//               {error && (
-//                 <div className="database-error" role="alert">
-//                   {error}
-//                 </div>
-//               )}
-
-//               <button
-//                 type="button"
-//                 onClick={handleConnect}
-//                 disabled={connecting}
-//               >
-//                 {connecting ? "Connecting..." : "Connect"}
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default DatabaseModal;
-
 import { useState } from "react";
 import { connectDatabase, connectDemo } from "../../services/api";
+import mysqlLogo from "../../assets/mysql.svg";
+import postgresqlLogo from "../../assets/postgresql.svg";
 
 function DatabaseModal({ onClose, onDatabaseConnected }) {
   const [databaseForm, setDatabaseForm] = useState({
@@ -301,9 +51,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       onClose();
     } catch (error) {
       console.error("Demo database connection failed:", error);
-      setError(
-        error.message || "Unable to connect to demo database."
-      );
+      setError(error.message || "Unable to connect to demo database.");
     } finally {
       setConnecting(false);
     }
@@ -349,18 +97,12 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       });
 
       onDatabaseConnected(response);
-      
+
       onClose();
     } catch (error) {
-      console.error(
-        `${connectionMode} connection failed:`,
-        error
-      );
+      console.error(`${connectionMode} connection failed:`, error);
 
-      setError(
-        error.message ||
-          `Unable to connect to ${connectionMode}.`
-      );
+      setError(error.message || `Unable to connect to ${connectionMode}.`);
     } finally {
       setConnecting(false);
     }
@@ -388,37 +130,33 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
           <div className="database-mode">
             <button
               type="button"
-              className={
-                connectionMode === "demo" ? "active" : ""
-              }
+              className={connectionMode === "demo" ? "active" : ""}
               onClick={() => {
                 setConnectionMode("demo");
                 setError("");
               }}
             >
-              Demo Database
+              Demo
             </button>
 
             <button
               type="button"
-              className={
-                connectionMode === "mysql" ? "active" : ""
-              }
+              className={connectionMode === "mysql" ? "active" : ""}
               onClick={() => handleDatabaseTypeChange("mysql")}
             >
-              MySQL
+              <img src={mysqlLogo} alt="MySQL" className="database-logo" />
             </button>
 
             <button
               type="button"
-              className={
-                connectionMode === "postgresql" ? "active" : ""
-              }
-              onClick={() =>
-                handleDatabaseTypeChange("postgresql")
-              }
+              className={connectionMode === "postgresql" ? "active" : ""}
+              onClick={() => handleDatabaseTypeChange("postgresql")}
             >
-              PostgreSQL
+              <img
+                src={postgresqlLogo}
+                alt="PostgreSQL"
+                className="database-logo"
+              />
             </button>
           </div>
 
@@ -427,15 +165,10 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
             <div className="database-demo">
               <h3>Qumly Demo Database</h3>
 
-              <p>
-                Try Qumly with the built-in demo database.
-              </p>
+              <p>Try Qumly with the built-in demo database.</p>
 
               {error && (
-                <div
-                  className="database-error"
-                  role="alert"
-                >
+                <div className="database-error" role="alert">
                   {error}
                 </div>
               )}
@@ -444,21 +177,17 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 type="button"
                 onClick={handleDemoConnect}
                 disabled={connecting}
+                className="database-modal__submit"
               >
-                {connecting
-                  ? "Connecting..."
-                  : "Connect Demo Database"}
+                {connecting ? "Connecting..." : "Connect Demo Database"}
               </button>
             </div>
           )}
 
           {/* MySQL / PostgreSQL */}
-          {(connectionMode === "mysql" ||
-            connectionMode === "postgresql") && (
+          {(connectionMode === "mysql" || connectionMode === "postgresql") && (
             <div className="database-form">
-              <label htmlFor="database-host">
-                Host
-              </label>
+              <label htmlFor="database-host">Host</label>
 
               <input
                 id="database-host"
@@ -469,9 +198,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 placeholder="Host name"
               />
 
-              <label htmlFor="database-port">
-                Port
-              </label>
+              <label htmlFor="database-port">Port</label>
 
               <input
                 id="database-port"
@@ -482,9 +209,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 placeholder="Port"
               />
 
-              <label htmlFor="database-name">
-                Database
-              </label>
+              <label htmlFor="database-name">Database</label>
 
               <input
                 id="database-name"
@@ -495,9 +220,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 placeholder="Database name"
               />
 
-              <label htmlFor="database-username">
-                Username
-              </label>
+              <label htmlFor="database-username">Username</label>
 
               <input
                 id="database-username"
@@ -508,9 +231,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 placeholder="Username"
               />
 
-              <label htmlFor="database-password">
-                Password
-              </label>
+              <label htmlFor="database-password">Password</label>
 
               <input
                 id="database-password"
@@ -522,10 +243,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               />
 
               {error && (
-                <div
-                  className="database-error"
-                  role="alert"
-                >
+                <div className="database-error" role="alert">
                   {error}
                 </div>
               )}
@@ -534,13 +252,12 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 type="button"
                 onClick={handleConnect}
                 disabled={connecting}
+                className="database-modal__submit btn btn--primary btn--block"
               >
                 {connecting
                   ? "Connecting..."
                   : `Connect ${
-                      connectionMode === "mysql"
-                        ? "MySQL"
-                        : "PostgreSQL"
+                      connectionMode === "mysql" ? "MySQL" : "PostgreSQL"
                     }`}
               </button>
             </div>

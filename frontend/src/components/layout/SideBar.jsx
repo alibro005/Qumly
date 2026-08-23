@@ -1,4 +1,6 @@
 import SchemaExplorer from "./SchemaExplorer";
+import mysqlLogo from "../../assets/mysql.svg";
+import postgresqlLogo from "../../assets/postgresql.svg";
 
 function Sidebar({
   onNewQuery,
@@ -7,6 +9,13 @@ function Sidebar({
   schema,
   databaseType,
 }) {
+  const normalizedDatabaseType = databaseType?.toLowerCase();
+
+  const databaseLogos = {
+    mysql: mysqlLogo,
+    postgresql: postgresqlLogo,
+  };
+  const databaseLogo = databaseLogos[normalizedDatabaseType];
   return (
     <aside className="sidebar">
       {/* New Query */}
@@ -57,11 +66,9 @@ function Sidebar({
             className={`db-status__dot ${
               databaseType ? "is-connected" : "is-disconnected"
             }`}
-          ></span>
+          />
 
-          <div>
-            <div className="db-status__name">{databaseType || "Database"}</div>
-
+          <div className="db-status__info">
             <div className="db-status__state">
               {databaseType ? "Connected" : "Not connected"}
             </div>

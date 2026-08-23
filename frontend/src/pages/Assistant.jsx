@@ -128,6 +128,7 @@ function App() {
       <Topbar
         onToggleSidebar={() => setSidebarOpen((previous) => !previous)}
         sidebarOpen={sidebarOpen}
+        databaseType={databaseType}
       />
 
       <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
