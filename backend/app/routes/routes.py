@@ -102,11 +102,25 @@ def connect_database(
             request.database_type,
         )
 
+        if (
+            "connection refused" in str(error).lower()
+            and request.host in ("localhost", "127.0.0.1", "::1")
+        ):
+            message = (
+                "Connection failed. `localhost` is not accessible "
+                "from the deployed application."
+            )
+        else:
+            message = (
+                "Connection failed. Please check your host, port, "
+                "and database credentials."
+            )
+
         raise HTTPException(
             status_code=400,
             detail={
                 "status": "failed",
-                "message": str(error),
+                "message": message,
             },
         )
 
