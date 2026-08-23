@@ -294,34 +294,26 @@ body.landing {
   flex-wrap: wrap;
   gap: var(--sp-3);
 }
+
 .compat-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--text-secondary);
   border: 1px solid var(--border);
   background: var(--surface);
   padding: 9px 18px;
   border-radius: 999px;
 }
 
-/* ==========================================================
-   Final CTA
-   ========================================================== */
-.final-cta {
-  text-align: center;
-  padding: var(--sp-7) 0 calc(var(--sp-7) + var(--sp-3));
-  border-top: 1px solid var(--border-soft);
-}
-.final-cta__heading {
-  font-size: 30px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: var(--sp-2);
-}
-.final-cta__sub {
-  font-size: 14.5px;
-  color: var(--text-secondary);
-  margin-bottom: var(--sp-5);
+.compat-pill img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
 
 /* ==========================================================
@@ -601,6 +593,11 @@ body.landing {
   .compat-pill {
     font-size: 12px;
     padding: 8px 14px;
+  }
+
+  .compat-pill img {
+    width: 36px;
+    height: 36px;
   }
 
   .site-footer {
