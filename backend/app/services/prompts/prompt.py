@@ -1,4 +1,9 @@
-def build_sql_prompt(schema: dict, question: str, history: list | None = None) -> str:
+def build_sql_prompt(
+    schema: dict,
+    question: str,
+    history: list | None = None,
+    database_type: str = "mysql",
+) -> str:
     schema_text = ""
 
     for table_name, table_info in schema.items():
@@ -25,6 +30,7 @@ def build_sql_prompt(schema: dict, question: str, history: list | None = None) -
                     f"{foreign_key['references_table']}."
                     f"{foreign_key['references_column']}\n"
                 )
+    database_dialect = "PostgreSQL" if database_type == "postgresql" else "MySQL"
 
     # Dynamic conversation history
     history_text = ""
@@ -47,7 +53,7 @@ Assistant answer:
 
     prompt = f"""
 You are QueryAI, an intelligent database assistant that converts
-natural language questions into MySQL SQL queries.
+natural language questions into {database_dialect} SQL queries.
 
 DATABASE SCHEMA:
 {schema_text}
@@ -95,7 +101,7 @@ to produce one well-defined SQL query.
 
 If the user's intent is sufficiently specified by the question, database
 schema, and relevant conversation history, generate the appropriate
-MySQL SELECT query.
+{database_dialect} SELECT query.
 
 If an important part of the user's intent is unspecified and multiple
 reasonable interpretations would produce materially different SQL queries
@@ -143,7 +149,7 @@ REQUEST TYPE RULES:
 IMPORTANT SQL RULES:
 
 1. Use only tables and columns from the provided schema.
-2. Generate MySQL-compatible SQL.
+2. Generate {database_dialect}-compatible SQL.
 3. Only generate SELECT queries.
 4. For text comparisons, make comparisons case-insensitive.
 5. Use LOWER(column) = LOWER('value') when comparing text values.
@@ -264,9 +270,12 @@ Rules:
     return prompt.strip()
 
 
-def build_correct_sql_prompt(question: str, sql: str, error: str, schema: dict) -> str:
+def build_correct_sql_prompt(
+    question: str, sql: str, error: str, schema: dict, database_type: str = "mysql",
+) -> str:
+    database_dialect = "PostgreSQL" if database_type == "postgresql" else "MySQL"
     prompt = f"""
-You are an expert MySQL SQL debugging assistant.
+You are an expert {database_dialect} SQL debugging assistant.
     
 The SQL query generated for the user's question failed during
     database execution.
@@ -289,7 +298,7 @@ RULES:
 1. Fix the SQL based on the database error.
 2. Use ONLY tables and columns from the schema.
 3. Preserve the original user's intent.
-4. Generate MySQL-compatible SQL.
+4. Generate {database_type}-compatible SQL.
 5. Return ONLY a SELECT query.
 6. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
 7. Do not explain the correction.

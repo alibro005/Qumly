@@ -35,7 +35,8 @@ function SchemaExplorer({ schema = {}, databaseType = null }) {
             </details>
           </li>
         ))}
-      </ul>
+      </ul> 
+     
     </div>
   );
 }

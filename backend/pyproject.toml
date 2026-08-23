@@ -12,6 +12,8 @@ dependencies = [
     "pydantic==2.13.4",
     "python-dotenv==1.2.2",
     "python-multipart==0.0.32",
+    "psycopg[binary]>=3.3.4",
+    "psycopg-pool>=3.3.1",
 ]
 
 [tool.fastapi]
