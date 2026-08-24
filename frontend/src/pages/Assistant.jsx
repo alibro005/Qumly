@@ -145,6 +145,7 @@ function App() {
             messages={messages}
             onClarification={handleClarification}
             onExplainSql={handleExplainSql}
+            databaseType={databaseType}
           />
           <QueryInput onSubmit={handleQuery} loading={loading} />
         </main>

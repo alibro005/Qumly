@@ -7,6 +7,7 @@ function ConversationFeed({
   onClarification,
   onShowSql,
   onExplainSql,
+  databaseType,
 }) {
   return (
     <section className="feed">
@@ -21,6 +22,7 @@ function ConversationFeed({
               sql={message.sql}
               onShowSql={onShowSql}
               onExplainSql={onExplainSql}
+              databaseType={databaseType}
             />
           )}
 
@@ -32,6 +34,7 @@ function ConversationFeed({
               sql={null}
               onShowSql={onShowSql}
               onExplainSql={onExplainSql}
+              databaseType={databaseType}
             />
           )}
 
@@ -41,6 +44,7 @@ function ConversationFeed({
               question={message.question}
               options={message.options}
               onSelect={(option) => onClarification(message, option)}
+              databaseType={databaseType}
             />
           )}
         </div>
