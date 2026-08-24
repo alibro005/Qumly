@@ -102,9 +102,10 @@ def connect_database(
             request.database_type,
         )
 
-        if (
-            "connection refused" in str(error).lower()
-            and request.host in ("localhost", "127.0.0.1", "::1")
+        if "connection refused" in str(error).lower() and request.host in (
+            "localhost",
+            "127.0.0.1",
+            "::1",
         ):
             message = (
                 "Connection failed. `localhost` is not accessible "
@@ -123,6 +124,19 @@ def connect_database(
                 "message": message,
             },
         )
+
+
+@router.post("/database/disconnect")
+def disconnect_database(
+    x_session_id: str = Header(...),
+):
+    try:
+        database_manager.disconnect(x_session_id)
+
+        return {"message": "Database disconnected successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/database/status")

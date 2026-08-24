@@ -174,7 +174,10 @@ class DatabaseManager:
         pool = self._pools.pop(session_id, None)
         database_type = self._database_types.pop(session_id, None)
 
-        if database_type == "postgresql" and pool:
+        if pool is None:
+            return
+
+        if isinstance(pool, ConnectionPool):
             pool.close()
 
 
