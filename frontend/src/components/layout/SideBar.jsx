@@ -1,6 +1,4 @@
 import SchemaExplorer from "./SchemaExplorer";
-import mysqlLogo from "../../assets/mysql.svg";
-import postgresqlLogo from "../../assets/postgresql.svg";
 
 function Sidebar({
   onNewQuery,
@@ -8,16 +6,25 @@ function Sidebar({
   onAddDatabase,
   schema,
   databaseType,
+  onDisconnect,
 }) {
-  const normalizedDatabaseType = databaseType?.toLowerCase();
-
-  const databaseLogos = {
-    mysql: mysqlLogo,
-    postgresql: postgresqlLogo,
-  };
-  const databaseLogo = databaseLogos[normalizedDatabaseType];
   return (
     <aside className="sidebar">
+      {/* Database Status */}
+      <div className="db-status">
+        <span
+          className={`db-status__dot ${
+            databaseType ? "is-connected" : "is-disconnected"
+          }`}
+        />
+
+        <div className="db-status__info">
+          <div className="db-status__state">
+            {databaseType ? "Connected" : "Not connected"}
+          </div>
+        </div>
+      </div>
+
       {/* New Query */}
       <div className="sidebar__section">
         <button className="btn btn--primary btn--block" onClick={onNewQuery}>
@@ -38,7 +45,6 @@ function Sidebar({
           New query
         </a>
       </nav>
-
       {/* Recent Queries */}
       <div className="sidebar__section sidebar__section--recent">
         <h2 className="sidebar__label">Recent queries</h2>
@@ -59,22 +65,15 @@ function Sidebar({
       {/* Dynamic Schema */}
       <SchemaExplorer schema={schema} databaseType={databaseType} />
 
-      {/* Database Status */}
-      <div className="sidebar__footer">
-        <div className="db-status">
-          <span
-            className={`db-status__dot ${
-              databaseType ? "is-connected" : "is-disconnected"
-            }`}
-          />
-
-          <div className="db-status__info">
-            <div className="db-status__state">
-              {databaseType ? "Connected" : "Not connected"}
-            </div>
-          </div>
-        </div>
-      </div>
+      {databaseType && (
+        <button
+          type="button"
+          className="btn--disconnect"
+          onClick={onDisconnect}
+        >
+          Disconnect
+        </button>
+      )}
     </aside>
   );
 }

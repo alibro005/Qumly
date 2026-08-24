@@ -11,6 +11,7 @@ import {
   explainSql,
   getDatabaseStatus,
   getSchema,
+  disconnectDatabase,
 } from "../services/api";
 
 function App() {
@@ -54,6 +55,18 @@ function App() {
 
   const handleExplainSql = async (sql) => {
     return await explainSql(sql);
+  };
+
+  // handle disconnect
+  const handleDisconnect = async () => {
+    try {
+      await disconnectDatabase();
+
+      setDatabaseType(null);
+      setSchema({});
+    } catch (error) {
+      console.error("Disconnect error:", error);
+    }
   };
 
   // handle query
@@ -138,6 +151,7 @@ function App() {
           onAddDatabase={handleAddDatabase}
           schema={schema}
           databaseType={databaseType}
+          onDisconnect={handleDisconnect}
         />
 
         <main className="workspace">
@@ -152,7 +166,6 @@ function App() {
       </div>
       {databaseModalOpen && (
         <DatabaseModal
-        
           onClose={() => setDatabaseModalOpen(false)}
           onDatabaseConnected={(data) => {
             setSchema(data?.schema || {});

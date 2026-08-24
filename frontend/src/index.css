@@ -376,13 +376,6 @@ a {
   padding: 3px 0;
 }
 
-.sidebar__footer {
-  margin-top: auto;
-  padding: var(--sp-4);
-  border-radius: 200px;
-  border: 1px solid var(--border);
-}
-
 .db-status {
   display: flex;
   align-items: center;
@@ -594,6 +587,27 @@ a {
 .btn--mic:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.btn--disconnect {
+  margin-top: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid #dc2626;
+  border-radius: 6px;
+  background: transparent;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn--disconnect:hover {
+  background: #9c1f1f;
+  color: #fff;
+}
+
+.btn--disconnect:active {
+  transform: scale(0.97);
 }
 
 /* ================================
