@@ -5,6 +5,7 @@ import Sidebar from "../components/layout/SideBar";
 import QueryInput from "../components/query/QueryInput";
 import ConversationFeed from "../components/conversation/ConversationFeed";
 import DatabaseModal from "../components/database/Database";
+import { getSessionId } from "../services/session";
 
 import {
   sendQuery,
@@ -63,7 +64,9 @@ function App() {
   // handle disconnect
   const handleDisconnect = async () => {
     try {
-      await disconnectDatabase();
+      const sessionId = getSessionId();
+
+      await disconnectDatabase(sessionId);
 
       setDatabaseType(null);
       setSchema({});

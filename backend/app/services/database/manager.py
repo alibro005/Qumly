@@ -171,6 +171,7 @@ class DatabaseManager:
             )
 
     def disconnect(self, session_id: str):
+        
         pool = self._pools.pop(session_id, None)
         database_type = self._database_types.pop(session_id, None)
 
