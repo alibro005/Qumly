@@ -213,7 +213,11 @@ User clarification:
     history = []
 
     if conversation_id:
-        history = get_history(conversation_id)
+        history = get_history(conversation_id)[-8:]
+        # print("Conversation ID:", conversation_id)
+        # print("Conversation history length:", len(history))
+        # print("Conversation history:", history)
+
 
     prompt = build_sql_prompt(
         schema=schema, question=question, history=history, database_type=database_type
@@ -281,7 +285,7 @@ User clarification:
     except Exception as error:
 
         corrected_prompt = build_correct_sql_prompt(
-            question=request.question,
+            question=question,
             sql=sql,
             error=str(error),
             schema=schema,
@@ -329,7 +333,7 @@ User clarification:
     if conversation_id:
         add_message(
             conversation_id=conversation_id,
-            question=request.question,
+            question=question,
             sql=sql,
             answer=answer,
             database_type=database_type,

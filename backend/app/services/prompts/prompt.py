@@ -46,8 +46,6 @@ User question:
 Generated SQL:
 {message["sql"]}
 
-Assistant answer:
-{message["answer"]}
 ---
 """
 

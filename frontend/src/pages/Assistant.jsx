@@ -16,6 +16,9 @@ import {
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [conversationId, setConversationId] = useState(() =>
+    crypto.randomUUID(),
+  );
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [recentQueries, setRecentQueries] = useState([]);
@@ -74,7 +77,7 @@ function App() {
     try {
       setLoading(true);
 
-      const response = await sendQuery(question);
+      const response = await sendQuery(question, null, conversationId);
 
       const newMessage = {
         id: Date.now(),
@@ -111,11 +114,16 @@ function App() {
     try {
       setLoading(true);
 
-      const response = await sendQuery(message.question, clarification);
+      const response = await sendQuery(
+        message.question,
+        clarification,
+        conversationId,
+      );
 
       const newMessage = {
         id: Date.now(),
-        question: `${message.question} based on ${clarification}`,
+        question: message.question,
+        clarification: clarification,
         status: response.status,
         answer: response.answer,
         sql: response.sql,
@@ -134,6 +142,7 @@ function App() {
   const handleNewQuery = () => {
     setMessages([]);
     setLoading(false);
+    setConversationId(crypto.randomUUID());
   };
 
   return (

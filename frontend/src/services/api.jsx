@@ -57,7 +57,11 @@ export async function getSchema() {
 }
 
 // Send Query
-export async function sendQuery(question, clarification = null) {
+export async function sendQuery(
+  question,
+  clarification = null,
+  conversationId = null
+) {
   const response = await fetch(`${API_URL}/query`, {
     method: "POST",
     headers: {
@@ -67,19 +71,15 @@ export async function sendQuery(question, clarification = null) {
     body: JSON.stringify({
       question,
       clarification,
+      conversation_id: conversationId,
     }),
   });
 
-  const data = await response.json();
-
-  // console.log("QUERY RESPONSE STATUS:", response.status);
-  // console.log("QUERY RESPONSE:", data);
-
   if (!response.ok) {
-    throw new Error(data.detail || "Query failed");
+    throw new Error("Failed to execute query");
   }
 
-  return data;
+  return response.json();
 }
 
 // Explain SQL
