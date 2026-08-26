@@ -1,12 +1,9 @@
-import { useState } from "react";
 
 function Footer() {
-  const [isOpen, setIsOpen] = useState(false);
 
   // handle navigation clicks
   const handleNavClick = (e, id) => {
     e.preventDefault();
-    setIsOpen(false);
 
     // Respect user's preference for reduced motion
     const prefersReducedMotion = window.matchMedia(

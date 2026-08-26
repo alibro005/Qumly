@@ -214,10 +214,6 @@ User clarification:
 
     if conversation_id:
         history = get_history(conversation_id)[-8:]
-        # print("Conversation ID:", conversation_id)
-        # print("Conversation history length:", len(history))
-        # print("Conversation history:", history)
-
 
     prompt = build_sql_prompt(
         schema=schema, question=question, history=history, database_type=database_type

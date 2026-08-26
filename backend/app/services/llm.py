@@ -21,7 +21,7 @@ def generate_sql(prompt: str) -> dict:
                     {
                         "role": "system",
                         "content": (
-                            "You are an expert MySQL SQL assistant. "
+                            "You are an expert SQL assistant. "
                             "Always return valid JSON according to the "
                             "requested response format."
                         ),
@@ -78,7 +78,7 @@ def correct_sql(prompt) -> str:
         messages=[
             {
                 "role": "system",
-                "content": "You are an expert Mysql SQL debugging assistant.",
+                "content": "You are an expert  SQL debugging assistant.",
             },
             {"role": "user", "content": prompt},
         ],

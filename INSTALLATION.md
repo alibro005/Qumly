@@ -2,13 +2,13 @@
   <img src="frontend/public/favicon.svg" alt="Qumly logo" width="100" height="100">
 </p>
 
-# Installation Guide
+# _Installation Guide_
 
 This guide walks you through setting up **Qumly** locally, including the FastAPI backend and React (Vite) frontend.
 
-Qumly lets you ask questions about a MySQL database using natural language. It generates SQL, executes the query, and explains the results in a simple, human-readable way.
+Qumly lets you ask questions about a MySQL/PostgresSQL database using natural language. It generates SQL, executes the query, and explains the results in a simple, human-readable way.
 
-## Prerequisites
+## _Prerequisites_
 
 Before getting started, make sure you have:
 
@@ -18,11 +18,11 @@ Before getting started, make sure you have:
 * A **MySQL database** that Qumly can connect to
 * A **[Groq](https://console.groq.com)** API key
 
-> **Note:** When running Qumly locally, you can connect it to a local MySQL database. If you're using a deployed Qumly backend, the MySQL database must be reachable from the internet.
+> **Note:** When running Qumly locally, you can connect it to a local MySQL/Postgres database. If you're using a deployed Qumly backend, the MySQL/PostgresSQL database must be reachable from the internet.
 
 ---
 
-## 1. Clone the Repository
+## _1. Clone the Repository_
 
 Clone the repository and move into the project directory:
 
@@ -33,7 +33,7 @@ cd Qumly
 
 ---
 
-## 2. Set Up the Backend
+## _2. Set Up the Backend_
 
 Move into the backend directory:
 
@@ -41,7 +41,7 @@ Move into the backend directory:
 cd backend
 ```
 
-### Install Dependencies
+### _Install Dependencies_
 
 Qumly includes a `uv.lock` file, so using `uv` is recommended:
 
@@ -75,7 +75,7 @@ Then install the dependencies:
 pip install -r requirements.txt
 ```
 
-### Configure Environment Variables
+### _Configure Environment Variables_
 
 Create a `.env` file inside the `backend/` directory:
 
@@ -97,7 +97,7 @@ The `DEMO_DB_*` variables are optional and are only required if you want to use 
 
 > **Important:** Never commit your `.env` file, database credentials, or Groq API key to GitHub.
 
-### Start the Backend
+### _Start the Backend_
 
 Using `uv`:
 
@@ -125,7 +125,7 @@ http://127.0.0.1:8000/health
 
 ---
 
-## 3. Set Up the Frontend
+## _3. Set Up the Frontend_
 
 Open a new terminal and navigate to the frontend directory:
 
@@ -139,7 +139,7 @@ Install the dependencies:
 npm install
 ```
 
-### Configure the API URL
+### _Configure the API URL_
 
 Create a `.env` file inside the `frontend/` directory:
 
@@ -149,7 +149,7 @@ VITE_API_URL=http://127.0.0.1:8000
 
 > Make sure there is no trailing slash at the end of the URL.
 
-### Start the Frontend
+### _Start the Frontend_
 
 ```bash
 npm run dev
@@ -163,7 +163,7 @@ http://localhost:5173
 
 ---
 
-## 4. Connect a Database
+## _4. Connect a Database_
 
 Open Qumly in your browser:
 
@@ -173,15 +173,15 @@ http://localhost:5173
 
 Qumly provides two ways to connect to a database.
 
-### Try Demo
+### _Try Demo_
 
 If you configured the `DEMO_DB_*` variables in the backend `.env` file, select **Try Demo** to connect to the configured demo database.
 
 This allows you to start using Qumly without configuring your own database connection.
 
-### Connect Your Own MySQL Database
+### _Connect Your Own MySQL/Postgres Database_
 
-Alternatively, select **Add Database** and provide your MySQL connection details:
+Alternatively, select **Add Database** and provide your MySQL/PostgresSQL connection details:
 
 ```text
 Host
@@ -191,7 +191,7 @@ Username
 Password
 ```
 
-For a local MySQL server, a typical configuration is:
+For a local MySQL/Postgres server, a typical configuration is:
 
 ```text
 Host: localhost
@@ -201,13 +201,13 @@ Database: your_database
 Password: your_password
 ```
 
-Make sure your MySQL server is running before connecting it to Qumly.
+Make sure your MySQL/PostgresSQL server is running before connecting it to Qumly.
 
-> **Note for deployed users:** When Qumly is deployed, `localhost` refers to the machine running the Qumly backend, not the user's computer. Therefore, a MySQL database used with the deployed backend must be remotely accessible.
+> **Note for deployed users:** When Qumly is deployed, `localhost` refers to the machine running the Qumly backend, not the user's computer. Therefore, a MySQL/PostgresSQL database used with the deployed backend must be remotely accessible.
 
 ---
 
-## 5. Ask Questions
+## _5. Ask Questions_
 
 Once a database is connected, you can ask questions using natural language.
 
@@ -225,9 +225,9 @@ Qumly will:
 
 ---
 
-## Useful Commands
+## _Useful Commands_
 
-### Backend
+### _Backend_
 
 Run these commands from the `backend/` directory:
 
@@ -242,7 +242,7 @@ uv run fastapi dev app/main.py
 uv run pytest
 ```
 
-### Frontend
+### _Frontend_
 
 Run these commands from the `frontend/` directory:
 
@@ -265,9 +265,9 @@ npm run lint
 
 ---
 
-## Troubleshooting
+## _Troubleshooting_
 
-### Demo Database Environment Variables Are Incomplete
+### _Demo Database Environment Variables Are Incomplete_
 
 If you see:
 
@@ -287,7 +287,7 @@ DEMO_DB_PASSWORD=your_password
 
 ---
 
-### CORS Error
+### _CORS Error_
 
 By default, the backend allows requests from the local Vite development URLs and the deployed Qumly frontend.
 
@@ -299,7 +299,7 @@ backend/app/main.py
 
 ---
 
-### Groq API Error
+### _Groq API Error_
 
 If Qumly cannot connect to Groq:
 
@@ -309,11 +309,11 @@ If Qumly cannot connect to Groq:
 
 ---
 
-### MySQL Connection Error
+### _Connection Error_
 
 Check the following:
 
-* MySQL is running.
+* MySQL/PostgresSQL is running.
 * The host is correct.
 * The port is correct.
 * The database name is correct.
@@ -330,9 +330,9 @@ Port: 3306
 
 ---
 
-## Environment Variables
+## _Environment Variables_
 
-### Backend
+### _Backend_
 
 ```env
 # Required
@@ -346,7 +346,7 @@ DEMO_DB_USERNAME=your_demo_db_username
 DEMO_DB_PASSWORD=your_demo_db_password
 ```
 
-### Frontend
+### _Frontend_
 
 ```env
 VITE_API_URL=http://127.0.0.1:8000

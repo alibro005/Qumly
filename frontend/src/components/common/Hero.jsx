@@ -69,10 +69,9 @@ function Hero() {
                 stroke="currentColor"
                 strokeWidth="1.2"
               />
-            </svg>
-
-            Works with your existing database
+            </svg>   
           </span>
+          Works with your existing database
         </div>
       </div>
 

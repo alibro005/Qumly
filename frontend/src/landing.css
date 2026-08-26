@@ -92,12 +92,13 @@ body.landing {
 
 .hero-land__actions {
   display: flex;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
   margin-bottom: var(--sp-5);
 }
 
 .hero-land__meta {
   display: flex;
+  gap: var(--sp-2);
 }
 
 /* Device frame — recreates the app inline as the hero's signature visual */
