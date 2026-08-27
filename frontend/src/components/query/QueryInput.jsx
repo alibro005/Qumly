@@ -71,7 +71,7 @@ function QueryInput({ onSubmit, loading = false }) {
 
   // Handle Ctrl + Enter key combination to submit the form
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && event.ctrlKey) {
+    if (event.key === "Enter") {
       event.preventDefault();
 
       if (!loading) {
@@ -104,8 +104,7 @@ function QueryInput({ onSubmit, loading = false }) {
 
         <div className="query-box__bar">
           <span className="kbd-hint">
-            <kbd>Ctrl</kbd>
-            <span>+</span>
+            <kbd>Press</kbd>
             <kbd>Enter</kbd>
             <span>to run</span>
           </span>
