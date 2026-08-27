@@ -237,6 +237,10 @@ a {
   overflow-x: hidden;
 }
 
+.sidebar-overlay {
+  display: none;
+}
+
 .app-shell.sidebar-collapsed .sidebar {
   opacity: 0;
   pointer-events: none;
@@ -676,6 +680,21 @@ a {
     min-height: 38px;
     padding: 0 12px;
     font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 40;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 50;
   }
 }
 

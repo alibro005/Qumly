@@ -156,6 +156,13 @@ function App() {
         databaseType={databaseType}
       />
 
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
         <Sidebar
           onNewQuery={handleNewQuery}
