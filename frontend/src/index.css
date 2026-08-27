@@ -1085,34 +1085,6 @@ a {
   }
 }
 
-/* Mobile */
-
-@media (max-width: 600px) {
-  .database-modal__overlay {
-    padding: 14px;
-  }
-
-  .database-modal {
-    border-radius: 12px;
-  }
-
-  .database-modal__body {
-    padding: 16px;
-  }
-}
-
-.database-error {
-  margin-top: 12px;
-  margin-bottom: 12px;
-  padding: 10px 12px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  border-radius: 8px;
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
 /* ==========================================================
    Conversation feed
    ========================================================== */
@@ -1421,59 +1393,6 @@ a {
 /* ==========================================================
    Responsive
    ========================================================== */
-@media (max-width: 900px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    position: fixed;
-    top: var(--header-h);
-    left: 0;
-    bottom: 0;
-    width: var(--sidebar-w);
-    z-index: 20;
-    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.4);
-  }
-  .app-shell:not(.sidebar-collapsed) .sidebar {
-    transform: translateX(0);
-  }
-  .app-shell.sidebar-collapsed .sidebar {
-    transform: translateX(-100%);
-    margin-left: 0;
-  }
-  .workspace {
-    padding: var(--sp-5) var(--sp-4);
-  }
-  .hero__heading {
-    font-size: 26px;
-  }
-}
-
-@media (max-width: 560px) {
-  .topbar__status .status-chip:first-child span {
-    display: none;
-  }
-  .brand-mark__svg {
-    height: 26px;
-  }
-  .query-box__bar {
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-  }
-  .msg--user .msg__text {
-    max-width: 88%;
-  }
-  .sql-block__actions {
-    gap: 6px;
-  }
-  .bar-chart {
-    height: 110px;
-  }
-}
-
-/* ==========================================================
-   Responsive
-   ========================================================== */
 
 @media (max-width: 900px) {
   /* Main layout always occupies full width */
@@ -1543,8 +1462,16 @@ a {
     padding: 0 var(--sp-3);
   }
 
+  .topbar__status .status-chip:first-child span {
+    display: none;
+  }
+
   .brand-mark img {
     height: 38px;
+  }
+
+  .brand-mark__svg {
+    height: 26px;
   }
 
   .sidebar {
@@ -1580,6 +1507,10 @@ a {
 
   .msg--user .msg__text {
     max-width: 92%;
+  }
+
+  .sql-block__actions {
+    gap: 6px;
   }
 
   .answer-card,
