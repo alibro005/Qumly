@@ -16,6 +16,9 @@ from app.services.llm import (
 )
 from app.services.validators.sql_validator import validate_sql
 from app.services.database.manager import database_manager
+from app.services.clarification_store import (
+    pending_clarifications,
+)
 
 from app.schema.schema import (
     QueryRequest,
@@ -189,97 +192,88 @@ def database_schema(
 
 
 @router.post("/query", response_model=QueryResponse)
-def query_database(
-    request: QueryRequest,
-    x_session_id: str = Header(...),
-):
+def query_database(request: QueryRequest, x_session_id: str = Header(...)):
 
     schema = database_manager.get_schema(x_session_id)
     database_type = database_manager.get_database_type(x_session_id)
-
-    question = request.question
-
-    if request.clarification:
-        question = f"""
-Original question:
-{request.question}
-
-User clarification:
-{request.clarification}
-"""
-
     conversation_id = request.conversation_id
 
-    history = []
+    # Handle clarifications if provided
 
-    if conversation_id:
-        history = get_history(conversation_id)[-8:]
+    if request.clarification:
+        state = pending_clarifications.get(conversation_id)
+        if state is None:
+            # fallback if server restarted / state lost: treat as fresh
+            state = {"original": request.question, "answers": []}
+
+        state["answers"].append(request.clarification)
+        pending_clarifications[conversation_id] = state
+
+        qa_text = "\n".join(f"- {ans}" for ans in state["answers"])
+        question = f"""Original question:
+{state["original"]}
+
+Clarifications provided so far:
+{qa_text}
+"""
+    else:
+        # fresh question — reset any old clarification state for this conversation
+        pending_clarifications[conversation_id] = {
+            "original": request.question,
+            "answers": [],
+        }
+        question = request.question
+
+    # Get the last 8 messages from the conversation history for context
+
+    history = get_history(conversation_id)[-8:] if conversation_id else []
+
+    # Build the prompt for the LLM to generate SQL
 
     prompt = build_sql_prompt(
         schema=schema, question=question, history=history, database_type=database_type
     )
 
+    # Call the LLM to generate SQL
     result = generate_sql(prompt)
 
     print("LLM RESULT:", result)
 
-    # Clarification
-
     if result.get("status") == "clarification_needed":
+        # keep pending_clarifications[conversation_id] as-is don't reset, don't finalize
         return {
             "status": "clarification_needed",
             "question": result.get("question"),
             "options": result.get("options", []),
         }
 
-    # Rejected request
-
     if result.get("status") == "rejected":
+        pending_clarifications.pop(conversation_id, None)
         return {
             "status": "rejected",
             "question": request.question,
             "answer": result.get("message", "This operation is not allowed."),
         }
 
-    # Clear request
-
     if result.get("status") != "clear":
         raise HTTPException(
             status_code=400,
-            detail={
-                "message": "Invalid response from AI.",
-                "result": result,
-            },
+            detail={"message": "Invalid response from AI.", "result": result},
         )
 
     sql = result.get("sql")
-
     if not sql:
-        raise HTTPException(
-            status_code=400,
-            detail="AI did not return a SQL query.",
-        )
-
-    # Validate SQL
+        raise HTTPException(status_code=400, detail="AI did not return a SQL query.")
 
     is_valid, message = validate_sql(sql)
-
     if not is_valid:
         raise HTTPException(
-            status_code=400,
-            detail={
-                "message": message,
-                "generated_sql": sql,
-            },
+            status_code=400, detail={"message": message, "generated_sql": sql}
         )
-
-    # Execute SQL
 
     try:
         results = database_manager.execute_query(x_session_id, sql)
-
     except Exception as error:
-
         corrected_prompt = build_correct_sql_prompt(
             question=question,
             sql=sql,
@@ -317,13 +311,9 @@ User clarification:
                 },
             )
 
-    # Generate answer
     answer_prompt = build_explain_answer_prompt(
-        question=request.question,
-        sql=sql,
-        results=results,
+        question=request.question, sql=sql, results=results
     )
-
     answer = generate_answer(answer_prompt)
 
     if conversation_id:
@@ -334,6 +324,7 @@ User clarification:
             answer=answer,
             database_type=database_type,
         )
+        pending_clarifications.pop(conversation_id, None)
 
     return {
         "status": "success",

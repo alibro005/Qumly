@@ -10,7 +10,7 @@ def add_message(
     question: str,
     sql: str,
     answer: str,
-    database_type=None,
+    database_type=str,
 ):
     if conversation_id not in conversations:
         conversations[conversation_id] = []
@@ -18,5 +18,6 @@ def add_message(
     conversations[conversation_id].append({
         "question": question,
         "sql": sql,
-        "answer": answer
+        "answer": answer,
+        "database_type": database_type,
     })
