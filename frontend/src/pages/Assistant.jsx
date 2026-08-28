@@ -85,6 +85,7 @@ function App() {
       const newMessage = {
         id: Date.now(),
         question: question,
+        clarificationQuestion: response.question,
         status: response.status,
         answer: response.answer,
         sql: response.sql,
@@ -125,8 +126,9 @@ function App() {
 
       const newMessage = {
         id: Date.now(),
-        question: message.question,
-        clarification: clarification,
+        question: response.question,
+        clarificationQuestion:
+          response.status === "clarification_needed" ? response.question : null,
         status: response.status,
         answer: response.answer,
         sql: response.sql,

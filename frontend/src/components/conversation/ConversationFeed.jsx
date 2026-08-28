@@ -40,13 +40,13 @@ function ConversationFeed({
 
           {/* Clarification needed */}
           {message.status === "clarification_needed" && (
-            <ClarificationCard
-              question={message.question}
-              options={message.options}
-              onSelect={(option) => onClarification(message, option)}
-              databaseType={databaseType}
-            />
-          )}
+              <ClarificationCard
+                question={message.clarificationQuestion}
+                options={message.options}
+                onSelect={(option) => onClarification(message, option)}
+                databaseType={databaseType}
+              />
+            )}
         </div>
       ))}
     </section>

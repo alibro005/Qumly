@@ -308,11 +308,12 @@ Return only the explanation.
     return prompt.strip()
 
 
-def build_explain_answer_prompt(question: str, sql: str, results: dict) -> str:
+def build_explain_answer_prompt(question: str, sql: str, results: dict,database_type: str = "mysql",) -> str:
+    database_dialect = "PostgreSQL" if database_type == "postgresql" else "MySQL"
     prompt = f"""
 You are QueryAI, a database assistant.
 
-The database has already executed the SQL query.
+The database has already executed the {database_dialect} SQL query.
 Your job is ONLY to explain the returned results in simple,
 natural language.
 

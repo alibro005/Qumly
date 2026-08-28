@@ -207,15 +207,31 @@ def query_database(request: QueryRequest, x_session_id: str = Header(...)):
             state = {"original": request.question, "answers": []}
 
         state["answers"].append(request.clarification)
-        pending_clarifications[conversation_id] = state
+        qa_text = "\n".join(
+            f"Clarification {index + 1}: {answer}"
+            for index, answer in enumerate(state["answers"])
+        )
 
-        qa_text = "\n".join(f"- {ans}" for ans in state["answers"])
-        question = f"""Original question:
+        question = f"""The user's original request was:
+
 {state["original"]}
 
-Clarifications provided so far:
+The user then clarified their request with the following selections:
+
 {qa_text}
+
+Use the clarifications to determine the user's final intent.
+Do not ask for information that has already been provided.
 """
+    #         pending_clarifications[conversation_id] = state
+
+    #         qa_text = "\n".join(f"- {ans}" for ans in state["answers"])
+    #         question = f"""Original question:
+    # {state["original"]}
+
+    # Clarifications provided so far:
+    # {qa_text}
+    # """
     else:
         # fresh question — reset any old clarification state for this conversation
         pending_clarifications[conversation_id] = {
@@ -311,9 +327,20 @@ Clarifications provided so far:
                 },
             )
 
+    MAX_ROWS_FOR_ANSWER = 20
+
+    answer_results = {
+        "columns": results.get("columns", []),
+        "rows": results.get("rows", [])[:MAX_ROWS_FOR_ANSWER],
+        "total_rows": len(results.get("rows", [])),
+    }
+
     answer_prompt = build_explain_answer_prompt(
-        question=request.question, sql=sql, results=results
+        question=question,
+        sql=sql,
+        results=answer_results,
     )
+
     answer = generate_answer(answer_prompt)
 
     if conversation_id:
