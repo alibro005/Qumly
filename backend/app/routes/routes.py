@@ -223,15 +223,6 @@ The user then clarified their request with the following selections:
 Use the clarifications to determine the user's final intent.
 Do not ask for information that has already been provided.
 """
-    #         pending_clarifications[conversation_id] = state
-
-    #         qa_text = "\n".join(f"- {ans}" for ans in state["answers"])
-    #         question = f"""Original question:
-    # {state["original"]}
-
-    # Clarifications provided so far:
-    # {qa_text}
-    # """
     else:
         # fresh question — reset any old clarification state for this conversation
         pending_clarifications[conversation_id] = {
@@ -256,13 +247,14 @@ Do not ask for information that has already been provided.
     print("LLM RESULT:", result)
 
     if result.get("status") == "clarification_needed":
-        # keep pending_clarifications[conversation_id] as-is don't reset, don't finalize
+        # Store the clarification state for this conversation
         return {
             "status": "clarification_needed",
             "question": result.get("question"),
             "options": result.get("options", []),
         }
 
+    # Handle rejected responses from the LLM
     if result.get("status") == "rejected":
         pending_clarifications.pop(conversation_id, None)
         return {
@@ -271,6 +263,7 @@ Do not ask for information that has already been provided.
             "answer": result.get("message", "This operation is not allowed."),
         }
 
+    # Handle unexpected responses from the LLM
     if result.get("status") != "clear":
         raise HTTPException(
             status_code=400,
