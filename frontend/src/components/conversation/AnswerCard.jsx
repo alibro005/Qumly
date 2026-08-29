@@ -5,7 +5,14 @@ import { format } from "sql-formatter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-function AnswerCard({ answer, results, sql, onExplainSql, databaseType }) {
+function AnswerCard({
+  answer,
+  results,
+  sql,
+  showActions,
+  onExplainSql,
+  databaseType,
+}) {
   const [showSql, setShowSql] = useState(false);
   const [explanation, setExplanation] = useState("");
   const [showExplain, setShowExplain] = useState(false);
@@ -15,21 +22,18 @@ function AnswerCard({ answer, results, sql, onExplainSql, databaseType }) {
   // Format the SQL query for better readability
   let formattedSql = sql;
 
-if (sql) {
-  try {
-    formattedSql = format(sql, {
-      language:
-        databaseType === "postgresql"
-          ? "postgresql"
-          : "mysql",
-    });
-  } catch (error) {
-    console.error("SQL formatting failed:", error);
-    console.error("Original SQL:", sql);
+  if (sql) {
+    try {
+      formattedSql = format(sql, {
+        language: databaseType === "postgresql" ? "postgresql" : "mysql",
+      });
+    } catch (error) {
+      console.error("SQL formatting failed:", error);
+      console.error("Original SQL:", sql);
 
-    formattedSql = sql;
+      formattedSql = sql;
+    }
   }
-}
   // Handle the "Explain SQL" button click
   const handleExplain = async () => {
     if (explanation) {
@@ -69,74 +73,75 @@ if (sql) {
             <ResultTable results={results} />
           </div>
         )}
-
-        <div className="sql-block">
-          {/* Action buttons */}
-          <div className="sql-block__actions">
-            <button
-              className="btn btn--ghost btn--sm"
-              type="button"
-              onClick={() => setShowSql((prev) => !prev)}
-            >
-              {showSql ? "Hide SQL" : "Show SQL"}
-            </button>
-
-            <button
-              className="btn btn--ghost btn--sm"
-              type="button"
-              onClick={handleExplain}
-              disabled={loadingExplanation}
-            >
-              {loadingExplanation
-                ? "Generating Explanation..."
-                : showExplain
-                  ? "Hide Explanation"
-                  : "Explain SQL"}
-            </button>
-
-            <button
-              className="btn btn--ghost btn--sm"
-              type="button"
-              onClick={() => setShowChart((prev) => !prev)}
-            >
-              {showChart ? "Hide Chart" : "Chart"}
-            </button>
-          </div>
-
-          {/* SQL panel */}
-          {showSql && (
-            <div className="sql-panel">
-              <div className="sql-panel__head">
-                <span>Generated SQL</span>
-
-                <button
-                  className="btn btn--ghost btn--xs"
-                  type="button"
-                  onClick={() => navigator.clipboard.writeText(sql)}
-                >
-                  Copy SQL
-                </button>
-              </div>
-
-              <SyntaxHighlighter
-                language="sql"
-                style={vscDarkPlus}
-                className="sql-code"
+        {showActions && (
+          <div className="sql-block">
+            {/* Action buttons */}
+            <div className="sql-block__actions">
+              <button
+                className="btn btn--ghost btn--sm"
+                type="button"
+                onClick={() => setShowSql((prev) => !prev)}
               >
-                {formattedSql};
-              </SyntaxHighlighter>
-            </div>
-          )}
+                {showSql ? "Hide SQL" : "Show SQL"}
+              </button>
 
-          {/* Explanation */}
-          {showExplain && explanation && (
-            <div className="explain-panel">
-              <p className="explain-panel__text">{explanation}</p>
-            </div>
-          )}
+              <button
+                className="btn btn--ghost btn--sm"
+                type="button"
+                onClick={handleExplain}
+                disabled={loadingExplanation}
+              >
+                {loadingExplanation
+                  ? "Generating Explanation..."
+                  : showExplain
+                    ? "Hide Explanation"
+                    : "Explain SQL"}
+              </button>
 
-          {showChart && <ResultChart results={results} />}
-        </div>
+              <button
+                className="btn btn--ghost btn--sm"
+                type="button"
+                onClick={() => setShowChart((prev) => !prev)}
+              >
+                {showChart ? "Hide Chart" : "Chart"}
+              </button>
+            </div>
+
+            {/* SQL panel */}
+            {showSql && (
+              <div className="sql-panel">
+                <div className="sql-panel__head">
+                  <span>Generated SQL</span>
+
+                  <button
+                    className="btn btn--ghost btn--xs"
+                    type="button"
+                    onClick={() => navigator.clipboard.writeText(sql)}
+                  >
+                    Copy SQL
+                  </button>
+                </div>
+
+                <SyntaxHighlighter
+                  language="sql"
+                  style={vscDarkPlus}
+                  className="sql-code"
+                >
+                  {formattedSql};
+                </SyntaxHighlighter>
+              </div>
+            )}
+
+            {/* Explanation */}
+            {showExplain && explanation && (
+              <div className="explain-panel">
+                <p className="explain-panel__text">{explanation}</p>
+              </div>
+            )}
+
+            {showChart && <ResultChart results={results} />}
+          </div>
+        )}
       </div>
     </div>
   );

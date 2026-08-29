@@ -254,13 +254,13 @@ Do not ask for information that has already been provided.
             "options": result.get("options", []),
         }
 
-    # Handle rejected responses from the LLM
+   # Handle rejected responses from the LLM
     if result.get("status") == "rejected":
         pending_clarifications.pop(conversation_id, None)
         return {
             "status": "rejected",
             "question": request.question,
-            "answer": result.get("message", "This operation is not allowed."),
+            "answer": result.get("answer"),
         }
 
     # Handle unexpected responses from the LLM

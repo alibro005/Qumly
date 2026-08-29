@@ -20,6 +20,7 @@ function ConversationFeed({
               answer={message.answer}
               results={message.results}
               sql={message.sql}
+              showActions={true}
               onShowSql={onShowSql}
               onExplainSql={onExplainSql}
               databaseType={databaseType}
@@ -32,9 +33,10 @@ function ConversationFeed({
               answer={message.answer}
               results={null}
               sql={null}
-              onShowSql={onShowSql}
-              onExplainSql={onExplainSql}
-              databaseType={databaseType}
+              showActions={false}
+              onShowSql={null}
+              onExplainSql={null}
+              databaseType={null}
             />
           )}
 
