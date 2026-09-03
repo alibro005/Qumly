@@ -1155,7 +1155,7 @@ a {
 
 /* Result table */
 .result-table-wrap {
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   margin-bottom: var(--sp-4);

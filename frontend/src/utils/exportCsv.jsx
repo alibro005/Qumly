@@ -1,18 +1,23 @@
-export function exportToCsv(
-  columns,
-  rows,
-  filename = "qumly-results.csv"
-) {
+export function exportToCsv(columns, rows, filename = "qumly-results.csv") {
   if (!columns?.length || !rows?.length) {
     return;
   }
 
   const escapeCsvValue = (value) => {
-    if (value === null || value === undefined) {
+    if (value === null) {
+      return "NULL";
+    }
+
+    if (value === undefined) {
       return "";
     }
 
-    const stringValue = String(value);
+    let stringValue = String(value);
+
+    // Mitigate CSV/Excel formula injection for string cells
+    if (typeof value === "string" && /^[\t\r\n ]*[=+\-@]/.test(stringValue)) {
+      stringValue = "'" + stringValue;
+    }
 
     if (
       stringValue.includes(",") ||
@@ -26,23 +31,13 @@ export function exportToCsv(
     return stringValue;
   };
 
-  const header = columns
-    .map(escapeCsvValue)
-    .join(",");
+  const header = columns.map(escapeCsvValue).join(",");
 
   const body = rows
-    .map((row) =>
-      row
-        .map(escapeCsvValue)
-        .join(",")
-    )
+    .map((row) => row.map(escapeCsvValue).join(","))
     .join("\r\n");
 
-  const csvContent =
-    "\uFEFF" +
-    header +
-    "\r\n" +
-    body;
+  const csvContent = "\uFEFF" + header + "\r\n" + body;
 
   const blob = new Blob([csvContent], {
     type: "text/csv;charset=utf-8;",
@@ -58,5 +53,5 @@ export function exportToCsv(
   link.click();
   document.body.removeChild(link);
 
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
