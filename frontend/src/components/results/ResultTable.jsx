@@ -1,3 +1,5 @@
+import { exportToCsv } from "../../utils/exportCsv";
+
 function ResultTable({ results }) {
   if (!results || !results.columns || !results.rows) {
     return null;
@@ -6,38 +8,58 @@ function ResultTable({ results }) {
   if (results.rows.length === 0) {
     return (
       <div className="result-table-wrap">
-        <p className="result-empty">
-          No results found.
-        </p>
+        <p className="result-empty">No results found.</p>
       </div>
     );
   }
 
+  const handleExport = () => {
+    exportToCsv(
+      results.columns,
+      results.rows,
+      `qumly-results-${Date.now()}.csv`,
+    );
+  };
+
   return (
     <div className="result-table-wrap">
-      <table className="result-table">
-        <thead>
-          <tr>
-            {results.columns.map((column) => (
-              <th key={column}>
-                {column}
-              </th>
-            ))}
-          </tr>
-        </thead>
+      <div className="result-table-header">
+        <span className="result-count">
+          {results.rows.length} {results.rows.length === 1 ? "row" : "rows"}
+        </span>
 
-        <tbody>
-          {results.rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((value, columnIndex) => (
-                <td key={columnIndex}>
-                  {value === null ? "NULL" : String(value)}
-                </td>
+        <button
+          type="button"
+          className="export-csv-button"
+          onClick={handleExport}
+        >
+          Export CSV
+        </button>
+      </div>
+
+      <div className="result-table-scroll">
+        <table className="result-table">
+          <thead>
+            <tr>
+              {results.columns.map((column) => (
+                <th key={column}>{column}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {results.rows.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((value, columnIndex) => (
+                  <td key={columnIndex}>
+                    {value === null ? "NULL" : String(value)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
