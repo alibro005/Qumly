@@ -6,10 +6,8 @@ function ResultTable({ results }) {
   }
 
   if (results.rows.length === 0) {
-    return (
-      <div className="result-table-wrap">
-        <p className="result-empty">No results found.</p>
-      </div>
+    return(
+       <p className="result-empty">No results found.</p>
     );
   }
 
@@ -22,7 +20,7 @@ function ResultTable({ results }) {
   };
 
   return (
-    <div className="result-table-wrap">
+    <>
       <div className="result-table-header">
         <span className="result-count">
           {results.rows.length} {results.rows.length === 1 ? "row" : "rows"}
@@ -52,7 +50,11 @@ function ResultTable({ results }) {
               <tr key={rowIndex}>
                 {row.map((value, columnIndex) => (
                   <td key={columnIndex}>
-                    {value === null ? "NULL" : String(value)}
+                    {value === null
+                      ? "NULL"
+                      : value === undefined
+                        ? ""
+                        : String(value)}
                   </td>
                 ))}
               </tr>
@@ -60,7 +62,7 @@ function ResultTable({ results }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }
 

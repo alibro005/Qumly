@@ -1,5 +1,5 @@
 export function exportToCsv(columns, rows, filename = "qumly-results.csv") {
-  if (!columns?.length || !rows?.length) {
+  if (!columns?.length || !Array.isArray(rows)) {
     return;
   }
 
