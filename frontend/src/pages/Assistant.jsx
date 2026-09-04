@@ -76,37 +76,73 @@ function App() {
   };
 
   // handle query
-  const handleQuery = async (question) => {
-    try {
-      setLoading(true);
 
+  const handleQuery = async (question) => {
+    const messageId = Date.now();
+
+    const pendingMessage = {
+      id: messageId,
+      question,
+      clarificationQuestion: null,
+      status: "loading",
+      answer: null,
+      sql: null,
+      results: null,
+      options: null,
+    };
+
+    // Show the user's message immediately
+    setMessages((previousMessages) => [...previousMessages, pendingMessage]);
+
+    setLoading(true);
+
+    try {
       const response = await sendQuery(question, null, conversationId);
 
-      const newMessage = {
-        id: Date.now(),
-        question: question,
-        clarificationQuestion: response.question,
-        status: response.status,
-        answer: response.answer,
-        sql: response.sql,
-        results: response.results,
-        options: response.options,
-      };
+      // Replace the loading message with the actual response
+      setMessages((previousMessages) =>
+        previousMessages.map((message) =>
+          message.id === messageId
+            ? {
+                ...message,
+                clarificationQuestion: response.question,
+                status: response.status,
+                answer: response.answer,
+                sql: response.sql,
+                results: response.results,
+                options: response.options,
+              }
+            : message,
+        ),
+      );
 
-      setMessages((previousMessages) => [...previousMessages, newMessage]);
       setRecentQueries((previous) => {
         const updated = [
           {
-            id: newMessage.id,
-            question: newMessage.question,
+            id: messageId,
+            question,
           },
-          ...previous.filter((item) => item.question !== newMessage.question),
+          ...previous.filter((item) => item.question !== question),
         ];
 
         return updated.slice(0, 5);
       });
     } catch (error) {
       console.error("Query error:", error);
+
+      setMessages((previousMessages) =>
+        previousMessages.map((message) =>
+          message.id === messageId
+            ? {
+                ...message,
+                status: "error",
+                answer:
+                  error.message ||
+                  "Something went wrong while processing your query.",
+              }
+            : message,
+        ),
+      );
     } finally {
       setLoading(false);
     }
