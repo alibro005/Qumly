@@ -151,30 +151,68 @@ function App() {
   // Handle Clarification
 
   const handleClarification = async (message, clarification) => {
-    try {
-      setLoading(true);
+    const messageId = Date.now();
 
+    // Create a new loading message
+    const pendingMessage = {
+      id: messageId,
+      question: clarification,
+      clarificationQuestion: null,
+      status: "loading",
+      answer: null,
+      sql: null,
+      results: null,
+      options: null,
+    };
+
+    // Keep the old message and add the new loading message
+    setMessages((previousMessages) => [...previousMessages, pendingMessage]);
+
+    setLoading(true);
+
+    try {
       const response = await sendQuery(
         message.question,
         clarification,
         conversationId,
       );
 
-      const newMessage = {
-        id: Date.now(),
-        question: response.question,
-        clarificationQuestion:
-          response.status === "clarification_needed" ? response.question : null,
-        status: response.status,
-        answer: response.answer,
-        sql: response.sql,
-        results: response.results,
-        options: response.options,
-      };
-
-      setMessages((previousMessages) => [...previousMessages, newMessage]);
+      // Replace only the new loading message
+      setMessages((previousMessages) =>
+        previousMessages.map((item) =>
+          item.id === messageId
+            ? {
+                ...item,
+                question: response.question,
+                clarificationQuestion:
+                  response.status === "clarification_needed"
+                    ? response.question
+                    : null,
+                status: response.status,
+                answer: response.answer,
+                sql: response.sql,
+                results: response.results,
+                options: response.options,
+              }
+            : item,
+        ),
+      );
     } catch (error) {
       console.error("Clarification error:", error);
+
+      setMessages((previousMessages) =>
+        previousMessages.map((item) =>
+          item.id === messageId
+            ? {
+                ...item,
+                status: "error",
+                answer:
+                  error.message ||
+                  "Something went wrong while processing your query.",
+              }
+            : item,
+        ),
+      );
     } finally {
       setLoading(false);
     }
