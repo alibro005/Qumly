@@ -183,7 +183,6 @@ function App() {
           item.id === messageId
             ? {
                 ...item,
-                question: response.question,
                 clarificationQuestion:
                   response.status === "clarification_needed"
                     ? response.question
@@ -205,7 +204,7 @@ function App() {
           item.id === messageId
             ? {
                 ...item,
-                status: "error",
+                status: "rejected",
                 answer:
                   error.message ||
                   "Something went wrong while processing your query.",
