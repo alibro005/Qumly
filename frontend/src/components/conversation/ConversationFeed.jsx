@@ -15,6 +15,19 @@ function ConversationFeed({
         <div className="conversation-item" key={message.id}>
           <UserMessage question={message.question} />
 
+          {/* Loading */}
+          {message.status === "loading" && (
+            <div className="query-loading" aria-live="polite">
+              <div className="query-loading__dots">
+                <span />
+                <span />
+                <span />
+              </div>
+
+              <span>Generating your answer...</span>
+            </div>
+          )}
+
           {message.status === "success" && (
             <AnswerCard
               answer={message.answer}
@@ -42,13 +55,13 @@ function ConversationFeed({
 
           {/* Clarification needed */}
           {message.status === "clarification_needed" && (
-              <ClarificationCard
-                question={message.clarificationQuestion}
-                options={message.options}
-                onSelect={(option) => onClarification(message, option)}
-                databaseType={databaseType}
-              />
-            )}
+            <ClarificationCard
+              question={message.clarificationQuestion}
+              options={message.options}
+              onSelect={(option) => onClarification(message, option)}
+              databaseType={databaseType}
+            />
+          )}
         </div>
       ))}
     </section>

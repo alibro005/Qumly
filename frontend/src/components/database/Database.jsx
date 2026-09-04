@@ -178,7 +178,9 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 onClick={handleDemoConnect}
                 disabled={connecting}
                 className="database-modal__submit"
+                aria-busy={connecting}
               >
+                {connecting && <span className="button-spinner" />}
                 {connecting ? "Connecting..." : "Connect Demo Database"}
               </button>
             </div>
@@ -253,7 +255,9 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 onClick={handleConnect}
                 disabled={connecting}
                 className="database-modal__submit btn btn--primary btn--block"
+                aria-busy={connecting}
               >
+                {connecting && <span className="button-spinner" />}
                 {connecting
                   ? "Connecting..."
                   : `Connect ${
