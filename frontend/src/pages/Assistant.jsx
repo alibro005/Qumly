@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Topbar from "../components/layout/Topbar";
 import Sidebar from "../components/layout/SideBar";
@@ -27,6 +27,8 @@ function App() {
 
   const [schema, setSchema] = useState({});
   const [databaseType, setDatabaseType] = useState(null);
+
+  const clarificationLoadingRef = useRef(false);
 
   useEffect(() => {
     const loadDatabase = async () => {
@@ -151,8 +153,12 @@ function App() {
   // Handle Clarification
 
   const handleClarification = async (message, clarification) => {
-    if (loading) return;
-    const messageId = Date.now();
+    // Prevent duplicate clarification requests
+    if (clarificationLoadingRef.current) return;
+
+    clarificationLoadingRef.current = true;
+
+    const messageId = crypto.randomUUID();
 
     // Create a new loading message
     const pendingMessage = {
@@ -215,6 +221,7 @@ function App() {
         ),
       );
     } finally {
+      clarificationLoadingRef.current = false;
       setLoading(false);
     }
   };
