@@ -151,12 +151,14 @@ function App() {
   // Handle Clarification
 
   const handleClarification = async (message, clarification) => {
+    if (loading) return;
     const messageId = Date.now();
 
     // Create a new loading message
     const pendingMessage = {
       id: messageId,
       question: clarification,
+      originalQuestion: message.originalQuestion || message.question,
       clarificationQuestion: null,
       status: "loading",
       answer: null,
@@ -172,7 +174,7 @@ function App() {
 
     try {
       const response = await sendQuery(
-        message.question,
+        message.originalQuestion || message.question,
         clarification,
         conversationId,
       );
