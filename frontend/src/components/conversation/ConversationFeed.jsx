@@ -23,8 +23,6 @@ function ConversationFeed({
                 <span />
                 <span />
               </div>
-
-              <span>Generating your answer...</span>
             </div>
           )}
 
