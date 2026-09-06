@@ -8,7 +8,8 @@
 </p>
 
 <p align="center">
-An AI-powered SQL assistant that turns natural language or voice into safe SQL, executes queries, and explains results in plain English.
+An AI-first SQL assistant that turns natural language and voice into safe SQL and explains the results in plain English.
+
 </p>
 
 <p align="center">
