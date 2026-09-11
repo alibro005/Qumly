@@ -1,0 +1,226 @@
+import logging
+
+from fastapi import HTTPException
+
+from app.schema.schema import QueryRequest
+from app.services.prompts.prompt import (
+    build_sql_prompt,
+    build_explain_answer_prompt,
+    build_correct_sql_prompt,
+)
+from app.services.llm import (
+    generate_sql,
+    generate_answer,
+    correct_sql,
+)
+from app.services.validators.sql_validator import validate_sql
+from app.services.database.manager import database_manager
+from app.services.clarification_store import pending_clarifications
+from app.services.history.conversation import get_history, add_message
+
+
+logger = logging.getLogger(__name__)
+
+MAX_ROWS_FOR_ANSWER = 20
+
+
+def process_query(
+    request: QueryRequest,
+    session_id: str,
+):
+    schema = database_manager.get_schema(session_id)
+    database_type = database_manager.get_database_type(session_id)
+    conversation_id = request.conversation_id
+
+    # Handle clarification
+    if request.clarification:
+        state = pending_clarifications.get(conversation_id)
+
+        if state is None:
+            state = {
+                "original": request.question,
+                "answers": [],
+            }
+
+        state["answers"].append(request.clarification)
+
+        qa_text = "\n".join(
+            f"Clarification {index + 1}: {answer}"
+            for index, answer in enumerate(state["answers"])
+        )
+
+        question = f"""The user's original request was:
+
+{state["original"]}
+
+The user then clarified their request with the following selections:
+
+{qa_text}
+
+Use the clarifications to determine the user's final intent.
+Do not ask for information that has already been provided.
+"""
+
+    else:
+        pending_clarifications[conversation_id] = {
+            "original": request.question,
+            "answers": [],
+        }
+
+        question = request.question
+
+    # Conversation history
+    history = get_history(conversation_id)[-8:] if conversation_id else []
+
+    # Build SQL prompt
+    prompt = build_sql_prompt(
+        schema=schema,
+        question=question,
+        history=history,
+        database_type=database_type,
+    )
+
+    # Generate SQL
+    result = generate_sql(prompt)
+
+    logger.debug("LLM result: %s", result)
+
+    # Clarification required
+    if result.get("status") == "clarification_needed":
+        return {
+            "status": "clarification_needed",
+            "question": result.get("question"),
+            "options": result.get("options", []),
+        }
+
+    # Request rejected
+    if result.get("status") == "rejected":
+        pending_clarifications.pop(conversation_id, None)
+
+        return {
+            "status": "rejected",
+            "question": request.question,
+            "answer": result.get("answer"),
+        }
+
+    # Unexpected LLM response
+    if result.get("status") != "clear":
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "Invalid response from AI.",
+                "result": result,
+            },
+        )
+
+    sql = result.get("sql")
+
+    if not sql:
+        raise HTTPException(
+            status_code=400,
+            detail="AI did not return a SQL query.",
+        )
+
+    # Validate SQL
+    is_valid, message = validate_sql(sql)
+
+    if not is_valid:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": message,
+                "generated_sql": sql,
+            },
+        )
+
+    # Execute SQL
+    try:
+        results = database_manager.execute_query(
+            session_id,
+            sql,
+        )
+
+    except Exception as error:
+        # Ask the LLM to correct failed SQL
+        corrected_prompt = build_correct_sql_prompt(
+            question=question,
+            sql=sql,
+            error=str(error),
+            schema=schema,
+            database_type=database_type,
+        )
+
+        corrected_sql = correct_sql(corrected_prompt)
+
+        # Validate corrected SQL
+        is_valid, message = validate_sql(corrected_sql)
+
+        if not is_valid:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "AI-generated correction failed validation.",
+                    "validation_error": message,
+                    "generated_sql": corrected_sql,
+                },
+            )
+
+        # Execute corrected SQL
+        try:
+            results = database_manager.execute_query(
+                session_id,
+                corrected_sql,
+            )
+
+            sql = corrected_sql
+
+        except Exception as correction_error:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "SQL correction failed.",
+                    "error": str(correction_error),
+                    "generated_sql": corrected_sql,
+                    "database_type": database_type,
+                },
+            )
+
+    # Limit results sent to the answer-generation LLM
+    answer_results = {
+        "columns": results.get("columns", []),
+        "rows": results.get("rows", [])[:MAX_ROWS_FOR_ANSWER],
+        "total_rows": len(results.get("rows", [])),
+    }
+
+    # Generate natural-language answer
+    answer_prompt = build_explain_answer_prompt(
+        question=question,
+        sql=sql,
+        results=answer_results,
+        database_type=database_type,
+    )
+
+    answer = generate_answer(answer_prompt)
+
+    # Save conversation history
+    if conversation_id:
+        add_message(
+            conversation_id=conversation_id,
+            question=question,
+            sql=sql,
+            answer=answer,
+            database_type=database_type,
+        )
+
+        pending_clarifications.pop(
+            conversation_id,
+            None,
+        )
+
+    return {
+        "status": "success",
+        "question": request.question,
+        "sql": sql,
+        "results": results,
+        "answer": answer,
+    }

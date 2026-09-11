@@ -10,7 +10,7 @@ def add_message(
     question: str,
     sql: str,
     answer: str,
-    database_type=str,
+    database_type: str,
 ):
     if conversation_id not in conversations:
         conversations[conversation_id] = []
