@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import mysql.connector as mysql_connector
 from mysql.connector import pooling
 import psycopg
@@ -8,6 +9,7 @@ from contextlib import contextmanager
 from app.services.database import mysql as mysql_database
 from app.services.database import postgresql as postgresql_database
 
+load_dotenv()
 
 class DatabaseManager:
     def __init__(self):
