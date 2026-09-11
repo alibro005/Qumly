@@ -1,20 +1,44 @@
-from app.services.sql_validator import validate_sql
+from app.services.validators.sql_validator import validate_sql
 
 
-test_queries = [
-    "SELECT * FROM students;",
-    "SELECT name, marks FROM students WHERE marks > 80;",
-    "DROP TABLE students;",
-    "DELETE FROM students;",
-    "UPDATE students SET marks = 100;"
-]
+def test_valid_select_query():
+    is_valid, message = validate_sql(
+        "SELECT * FROM students;"
+    )
+
+    assert is_valid is True
+    assert message == "SQL query is safe."
 
 
-for query in test_queries:
-    is_valid, message = validate_sql(query)
+def test_valid_select_with_condition():
+    is_valid, message = validate_sql(
+        "SELECT name, marks FROM students WHERE marks > 80;"
+    )
 
-    print("\nQuery:")
-    print(query)
+    assert is_valid is True
 
-    print("Valid:", is_valid)
-    print("Message:", message)
+def test_reject_drop_query():
+    is_valid, message = validate_sql(
+        "DROP TABLE students;"
+    )
+
+    assert is_valid is False
+    assert message == "Only SELECT queries are allowed."
+
+
+def test_reject_delete_query():
+    is_valid, message = validate_sql(
+        "DELETE FROM students;"
+    )
+
+    assert is_valid is False
+    assert message == "Only SELECT queries are allowed."
+
+
+def test_reject_update_query():
+    is_valid, message = validate_sql(
+        "UPDATE students SET marks = 100;"
+    )
+
+    assert is_valid is False
+    assert message == "Only SELECT queries are allowed."
