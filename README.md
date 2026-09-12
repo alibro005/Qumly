@@ -3,7 +3,7 @@
 
 <p align="center">
   <a href="https://qumly.me">
-    <img src="assets/qumly-logo-transparent.svg" alt="Qumly logo" width="100%" height="250">
+    <img src="assets/logo_transparent.svg" alt="Qumly logo" width="100%" height="250">
   </a>
 </p>
 
