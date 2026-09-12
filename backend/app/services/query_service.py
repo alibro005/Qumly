@@ -15,9 +15,14 @@ from app.services.llm import (
 )
 from app.services.validators.sql_validator import validate_sql
 from app.services.database.manager import database_manager
-from app.services.clarification_store import pending_clarifications
+from app.services.clarification_store import (
+    add_clarification,
+    clear_clarification,
+    get_clarification,
+    start_clarification,
+    get_or_start_clarification,
+)
 from app.services.history.conversation import get_history, add_message
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,17 +37,16 @@ def process_query(
     database_type = database_manager.get_database_type(session_id)
     conversation_id = request.conversation_id
 
-    # Handle clarification
     if request.clarification:
-        state = pending_clarifications.get(conversation_id)
+        state = get_or_start_clarification(
+            conversation_id=conversation_id,
+            original_question=request.question,
+        )
 
-        if state is None:
-            state = {
-                "original": request.question,
-                "answers": [],
-            }
-
-        state["answers"].append(request.clarification)
+        state = add_clarification(
+            conversation_id=conversation_id,
+            answer=request.clarification,
+        )
 
         qa_text = "\n".join(
             f"Clarification {index + 1}: {answer}"
@@ -51,21 +55,20 @@ def process_query(
 
         question = f"""The user's original request was:
 
-{state["original"]}
+    {state["original"]}
 
-The user then clarified their request with the following selections:
+    The user then clarified their request with the following selections:
 
-{qa_text}
+    {qa_text}
 
-Use the clarifications to determine the user's final intent.
-Do not ask for information that has already been provided.
-"""
-
+    Use the clarifications to determine the user's final intent.
+    Do not ask for information that has already been provided.
+    """
     else:
-        pending_clarifications[conversation_id] = {
-            "original": request.question,
-            "answers": [],
-        }
+        start_clarification(
+            conversation_id=conversation_id,
+            original_question=request.question,
+        )
 
         question = request.question
 
@@ -95,7 +98,7 @@ Do not ask for information that has already been provided.
 
     # Request rejected
     if result.get("status") == "rejected":
-        pending_clarifications.pop(conversation_id, None)
+        clear_clarification(conversation_id)
 
         return {
             "status": "rejected",
@@ -212,10 +215,7 @@ Do not ask for information that has already been provided.
             database_type=database_type,
         )
 
-        pending_clarifications.pop(
-            conversation_id,
-            None,
-        )
+        clear_clarification(conversation_id)
 
     return {
         "status": "success",
