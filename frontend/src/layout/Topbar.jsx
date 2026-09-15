@@ -1,6 +1,6 @@
-import logo from "../../assets/logo.svg";
-import mysqlLogo from "../../assets/mysql.svg";
-import postgresqlLogo from "../../assets/postgresql.svg";
+import logo from "../assets/logo.svg";
+import mysqlLogo from "../assets/mysql.svg";
+import postgresqlLogo from "../assets/postgresql.svg";
 
 function Topbar({ onToggleSidebar, sidebarOpen = true, databaseType}) {
   const normalizedDatabaseType = databaseType?.toLowerCase();

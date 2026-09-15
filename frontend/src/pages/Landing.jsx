@@ -6,6 +6,8 @@ import Preview from "../components/common/Preview";
 import Compatibility from "../components/common/Compatibility";
 import Footer from "../components/common/Footer";
 
+
+
 function Landing() {
   return (
     <div className="landing">
