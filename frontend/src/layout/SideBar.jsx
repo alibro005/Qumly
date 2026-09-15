@@ -1,4 +1,4 @@
-import SchemaExplorer from "./SchemaExplorer";
+import SchemaExplorer from "../features/database/SchemaExplorer";
 
 function Sidebar({
   onNewQuery,

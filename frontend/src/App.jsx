@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Landing from "./pages/Landing";
-import Assistant from "./pages/Assistant";
+import Assistant from "./features/assistant/Assistant";
 
 function App() {
   const hostname = window.location.hostname;

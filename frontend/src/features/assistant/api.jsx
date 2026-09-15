@@ -1,4 +1,4 @@
-import { getSessionId } from "./session";
+import { getSessionId } from "../../services/session";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

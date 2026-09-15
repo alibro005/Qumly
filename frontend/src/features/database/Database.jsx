@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { connectDatabase, connectDemo } from "../../services/api";
+import { connectDatabase, connectDemo } from "../assistant/api";
 import mysqlLogo from "../../assets/mysql.svg";
 import postgresqlLogo from "../../assets/postgresql.svg";
 

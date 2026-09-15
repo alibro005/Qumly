@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
-import Topbar from "../components/layout/Topbar";
-import Sidebar from "../components/layout/SideBar";
-import QueryInput from "../components/query/QueryInput";
-import ConversationFeed from "../components/conversation/ConversationFeed";
-import DatabaseModal from "../components/database/Database";
-import { getSessionId } from "../services/session";
+import Topbar from "../../layout/Topbar";
+import Sidebar from "../../layout/SideBar";
+import QueryInput from "./QueryInput";
+import ConversationFeed from "./ConversationFeed";
+import DatabaseModal from "../database/Database";
+
+import { getSessionId } from "../../services/session";
 
 import {
   sendQuery,
@@ -13,7 +14,7 @@ import {
   getDatabaseStatus,
   getSchema,
   disconnectDatabase,
-} from "../services/api";
+} from "./api";
 
 function App() {
   const [messages, setMessages] = useState([]);
