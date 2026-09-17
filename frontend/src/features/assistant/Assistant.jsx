@@ -233,6 +233,8 @@ function App() {
     setConversationId(crypto.randomUUID());
   };
 
+  const isDatabaseConnected = Boolean(databaseType);
+
   return (
     <div className="app">
       <Topbar
@@ -265,7 +267,7 @@ function App() {
             onExplainSql={handleExplainSql}
             databaseType={databaseType}
           />
-          <QueryInput onSubmit={handleQuery} loading={loading} />
+          <QueryInput onSubmit={handleQuery} loading={loading} isDatabaseConnected={Boolean(databaseType)} />
         </main>
       </div>
       {databaseModalOpen && (

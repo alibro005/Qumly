@@ -32,6 +32,11 @@ def process_query(
     request: QueryRequest,
     session_id: str,
 ):
+    if not database_manager.is_connected(session_id):
+        raise HTTPException(
+            status_code=400,
+            detail="Please connect a database before asking questions about your data.",
+        )
     schema = database_manager.get_schema(session_id)
     database_type = database_manager.get_database_type(session_id)
     conversation_id = request.conversation_id
