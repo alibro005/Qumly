@@ -1,10 +1,11 @@
 import os
-from dotenv import load_dotenv
-import mysql.connector as mysql_connector
-from mysql.connector import pooling
-import psycopg
-from psycopg_pool import ConnectionPool
 from contextlib import contextmanager
+
+import mysql.connector as mysql_connector
+import psycopg
+from dotenv import load_dotenv
+from mysql.connector import pooling
+from psycopg_pool import ConnectionPool
 
 from app.services.database import mysql as mysql_database
 from app.services.database import postgresql as postgresql_database
@@ -90,7 +91,10 @@ class DatabaseManager:
         username = os.getenv("DEMO_DB_USERNAME")
         password = os.getenv("DEMO_DB_PASSWORD")
 
-        if not all([host, port, database, username, password]):
+        if host is None or port is None or database is None:
+            raise RuntimeError("Demo database environment variables are incomplete.")
+
+        if username is None or password is None:
             raise RuntimeError("Demo database environment variables are incomplete.")
 
         self.configure_mysql(
@@ -147,7 +151,7 @@ class DatabaseManager:
                         return True
                 return connection.is_connected()
 
-        except Exception:
+        except Exception:   # noqa: BLE001
             return False
 
     def get_schema(self, session_id: str):
@@ -175,7 +179,7 @@ class DatabaseManager:
     def disconnect(self, session_id: str):
         
         pool = self._pools.pop(session_id, None)
-        database_type = self._database_types.pop(session_id, None)
+        self._database_types.pop(session_id, None)
 
         if pool is None:
             return

@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Header, HTTPException
 import logging
+
+from fastapi import APIRouter, Header, HTTPException
 
 from app.schema.schema import DatabaseConnectionRequest
 from app.services.database.manager import database_manager
-
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ def disconnect_database(x_session_id: str = Header(...)):
             "message": "Database disconnected successfully"
         }
 
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001
         raise HTTPException(
             status_code=500,
             detail=str(error),
@@ -148,7 +148,7 @@ def database_schema(x_session_id: str = Header(...)):
     try:
         return database_manager.get_schema(x_session_id)
 
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001
         raise HTTPException(
             status_code=400,
             detail={

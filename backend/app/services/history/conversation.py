@@ -1,7 +1,7 @@
-conversations = {}
+conversations: dict[str, list[dict[str, str]]] = {}
 
 
-def get_history(conversation_id: str):
+def get_history(conversation_id: str) -> list[dict[str, str]]:
     return conversations.get(conversation_id, [])
 
 
@@ -11,7 +11,7 @@ def add_message(
     sql: str,
     answer: str,
     database_type: str,
-):
+) -> None:
     if conversation_id not in conversations:
         conversations[conversation_id] = []
 

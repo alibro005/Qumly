@@ -2,8 +2,8 @@ import json
 import os
 import time
 
-from groq import Groq, APIConnectionError
 from dotenv import load_dotenv
+from groq import APIConnectionError, Groq
 
 load_dotenv()
 
@@ -31,7 +31,12 @@ def generate_sql(prompt: str) -> dict:
                 temperature=0,
             )
 
-            content = response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+
+            if content is None:
+                raise ValueError("LLM returned empty content.")
+
+            content = content.strip()
 
             try:
                 return json.loads(content)
@@ -45,6 +50,8 @@ def generate_sql(prompt: str) -> dict:
                 )
 
             time.sleep(2**attempt)
+
+    raise RuntimeError("Failed to generate SQL.")
 
 
 def generate_sql_explanation(prompt):
@@ -69,7 +76,12 @@ def generate_answer(prompt) -> str:
         temperature=0,
     )
 
-    return response.choices[0].message.content.strip()
+    content = response.choices[0].message.content
+
+    if content is None:
+        raise ValueError("LLM returned empty content.")
+
+    return content.strip()
 
 
 def correct_sql(prompt) -> str:
@@ -85,4 +97,9 @@ def correct_sql(prompt) -> str:
         temperature=0,
     )
 
-    return response.choices[0].message.content.strip()
+    content = response.choices[0].message.content
+
+    if content is None:
+        raise ValueError("LLM returned empty content.")
+
+    return content.strip()

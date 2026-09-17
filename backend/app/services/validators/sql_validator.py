@@ -1,6 +1,5 @@
 import re
 
-
 FORBIDDEN_KEYWORDS = {
     "INSERT",
     "UPDATE",

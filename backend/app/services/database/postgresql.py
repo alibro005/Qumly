@@ -1,4 +1,3 @@
-import psycopg
 
 
 def get_schema(connection):

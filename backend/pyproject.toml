@@ -21,7 +21,9 @@ entrypoint = "app.main:app"
 
 [dependency-groups]
 dev = [
+    "mypy>=2.3.1",
     "pytest>=9.1.1",
+    "ruff>=0.16.8",
 ]
 
 [tool.pytest.ini_options]

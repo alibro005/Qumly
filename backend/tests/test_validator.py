@@ -2,16 +2,16 @@ from app.services.validators.sql_validator import validate_sql
 
 
 def test_valid_select_query():
-    is_valid, message = validate_sql(
+    is_valid, _ = validate_sql(
         "SELECT * FROM students;"
     )
 
     assert is_valid is True
-    assert message == "SQL query is safe."
+    assert _ == "SQL query is safe."
 
 
 def test_valid_select_with_condition():
-    is_valid, message = validate_sql(
+    is_valid, _ = validate_sql(
         "SELECT name, marks FROM students WHERE marks > 80;"
     )
 

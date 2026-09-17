@@ -1,6 +1,5 @@
 from typing import Any
 
-
 ClarificationState = dict[str, Any]
 
 # Temporary in-memory store for pending clarifications.

@@ -3,26 +3,25 @@ import logging
 from fastapi import HTTPException
 
 from app.schema.schema import QueryRequest
-from app.services.prompts.prompt import (
-    build_sql_prompt,
-    build_explain_answer_prompt,
-    build_correct_sql_prompt,
-)
-from app.services.llm import (
-    generate_sql,
-    generate_answer,
-    correct_sql,
-)
-from app.services.validators.sql_validator import validate_sql
-from app.services.database.manager import database_manager
 from app.services.clarification_store import (
     add_clarification,
     clear_clarification,
-    get_clarification,
-    start_clarification,
     get_or_start_clarification,
+    start_clarification,
 )
-from app.services.history.conversation import get_history, add_message
+from app.services.database.manager import database_manager
+from app.services.history.conversation import add_message, get_history
+from app.services.llm import (
+    correct_sql,
+    generate_answer,
+    generate_sql,
+)
+from app.services.prompts.prompt import (
+    build_correct_sql_prompt,
+    build_explain_answer_prompt,
+    build_sql_prompt,
+)
+from app.services.validators.sql_validator import validate_sql
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +142,7 @@ def process_query(
             sql,
         )
 
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001
         # Ask the LLM to correct failed SQL
         corrected_prompt = build_correct_sql_prompt(
             question=question,
@@ -177,7 +176,7 @@ def process_query(
 
             sql = corrected_sql
 
-        except Exception as correction_error:
+        except Exception as correction_error:   # noqa: BLE001
             raise HTTPException(
                 status_code=400,
                 detail={

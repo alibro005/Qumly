@@ -2,10 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.database import router as database_router
-from app.api.routes.health import router as health_router
 from app.api.routes.explanation import router as explanation_router
+from app.api.routes.health import router as health_router
 from app.api.routes.query import router as query_router
-
 
 app = FastAPI(
     title="Qumly",

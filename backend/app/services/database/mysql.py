@@ -1,4 +1,3 @@
-import mysql.connector
 
 
 def get_schema(connection):

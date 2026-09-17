@@ -3,7 +3,6 @@ from fastapi import APIRouter, Header
 from app.schema.schema import QueryRequest, QueryResponse
 from app.services.query_service import process_query
 
-
 router = APIRouter()
 
 
