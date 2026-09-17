@@ -53,6 +53,19 @@ function ConversationFeed({
             />
           )}
 
+          {/* Error */}
+          {message.status === "error" && (
+            <AnswerCard
+              answer={message.answer}
+              results={null}
+              sql={null}
+              showActions={false}
+              onShowSql={null}
+              onExplainSql={null}
+              databaseType={null}
+            />
+          )}
+
           {/* Clarification needed */}
           {message.status === "clarification_needed" && (
             <ClarificationCard

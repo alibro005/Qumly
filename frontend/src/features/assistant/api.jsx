@@ -76,7 +76,11 @@ export async function sendQuery(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to execute query");
+    const error = await response.json();
+
+    throw new Error(
+      error.detail || "Failed to execute query"
+    );
   }
 
   return response.json();

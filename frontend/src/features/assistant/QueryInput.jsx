@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-function QueryInput({ onSubmit, loading = false }) {
+function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
   const [question, setQuestion] = useState("");
   const [isListening, setIsListening] = useState(false);
 
@@ -64,9 +64,8 @@ function QueryInput({ onSubmit, loading = false }) {
     if (!trimmedQuestion || loading) {
       return;
     }
-
-    await onSubmit(trimmedQuestion);
     setQuestion("");
+    await onSubmit(trimmedQuestion);
   };
 
   // Handle Ctrl + Enter key combination to submit the form
@@ -178,7 +177,7 @@ function QueryInput({ onSubmit, loading = false }) {
             <button
               type="submit"
               className="btn btn--primary"
-              disabled={!question.trim() || loading}
+              disabled={!question.trim() || loading || !isDatabaseConnected}
             >
               {loading ? "Running..." : "Ask Qumly"}
 
