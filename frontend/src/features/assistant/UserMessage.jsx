@@ -1,4 +1,3 @@
-
 function UserMessage({ question }) {
   return (
     <div className="msg msg--user">

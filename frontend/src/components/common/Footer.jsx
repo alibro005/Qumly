@@ -1,4 +1,3 @@
-
 function Footer() {
 
   // handle navigation clicks

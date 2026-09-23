@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState, lazy, Suspense }  from "react";
 import ResultTable from "../results/ResultTable";
-import ResultChart from "../results/ResultChart";
 import { format } from "sql-formatter";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -13,6 +12,8 @@ function AnswerCard({
   onExplainSql,
   databaseType,
 }) {
+  const ResultChart = lazy(() => import("../results/ResultChart"));
+
   const [showSql, setShowSql] = useState(false);
   const [explanation, setExplanation] = useState("");
   const [showExplain, setShowExplain] = useState(false);
@@ -139,7 +140,11 @@ function AnswerCard({
               </div>
             )}
 
-            {showChart && <ResultChart results={results} />}
+            {showChart && (
+              <Suspense fallback={<div>Loading chart...</div>}>
+                <ResultChart results={results} />
+              </Suspense>
+            )}
           </div>
         )}
       </div>

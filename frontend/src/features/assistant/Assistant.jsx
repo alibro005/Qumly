@@ -233,8 +233,6 @@ function App() {
     setConversationId(crypto.randomUUID());
   };
 
-  const isDatabaseConnected = Boolean(databaseType);
-
   return (
     <div className="app">
       <Topbar
