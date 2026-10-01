@@ -26,8 +26,8 @@
   --success-soft: rgba(52, 211, 153, 0.14);
 
   /* Type */
-  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
   /* Radii / spacing */
   --r-sm: 6px;
@@ -356,7 +356,7 @@ a {
   display: none;
 }
 .schema-tree summary::before {
-  content: "▸";
+  content: '▸';
   display: inline-block;
   width: 12px;
   color: var(--text-faint);

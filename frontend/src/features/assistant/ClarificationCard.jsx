@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
 
 function ClarificationCard({ question, options, onSelect }) {
   return (
@@ -6,9 +6,7 @@ function ClarificationCard({ question, options, onSelect }) {
       <div className="clarify-card">
         <div className="clarify-card__head">
           <span className="answer-card__mark">Q</span>
-          <span className="clarify-card__title">
-            Qumly needs a little clarification
-          </span>
+          <span className="clarify-card__title">Qumly needs a little clarification</span>
         </div>
 
         <p className="clarify-card__question">{question}</p>

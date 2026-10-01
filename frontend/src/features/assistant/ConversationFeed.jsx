@@ -1,14 +1,8 @@
-import UserMessage from "./UserMessage";
-import AnswerCard from "./AnswerCard";
-import ClarificationCard from "./ClarificationCard";
+import UserMessage from './UserMessage';
+import AnswerCard from './AnswerCard';
+import ClarificationCard from './ClarificationCard';
 
-function ConversationFeed({
-  messages,
-  onClarification,
-  onShowSql,
-  onExplainSql,
-  databaseType,
-}) {
+function ConversationFeed({ messages, onClarification, onShowSql, onExplainSql, databaseType }) {
   return (
     <section className="feed">
       {messages.map((message) => (
@@ -17,18 +11,17 @@ function ConversationFeed({
 
           {/* Loading */}
 
-          {message.status === "loading" && (
+          {message.status === 'loading' && (
             <div className="query-loading" aria-live="polite">
               <div className="query-loading__dots">
                 <span />
                 <span />
                 <span />
               </div>
-
             </div>
           )}
 
-          {message.status === "success" && (
+          {message.status === 'success' && (
             <AnswerCard
               answer={message.answer}
               results={message.results}
@@ -41,7 +34,7 @@ function ConversationFeed({
           )}
 
           {/* Rejected */}
-          {message.status === "rejected" && (
+          {message.status === 'rejected' && (
             <AnswerCard
               answer={message.answer}
               results={null}
@@ -54,7 +47,7 @@ function ConversationFeed({
           )}
 
           {/* Error */}
-          {message.status === "error" && (
+          {message.status === 'error' && (
             <AnswerCard
               answer={message.answer}
               results={null}
@@ -67,7 +60,7 @@ function ConversationFeed({
           )}
 
           {/* Clarification needed */}
-          {message.status === "clarification_needed" && (
+          {message.status === 'clarification_needed' && (
             <ClarificationCard
               question={message.clarificationQuestion}
               options={message.options}

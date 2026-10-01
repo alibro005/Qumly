@@ -1,26 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
-import Topbar from "../../layout/Topbar";
-import Sidebar from "../../layout/SideBar";
-import QueryInput from "./QueryInput";
-import ConversationFeed from "./ConversationFeed";
-import DatabaseModal from "../database/Database";
+import Topbar from '../../layout/Topbar';
+import Sidebar from '../../layout/SideBar';
+import QueryInput from './QueryInput';
+import ConversationFeed from './ConversationFeed';
+import DatabaseModal from '../database/Database';
 
-import { getSessionId } from "../../services/session";
+import { getSessionId } from '../../services/session';
 
-import {
-  sendQuery,
-  explainSql,
-  getDatabaseStatus,
-  getSchema,
-  disconnectDatabase,
-} from "./api";
+import { sendQuery, explainSql, getDatabaseStatus, getSchema, disconnectDatabase } from './api';
 
 function App() {
   const [messages, setMessages] = useState([]);
-  const [conversationId, setConversationId] = useState(() =>
-    crypto.randomUUID(),
-  );
+  const [conversationId, setConversationId] = useState(() => crypto.randomUUID());
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [recentQueries, setRecentQueries] = useState([]);
@@ -47,7 +39,7 @@ function App() {
         const schema = await getSchema();
         setSchema(schema);
       } catch (error) {
-        console.error("Failed to restore database:", error);
+        console.error('Failed to restore database:', error);
         setDatabaseType(null);
         setSchema({});
       }
@@ -74,7 +66,7 @@ function App() {
       setDatabaseType(null);
       setSchema({});
     } catch (error) {
-      console.error("Disconnect error:", error);
+      console.error('Disconnect error:', error);
     }
   };
 
@@ -87,7 +79,7 @@ function App() {
       id: messageId,
       question,
       clarificationQuestion: null,
-      status: "loading",
+      status: 'loading',
       answer: null,
       sql: null,
       results: null,
@@ -115,8 +107,8 @@ function App() {
                 results: response.results,
                 options: response.options,
               }
-            : message,
-        ),
+            : message
+        )
       );
 
       setRecentQueries((previous) => {
@@ -131,20 +123,18 @@ function App() {
         return updated.slice(0, 5);
       });
     } catch (error) {
-      console.error("Query error:", error);
+      console.error('Query error:', error);
 
       setMessages((previousMessages) =>
         previousMessages.map((message) =>
           message.id === messageId
             ? {
                 ...message,
-                status: "error",
-                answer:
-                  error.message ||
-                  "Something went wrong while processing your query.",
+                status: 'error',
+                answer: error.message || 'Something went wrong while processing your query.',
               }
-            : message,
-        ),
+            : message
+        )
       );
     } finally {
       setLoading(false);
@@ -167,7 +157,7 @@ function App() {
       question: clarification,
       originalQuestion: message.originalQuestion || message.question,
       clarificationQuestion: null,
-      status: "loading",
+      status: 'loading',
       answer: null,
       sql: null,
       results: null,
@@ -183,7 +173,7 @@ function App() {
       const response = await sendQuery(
         message.originalQuestion || message.question,
         clarification,
-        conversationId,
+        conversationId
       );
 
       // Replace only the new loading message
@@ -193,33 +183,29 @@ function App() {
             ? {
                 ...item,
                 clarificationQuestion:
-                  response.status === "clarification_needed"
-                    ? response.question
-                    : null,
+                  response.status === 'clarification_needed' ? response.question : null,
                 status: response.status,
                 answer: response.answer,
                 sql: response.sql,
                 results: response.results,
                 options: response.options,
               }
-            : item,
-        ),
+            : item
+        )
       );
     } catch (error) {
-      console.error("Clarification error:", error);
+      console.error('Clarification error:', error);
 
       setMessages((previousMessages) =>
         previousMessages.map((item) =>
           item.id === messageId
             ? {
                 ...item,
-                status: "rejected",
-                answer:
-                  error.message ||
-                  "Something went wrong while processing your query.",
+                status: 'rejected',
+                answer: error.message || 'Something went wrong while processing your query.',
               }
-            : item,
-        ),
+            : item
+        )
       );
     } finally {
       clarificationLoadingRef.current = false;
@@ -241,14 +227,9 @@ function App() {
         databaseType={databaseType}
       />
 
-      {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
 
-      <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
+      <div className={`app-shell ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         <Sidebar
           onNewQuery={handleNewQuery}
           recentQueries={recentQueries}
@@ -265,7 +246,11 @@ function App() {
             onExplainSql={handleExplainSql}
             databaseType={databaseType}
           />
-          <QueryInput onSubmit={handleQuery} loading={loading} isDatabaseConnected={Boolean(databaseType)} />
+          <QueryInput
+            onSubmit={handleQuery}
+            loading={loading}
+            isDatabaseConnected={Boolean(databaseType)}
+          />
         </main>
       </div>
       {databaseModalOpen && (

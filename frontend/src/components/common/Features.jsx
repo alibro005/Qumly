@@ -23,8 +23,8 @@ function Features() {
           <h3>Natural language, not syntax</h3>
 
           <p>
-            Ask the way you'd ask a person. Qumly handles the joins, filters,
-            and grouping underneath.
+            Ask the way you'd ask a person. Qumly handles the joins, filters, and grouping
+            underneath.
           </p>
         </article>
 
@@ -47,8 +47,8 @@ function Features() {
           <h3>Understands your schema</h3>
 
           <p>
-            Qumly reads your tables and columns first, so it knows what
-            "department" or "marks" actually refers to.
+            Qumly reads your tables and columns first, so it knows what "department" or "marks"
+            actually refers to.
           </p>
         </article>
 
@@ -68,8 +68,8 @@ function Features() {
           <h3>Asks when it's not sure</h3>
 
           <p>
-            A vague question like "the best students" gets a clarifying
-            follow-up instead of a guess.
+            A vague question like "the best students" gets a clarifying follow-up instead of a
+            guess.
           </p>
         </article>
 
@@ -89,8 +89,8 @@ function Features() {
           <h3>Shows its work</h3>
 
           <p>
-            Every answer comes with the exact SQL Qumly ran, plus a
-            plain-language explanation of it.
+            Every answer comes with the exact SQL Qumly ran, plus a plain-language explanation of
+            it.
           </p>
         </article>
 
@@ -109,8 +109,8 @@ function Features() {
           <h3>Follow-up questions</h3>
 
           <p>
-            "Only from the CS department" narrows the last answer instead of
-            starting the conversation over.
+            "Only from the CS department" narrows the last answer instead of starting the
+            conversation over.
           </p>
         </article>
 
@@ -126,19 +126,15 @@ function Features() {
                 stroke="#7F77DD"
                 strokeWidth="1.5"
               />
-              <path
-                d="M3 7.5h12"
-                stroke="#7F77DD"
-                strokeWidth="1.5"
-              />
+              <path d="M3 7.5h12" stroke="#7F77DD" strokeWidth="1.5" />
             </svg>
           </div>
 
           <h3>Your data stays yours</h3>
 
           <p>
-            Qumly connects to the database you already run nothing is copied
-            into a third-party store.
+            Qumly connects to the database you already run nothing is copied into a third-party
+            store.
           </p>
         </article>
       </div>

@@ -1,21 +1,14 @@
-import { useState, lazy, Suspense }  from "react";
-import ResultTable from "../results/ResultTable";
-import { format } from "sql-formatter";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useState, lazy, Suspense } from 'react';
+import ResultTable from '../results/ResultTable';
+import { format } from 'sql-formatter';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-function AnswerCard({
-  answer,
-  results,
-  sql,
-  showActions,
-  onExplainSql,
-  databaseType,
-}) {
-  const ResultChart = lazy(() => import("../results/ResultChart"));
+function AnswerCard({ answer, results, sql, showActions, onExplainSql, databaseType }) {
+  const ResultChart = lazy(() => import('../results/ResultChart'));
 
   const [showSql, setShowSql] = useState(false);
-  const [explanation, setExplanation] = useState("");
+  const [explanation, setExplanation] = useState('');
   const [showExplain, setShowExplain] = useState(false);
   const [loadingExplanation, setLoadingExplanation] = useState(false);
   const [showChart, setShowChart] = useState(false);
@@ -26,11 +19,11 @@ function AnswerCard({
   if (sql) {
     try {
       formattedSql = format(sql, {
-        language: databaseType === "postgresql" ? "postgresql" : "mysql",
+        language: databaseType === 'postgresql' ? 'postgresql' : 'mysql',
       });
     } catch (error) {
-      console.error("SQL formatting failed:", error);
-      console.error("Original SQL:", sql);
+      console.error('SQL formatting failed:', error);
+      console.error('Original SQL:', sql);
 
       formattedSql = sql;
     }
@@ -51,7 +44,7 @@ function AnswerCard({
       setExplanation(data.explanation);
       setShowExplain(true);
     } catch (error) {
-      console.error("Explain SQL error:", error);
+      console.error('Explain SQL error:', error);
     } finally {
       setLoadingExplanation(false);
     }
@@ -83,7 +76,7 @@ function AnswerCard({
                 type="button"
                 onClick={() => setShowSql((prev) => !prev)}
               >
-                {showSql ? "Hide SQL" : "Show SQL"}
+                {showSql ? 'Hide SQL' : 'Show SQL'}
               </button>
 
               <button
@@ -93,10 +86,10 @@ function AnswerCard({
                 disabled={loadingExplanation}
               >
                 {loadingExplanation
-                  ? "Generating Explanation..."
+                  ? 'Generating Explanation...'
                   : showExplain
-                    ? "Hide Explanation"
-                    : "Explain SQL"}
+                    ? 'Hide Explanation'
+                    : 'Explain SQL'}
               </button>
 
               <button
@@ -104,7 +97,7 @@ function AnswerCard({
                 type="button"
                 onClick={() => setShowChart((prev) => !prev)}
               >
-                {showChart ? "Hide Chart" : "Chart"}
+                {showChart ? 'Hide Chart' : 'Chart'}
               </button>
             </div>
 
@@ -123,11 +116,7 @@ function AnswerCard({
                   </button>
                 </div>
 
-                <SyntaxHighlighter
-                  language="sql"
-                  style={vscDarkPlus}
-                  className="sql-code"
-                >
+                <SyntaxHighlighter language="sql" style={vscDarkPlus} className="sql-code">
                   {formattedSql};
                 </SyntaxHighlighter>
               </div>

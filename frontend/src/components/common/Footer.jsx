@@ -1,24 +1,17 @@
 function Footer() {
-
   // handle navigation clicks
   const handleNavClick = (e, id) => {
     e.preventDefault();
 
     // Respect user's preference for reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     document.getElementById(id)?.scrollIntoView({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
     });
 
     // Update the URL without adding a new entry to the browser's history
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + window.location.search,
-    );
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
   };
   return (
     <footer className="site-footer">
@@ -27,41 +20,29 @@ function Footer() {
 
         <p>Ask your database anything.</p>
         <div className="site-footer__links social">
-          <a
-            href="https://github.com/alibro005/Qumly"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://github.com/alibro005/Qumly" target="_blank" rel="noopener noreferrer">
             GitHub ↗
           </a>
-          <a
-            href="https://www.linkedin.com/in/alibro005"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://www.linkedin.com/in/alibro005" target="_blank" rel="noopener noreferrer">
             LinkedIn ↗
           </a>
         </div>
       </div>
 
       <nav className="site-footer__links" aria-label="Footer">
-        <a href="#how" onClick={(e) => handleNavClick(e, "how")}>
+        <a href="#how" onClick={(e) => handleNavClick(e, 'how')}>
           How it works
         </a>
 
-        <a href="#features" onClick={(e) => handleNavClick(e, "features")}>
+        <a href="#features" onClick={(e) => handleNavClick(e, 'features')}>
           Features
         </a>
 
-        <a href="#compat" onClick={(e) => handleNavClick(e, "compat")}>
+        <a href="#compat" onClick={(e) => handleNavClick(e, 'compat')}>
           Compatibility
         </a>
 
-        <a
-          href="https://app.qumly.me"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://app.qumly.me" target="_blank" rel="noopener noreferrer">
           Open app
         </a>
       </nav>

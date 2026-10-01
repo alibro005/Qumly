@@ -1,5 +1,5 @@
-import { useState } from "react";
-import logo from "../../assets/logo.svg";
+import { useState } from 'react';
+import logo from '../../assets/logo.svg';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,52 +10,43 @@ function Navbar() {
     setIsOpen(false);
 
     // Respect user's preference for reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     document.getElementById(id)?.scrollIntoView({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
     });
 
     // Update the URL without adding a new entry to the browser's history
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + window.location.search,
-    );
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
   };
 
   return (
-    <header className={`site-nav ${isOpen ? "is-open" : ""}`}>
+    <header className={`site-nav ${isOpen ? 'is-open' : ''}`}>
       <a href="/" className="brand-mark" aria-label="Qumly home">
         <img src={logo} alt="Qumly logo" />
         <span className="brand-mark__text">Qumly</span>
       </a>
 
       <nav className="site-nav__links" id="navLinks" aria-label="Primary">
-        <a href="#how" onClick={(e) => handleNavClick(e, "how")}>
+        <a href="#how" onClick={(e) => handleNavClick(e, 'how')}>
           How it works
         </a>
 
-        <a href="#features" onClick={(e) => handleNavClick(e, "features")}>
+        <a href="#features" onClick={(e) => handleNavClick(e, 'features')}>
           Features
         </a>
 
-        <a href="#preview" onClick={(e) => handleNavClick(e, "preview")}>
+        <a href="#preview" onClick={(e) => handleNavClick(e, 'preview')}>
           Preview
         </a>
 
-        <a href="#compat" onClick={(e) => handleNavClick(e, "compat")}>
+        <a href="#compat" onClick={(e) => handleNavClick(e, 'compat')}>
           Compatibility
         </a>
       </nav>
 
       <div className="site-nav__actions">
-        <a
-          href="https://app.qumly.me"
-          className="btn btn--primary btn--sm hide"
-        >
+        <a href="https://app.qumly.me" className="btn btn--primary btn--sm hide">
           Try Qumly
         </a>
 

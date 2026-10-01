@@ -1,4 +1,4 @@
-import { exportToCsv } from "../../utils/exportCsv";
+import { exportToCsv } from '../../utils/exportCsv';
 
 function ResultTable({ results }) {
   if (!results || !results.columns || !results.rows) {
@@ -6,31 +6,21 @@ function ResultTable({ results }) {
   }
 
   if (results.rows.length === 0) {
-    return(
-       <p className="result-empty">No results found.</p>
-    );
+    return <p className="result-empty">No results found.</p>;
   }
 
   const handleExport = () => {
-    exportToCsv(
-      results.columns,
-      results.rows,
-      `qumly-results-${Date.now()}.csv`,
-    );
+    exportToCsv(results.columns, results.rows, `qumly-results-${Date.now()}.csv`);
   };
 
   return (
     <>
       <div className="result-table-header">
         <span className="result-count">
-          {results.rows.length} {results.rows.length === 1 ? "row" : "rows"}
+          {results.rows.length} {results.rows.length === 1 ? 'row' : 'rows'}
         </span>
 
-        <button
-          type="button"
-          className="export-csv-button"
-          onClick={handleExport}
-        >
+        <button type="button" className="export-csv-button" onClick={handleExport}>
           Export CSV
         </button>
       </div>
@@ -50,11 +40,7 @@ function ResultTable({ results }) {
               <tr key={rowIndex}>
                 {row.map((value, columnIndex) => (
                   <td key={columnIndex}>
-                    {value === null
-                      ? "NULL"
-                      : value === undefined
-                        ? ""
-                        : String(value)}
+                    {value === null ? 'NULL' : value === undefined ? '' : String(value)}
                   </td>
                 ))}
               </tr>

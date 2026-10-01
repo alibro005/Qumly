@@ -1,6 +1,6 @@
-import mysql from "../../assets/mysql.svg";
-import postgresql from "../../assets/postgresql.svg";
-import mariadb from "../../assets/mariadb.svg";
+import mysql from '../../assets/mysql.svg';
+import postgresql from '../../assets/postgresql.svg';
+import mariadb from '../../assets/mariadb.svg';
 
 function Compatibility() {
   return (

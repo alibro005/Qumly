@@ -4,13 +4,7 @@ function SchemaExplorer({ schema = {}, databaseType = null }) {
       <h2 className="sidebar__label">Schema</h2>
 
       <div className="schema-db">
-        <svg
-          width="13"
-          height="13"
-          viewBox="0 0 14 14"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path
             d="M7 1.2c2.7 0 4.9.9 4.9 2v7.6c0 1.1-2.2 2-4.9 2s-4.9-.9-4.9-2V3.2c0-1.1 2.2-2 4.9-2Z"
             stroke="currentColor"
@@ -18,7 +12,7 @@ function SchemaExplorer({ schema = {}, databaseType = null }) {
           />
         </svg>
 
-        {databaseType || "No database connected"}
+        {databaseType || 'No database connected'}
       </div>
 
       <ul className="schema-tree">
@@ -35,8 +29,7 @@ function SchemaExplorer({ schema = {}, databaseType = null }) {
             </details>
           </li>
         ))}
-      </ul> 
-     
+      </ul>
     </div>
   );
 }

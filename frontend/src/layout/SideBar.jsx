@@ -1,27 +1,14 @@
-import SchemaExplorer from "../features/database/SchemaExplorer";
+import SchemaExplorer from '../features/database/SchemaExplorer';
 
-function Sidebar({
-  onNewQuery,
-  recentQueries,
-  onAddDatabase,
-  schema,
-  databaseType,
-  onDisconnect,
-}) {
+function Sidebar({ onNewQuery, recentQueries, onAddDatabase, schema, databaseType, onDisconnect }) {
   return (
     <aside className="sidebar">
       {/* Database Status */}
       <div className="db-status">
-        <span
-          className={`db-status__dot ${
-            databaseType ? "is-connected" : "is-disconnected"
-          }`}
-        />
+        <span className={`db-status__dot ${databaseType ? 'is-connected' : 'is-disconnected'}`} />
 
         <div className="db-status__info">
-          <div className="db-status__state">
-            {databaseType ? "Connected" : "Not connected"}
-          </div>
+          <div className="db-status__state">{databaseType ? 'Connected' : 'Not connected'}</div>
         </div>
       </div>
 
@@ -30,11 +17,7 @@ function Sidebar({
         <button className="btn btn--primary btn--block" onClick={onNewQuery}>
           + New query
         </button>
-        <button
-          type="button"
-          className="btn btn--primary btn--block dbt"
-          onClick={onAddDatabase}
-        >
+        <button type="button" className="btn btn--primary btn--block dbt" onClick={onAddDatabase}>
           + Add database
         </button>
       </div>
@@ -66,11 +49,7 @@ function Sidebar({
       <SchemaExplorer schema={schema} databaseType={databaseType} />
 
       {databaseType && (
-        <button
-          type="button"
-          className="btn--disconnect"
-          onClick={onDisconnect}
-        >
+        <button type="button" className="btn--disconnect" onClick={onDisconnect}>
           Disconnect
         </button>
       )}

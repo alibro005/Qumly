@@ -1,16 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Landing from "./pages/Landing";
-import Assistant from "./features/assistant/Assistant";
+import Landing from './pages/Landing';
+import Assistant from './features/assistant/Assistant';
 
 function App() {
   const hostname = window.location.hostname;
 
-  if (hostname === "app.qumly.me") {
+  if (hostname === 'app.qumly.me') {
     return <Assistant />;
   }
 
-  if (hostname === "qumly.me" || hostname === "www.qumly.me") {
+  if (hostname === 'qumly.me' || hostname === 'www.qumly.me') {
     return <Landing />;
   }
 

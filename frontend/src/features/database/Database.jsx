@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { connectDatabase, connectDemo } from "../assistant/api";
-import mysqlLogo from "../../assets/mysql.svg";
-import postgresqlLogo from "../../assets/postgresql.svg";
+import { useState } from 'react';
+import { connectDatabase, connectDemo } from '../assistant/api';
+import mysqlLogo from '../../assets/mysql.svg';
+import postgresqlLogo from '../../assets/postgresql.svg';
 
 function DatabaseModal({ onClose, onDatabaseConnected }) {
   const [databaseForm, setDatabaseForm] = useState({
-    host: "",
-    port: "3306",
-    database: "",
-    username: "",
-    password: "",
+    host: '',
+    port: '3306',
+    database: '',
+    username: '',
+    password: '',
   });
 
   const [connecting, setConnecting] = useState(false);
-  const [connectionMode, setConnectionMode] = useState("demo");
-  const [error, setError] = useState("");
+  const [connectionMode, setConnectionMode] = useState('demo');
+  const [error, setError] = useState('');
 
   const handleDatabaseChange = (event) => {
     const { name, value } = event.target;
@@ -27,11 +27,11 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
 
   const handleDatabaseTypeChange = (type) => {
     setConnectionMode(type);
-    setError("");
+    setError('');
 
     setDatabaseForm((previous) => ({
       ...previous,
-      port: type === "mysql" ? "3306" : "5433",
+      port: type === 'mysql' ? '3306' : '5433',
     }));
   };
 
@@ -40,7 +40,7 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       return;
     }
 
-    setError("");
+    setError('');
 
     try {
       setConnecting(true);
@@ -50,8 +50,8 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       onDatabaseConnected(response);
       onClose();
     } catch (error) {
-      console.error("Demo database connection failed:", error);
-      setError(error.message || "Unable to connect to demo database.");
+      console.error('Demo database connection failed:', error);
+      setError(error.message || 'Unable to connect to demo database.');
     } finally {
       setConnecting(false);
     }
@@ -62,25 +62,25 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
       return;
     }
 
-    setError("");
+    setError('');
 
     if (!databaseForm.host) {
-      setError("Please enter the database host.");
+      setError('Please enter the database host.');
       return;
     }
 
     if (!databaseForm.port) {
-      setError("Please enter the database port.");
+      setError('Please enter the database port.');
       return;
     }
 
     if (!databaseForm.database) {
-      setError("Please enter the database name.");
+      setError('Please enter the database name.');
       return;
     }
 
     if (!databaseForm.username) {
-      setError("Please enter the database username.");
+      setError('Please enter the database username.');
       return;
     }
 
@@ -130,10 +130,10 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
           <div className="database-mode">
             <button
               type="button"
-              className={connectionMode === "demo" ? "active" : ""}
+              className={connectionMode === 'demo' ? 'active' : ''}
               onClick={() => {
-                setConnectionMode("demo");
-                setError("");
+                setConnectionMode('demo');
+                setError('');
               }}
             >
               Demo
@@ -141,27 +141,23 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
 
             <button
               type="button"
-              className={connectionMode === "mysql" ? "active" : ""}
-              onClick={() => handleDatabaseTypeChange("mysql")}
+              className={connectionMode === 'mysql' ? 'active' : ''}
+              onClick={() => handleDatabaseTypeChange('mysql')}
             >
               <img src={mysqlLogo} alt="MySQL" className="database-logo" />
             </button>
 
             <button
               type="button"
-              className={connectionMode === "postgresql" ? "active" : ""}
-              onClick={() => handleDatabaseTypeChange("postgresql")}
+              className={connectionMode === 'postgresql' ? 'active' : ''}
+              onClick={() => handleDatabaseTypeChange('postgresql')}
             >
-              <img
-                src={postgresqlLogo}
-                alt="PostgreSQL"
-                className="database-logo"
-              />
+              <img src={postgresqlLogo} alt="PostgreSQL" className="database-logo" />
             </button>
           </div>
 
           {/* Demo Database */}
-          {connectionMode === "demo" && (
+          {connectionMode === 'demo' && (
             <div className="database-demo">
               <h3>Qumly Demo Database</h3>
 
@@ -181,13 +177,13 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
                 aria-busy={connecting}
               >
                 {connecting && <span className="button-spinner" />}
-                {connecting ? "Connecting..." : "Connect Demo Database"}
+                {connecting ? 'Connecting...' : 'Connect Demo Database'}
               </button>
             </div>
           )}
 
           {/* MySQL / PostgreSQL */}
-          {(connectionMode === "mysql" || connectionMode === "postgresql") && (
+          {(connectionMode === 'mysql' || connectionMode === 'postgresql') && (
             <div className="database-form">
               <label htmlFor="database-host">Host</label>
 
@@ -259,10 +255,8 @@ function DatabaseModal({ onClose, onDatabaseConnected }) {
               >
                 {connecting && <span className="button-spinner" />}
                 {connecting
-                  ? "Connecting..."
-                  : `Connect ${
-                      connectionMode === "mysql" ? "MySQL" : "PostgreSQL"
-                    }`}
+                  ? 'Connecting...'
+                  : `Connect ${connectionMode === 'mysql' ? 'MySQL' : 'PostgreSQL'}`}
               </button>
             </div>
           )}

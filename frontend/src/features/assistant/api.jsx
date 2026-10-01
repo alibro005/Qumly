@@ -1,19 +1,19 @@
-import { getSessionId } from "../../services/session";
+import { getSessionId } from '../../services/session';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function getSessionHeaders() {
   return {
-    "X-Session-ID": getSessionId(),
+    'X-Session-ID': getSessionId(),
   };
 }
 
 // Connect Demo Database
 export async function connectDemo() {
   const response = await fetch(`${API_URL}/demo`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...getSessionHeaders(),
     },
   });
@@ -26,13 +26,12 @@ export async function connectDemo() {
   if (!response.ok) {
     const detail = data.detail;
 
-    let message = "Unable to connect to demo database.";
+    let message = 'Unable to connect to demo database.';
 
-    if (typeof detail === "string") {
+    if (typeof detail === 'string') {
       message = detail;
-    } else if (detail && typeof detail === "object") {
-      message =
-        detail.message || detail.error || "Unable to connect to demo database.";
+    } else if (detail && typeof detail === 'object') {
+      message = detail.message || detail.error || 'Unable to connect to demo database.';
     }
 
     throw new Error(message);
@@ -57,15 +56,11 @@ export async function getSchema() {
 }
 
 // Send Query
-export async function sendQuery(
-  question,
-  clarification = null,
-  conversationId = null
-) {
+export async function sendQuery(question, clarification = null, conversationId = null) {
   const response = await fetch(`${API_URL}/query`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...getSessionHeaders(),
     },
     body: JSON.stringify({
@@ -78,9 +73,7 @@ export async function sendQuery(
   if (!response.ok) {
     const error = await response.json();
 
-    throw new Error(
-      error.detail || "Failed to execute query"
-    );
+    throw new Error(error.detail || 'Failed to execute query');
   }
 
   return response.json();
@@ -89,9 +82,9 @@ export async function sendQuery(
 // Explain SQL
 export async function explainSql(sql) {
   const response = await fetch(`${API_URL}/explain-sql`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...getSessionHeaders(),
     },
     body: JSON.stringify({
@@ -102,7 +95,7 @@ export async function explainSql(sql) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Failed to explain SQL");
+    throw new Error(data.detail || 'Failed to explain SQL');
   }
 
   return data;
@@ -111,9 +104,9 @@ export async function explainSql(sql) {
 // Connect Database
 export async function connectDatabase(credentials) {
   const response = await fetch(`${API_URL}/database/connect`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...getSessionHeaders(),
     },
     body: JSON.stringify(credentials),
@@ -123,13 +116,12 @@ export async function connectDatabase(credentials) {
 
   if (!response.ok) {
     const detail = data.detail;
-    let message = "Unable to connect to database.";
+    let message = 'Unable to connect to database.';
 
-    if (typeof detail === "string") {
+    if (typeof detail === 'string') {
       message = detail;
-    } else if (detail && typeof detail === "object") {
-      message =
-        detail.message || detail.error || "Unable to connect to database.";
+    } else if (detail && typeof detail === 'object') {
+      message = detail.message || detail.error || 'Unable to connect to database.';
     }
 
     throw new Error(message);
@@ -141,14 +133,14 @@ export async function connectDatabase(credentials) {
 // Disconnect Database
 export const disconnectDatabase = async (sessionId) => {
   const response = await fetch(`${API_URL}/database/disconnect`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "x-session-id": sessionId,
+      'x-session-id': sessionId,
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to disconnect");
+    throw new Error('Failed to disconnect');
   }
 
   return response.json();
@@ -165,7 +157,7 @@ export async function getDatabaseStatus() {
   // console.log("DATABASE STATUS:", data);
 
   if (!response.ok) {
-    throw new Error(data.detail || "Failed to get database status");
+    throw new Error(data.detail || 'Failed to get database status');
   }
 
   return data;

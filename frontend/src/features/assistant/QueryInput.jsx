@@ -1,24 +1,23 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 
-function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
-  const [question, setQuestion] = useState("");
+function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false }) {
+  const [question, setQuestion] = useState('');
   const [isListening, setIsListening] = useState(false);
 
   const recognitionRef = useRef(null);
 
   // Start listening to the user's voice input
   const startListening = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in this browser.");
+      alert('Speech recognition is not supported in this browser.');
       return;
     }
 
     const recognition = new SpeechRecognition();
 
-    recognition.lang = "en-US";
+    recognition.lang = 'en-US';
     recognition.interimResults = false;
     recognition.continuous = false;
 
@@ -30,13 +29,13 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
       const transcript = event.results[0][0].transcript;
 
       setQuestion((prev) => {
-        const separator = prev.trim() ? " " : "";
+        const separator = prev.trim() ? ' ' : '';
         return prev + separator + transcript;
       });
     };
 
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
+      console.error('Speech recognition error:', event.error);
       setIsListening(false);
     };
 
@@ -48,7 +47,7 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
     recognition.start();
   };
 
- // Stop listening to the user's voice input
+  // Stop listening to the user's voice input
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
@@ -64,13 +63,13 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
     if (!trimmedQuestion || loading) {
       return;
     }
-    setQuestion("");
+    setQuestion('');
     await onSubmit(trimmedQuestion);
   };
 
   // Handle Ctrl + Enter key combination to submit the form
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
 
       if (!loading) {
@@ -111,13 +110,11 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
           <div className="query-box__actions">
             <button
               type="button"
-              className={`btn btn--mic ${isListening ? "btn--mic-active" : ""}`}
+              className={`btn btn--mic ${isListening ? 'btn--mic-active' : ''}`}
               onClick={isListening ? stopListening : startListening}
               disabled={loading}
-              title={isListening ? "Stop listening" : "Voice input"}
-              aria-label={
-                isListening ? "Stop voice input" : "Start voice input"
-              }
+              title={isListening ? 'Stop listening' : 'Voice input'}
+              aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
             >
               {isListening ? (
                 <svg
@@ -126,14 +123,7 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                 >
-                  <rect
-                    x="8"
-                    y="8"
-                    width="8"
-                    height="8"
-                    rx="1"
-                    fill="currentColor"
-                  />
+                  <rect x="8" y="8" width="8" height="8" rx="1" fill="currentColor" />
                 </svg>
               ) : (
                 <svg
@@ -164,12 +154,7 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
                     strokeLinecap="round"
                   />
 
-                  <path
-                    d="M9 21h6"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
+                  <path d="M9 21h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
               )}
             </button>
@@ -179,16 +164,10 @@ function QueryInput({ onSubmit, loading = false, isDatabaseConnected = false}) {
               className="btn btn--primary"
               disabled={!question.trim() || loading || !isDatabaseConnected}
             >
-              {loading ? "Running..." : "Ask Qumly"}
+              {loading ? 'Running...' : 'Ask Qumly'}
 
               {!loading && (
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  aria-hidden="true"
-                >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path
                     d="M2.5 7h9M7.5 3l4 4-4 4"
                     stroke="currentColor"

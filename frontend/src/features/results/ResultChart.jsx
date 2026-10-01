@@ -1,13 +1,5 @@
-import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function ResultChart({ results }) {
   // Basic validation
@@ -19,9 +11,7 @@ function ResultChart({ results }) {
     results.rows.length === 0
   ) {
     return (
-      <p className="chart-panel__text">
-        No suitable chart can be generated for these results.
-      </p>
+      <p className="chart-panel__text">No suitable chart can be generated for these results.</p>
     );
   }
 
@@ -32,33 +22,27 @@ function ResultChart({ results }) {
     rows.some((row) => {
       const value = row[columnIndex];
 
-      if (value === null || value === undefined || value === "") {
+      if (value === null || value === undefined || value === '') {
         return false;
       }
 
       return Number.isFinite(Number(value));
-    }),
+    })
   );
 
   // No numeric column = no useful bar chart
   if (numericIndex === -1) {
     return (
-      <p className="chart-panel__text">
-        No suitable chart can be generated for these results.
-      </p>
+      <p className="chart-panel__text">No suitable chart can be generated for these results.</p>
     );
   }
 
   // Find a categorical column different from the numeric column
-  const labelIndex = columns.findIndex(
-    (_, columnIndex) => columnIndex !== numericIndex,
-  );
+  const labelIndex = columns.findIndex((_, columnIndex) => columnIndex !== numericIndex);
 
   if (labelIndex === -1) {
     return (
-      <p className="chart-panel__text">
-        No suitable chart can be generated for these results.
-      </p>
+      <p className="chart-panel__text">No suitable chart can be generated for these results.</p>
     );
   }
 
@@ -84,9 +68,7 @@ function ResultChart({ results }) {
   // Nothing valid to display
   if (chartData.length === 0) {
     return (
-      <p className="chart-panel__text">
-        No suitable chart can be generated for these results.
-      </p>
+      <p className="chart-panel__text">No suitable chart can be generated for these results.</p>
     );
   }
 
@@ -104,13 +86,7 @@ function ResultChart({ results }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis
-            dataKey="name"
-            interval={0}
-            angle={-35}
-            textAnchor="end"
-            height={80}
-          />
+          <XAxis dataKey="name" interval={0} angle={-35} textAnchor="end" height={80} />
 
           <YAxis />
 
