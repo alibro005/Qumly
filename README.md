@@ -92,17 +92,11 @@ Qumly generates and executes the query, then presents the results in a clear, hu
 
 Qumly was evaluated on **49 test cases** using an e-commerce database schema. The evaluation covers SQL generation, database results, filtering, aggregation, joins, complex queries, ambiguity handling, and SQL safety.
 
-<p align="center">
-  <img src="assets/evaluation_results.png" alt="Qumly evaluation results" width="80%">
-</p>
-
-
 ### _Interaction Efficiency_
 
 Qumly achieved correct database results across all **49 test cases**. One clear query required an unnecessary clarification before generating the correct SQL.
 
 **Interaction Efficiency: 48/49 (97.96%)**
-
 
 ## _Tech Stack_
 
